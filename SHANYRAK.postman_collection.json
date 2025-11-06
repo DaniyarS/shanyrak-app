@@ -1,0 +1,714 @@
+{
+	"info": {
+		"_postman_id": "4868c1d2-e39b-45d4-9e20-a19d1a31cef8",
+		"name": "SHANYRAK",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38819219",
+		"_collection_link": "https://dark-escape-208538.postman.co/workspace/SHANYRAK~dbf86f24-c81e-4972-af5c-55f1ffd232f4/collection/20577508-4868c1d2-e39b-45d4-9e20-a19d1a31cef8?action=share&source=collection_link&creator=38819219"
+	},
+	"item": [
+		{
+			"name": "categories",
+			"item": [
+				{
+					"name": "all",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/categories",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/categories/5414ea67-5f82-4514-82e9-61afe37234cf",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"categories",
+								"5414ea67-5f82-4514-82e9-61afe37234cf"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "children",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/categories/5414ea67-5f82-4514-82e9-61afe37234cf/children",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"categories",
+								"5414ea67-5f82-4514-82e9-61afe37234cf",
+								"children"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"accessToken\", jsonData.token);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "phone",
+									"value": "87020000796",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Beknur123!",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/auth/login",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"accessToken\", jsonData.token);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fullName\": \"Beknur Slamkul\",\n    \"phone\" : \"87020000796\",\n    \"role\" : \"CUSTOMER\",\n    \"password\" : \"Beknur123!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/auth/register",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "estates",
+			"item": [
+				{
+					"name": "createEstate",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"kind\" : \"kindTest\",\n    \"email\" : \"emailTest\",\n    \"addressLine\" : \"addressLineTest\",\n    \"city\" : \"cityTest\",\n    \"district\" : \"districtTest\",\n    \"lat\" : \"1123\",\n    \"lon\" : \"1233\",\n    \"areaM2\" : \"49.9\",\n    \"floor\" : \"7\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/estates",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"estates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"publicId\": \"ebb078f0-d138-4878-8df0-0109218480ca\",\n        \"kind\": \"kindTest\",\n        \"email\": \"emailTest\",\n        \"addressLine\": \"addressLineTest\",\n        \"city\": \"cityTest\",\n        \"district\": \"hahaha\",\n        \"lat\": 1123.00,\n        \"lon\": 3221.00,\n        \"areaM2\": 49.90,\n        \"floor\": 7\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/estates",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"estates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getCustomerEstates",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"kind\" : \"kindTest\",\n    \"email\" : \"emailTest\",\n    \"addressLine\" : \"addressLineTest\",\n    \"city\" : \"cityTest\",\n    \"district\" : \"districtTest\",\n    \"lat\" : \"1123\",\n    \"lon\" : \"1233\",\n    \"areaM2\" : \"49.9\",\n    \"floor\" : \"7\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/estates",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"estates"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "orders",
+			"item": [
+				{
+					"name": "createOrder",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"category\" : {\n        \"publicId\" : \"075110d6-2a72-48fc-b0cf-93df38b79c16\"\n    },\n    \"realEstate\" : {\n        \"publicId\" : \"552d936b-4c64-47a8-9d6a-d84a861ecd03\"\n    },\n    \"order\" : {\n        \"title\" : \"Натяжной потолок\",\n        \"description\" : \"Надо сделать за кв метр готов 2000тг\",\n        \"budjetMin\" : 1000,\n        \"budjetMax\" : 2000\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/orders",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"uuid\": \"ddabc63a-96d0-4956-aa23-19932dc08542\",\n    \"title\": \"Натяжной потолок\",\n    \"description\": \"Надо сделать за кв метр готов 3000тг\",\n    \"budgetMin\": 1000,\n    \"budgetMax\": 0,\n    \"unit\": \"areaM2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/orders",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"category\" : {\n        \"publicId\" : \"075110d6-2a72-48fc-b0cf-93df38b79c16\"\n    },\n    \"realEstate\" : {\n        \"publicId\" : \"552d936b-4c64-47a8-9d6a-d84a861ecd03\"\n    },\n    \"order\" : {\n        \"title\" : \"Натяжной потолок\",\n        \"description\" : \"Надо сделать за кв метр готов 2000тг\",\n        \"budjetMin\" : 1000,\n        \"budjetMax\" : 2000\n    }\n}"
+						},
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/orders/ddabc63a-96d0-4956-aa23-19932dc08542",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"ddabc63a-96d0-4956-aa23-19932dc08542"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/orders?page=0&size=10&sort=createAt,desc&city=cityTest&areaFrom=49&q=Натяжной потолок",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "sort",
+									"value": "createAt,desc"
+								},
+								{
+									"key": "categoryPublicId",
+									"value": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+									"disabled": true
+								},
+								{
+									"key": "budgetMinFrom",
+									"value": "300000",
+									"disabled": true
+								},
+								{
+									"key": "createdFrom",
+									"value": "2025-11-01T00:00:00Z",
+									"disabled": true
+								},
+								{
+									"key": "createdTo",
+									"value": "2025-11-03T00:00:00Z",
+									"disabled": true
+								},
+								{
+									"key": "city",
+									"value": "cityTest"
+								},
+								{
+									"key": "areaFrom",
+									"value": "49"
+								},
+								{
+									"key": "q",
+									"value": "Натяжной потолок"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "offers",
+			"item": [
+				{
+					"name": "send",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"order\" : {\n        \"uuid\" : \"1e1ecb87-c1a6-4770-9459-7bd393916cff\"\n    },\n    \"offer\" : {\n        \"price\" : 1200,\n        \"message\" : \"Братан за 1200 никто не предложит\",\n        \"unit\" : \"m2\",\n        \"daysEstimate\" : 3\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/offers",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"offers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "searchByOrder",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/offers?orderId=1e1ecb87-c1a6-4770-9459-7bd393916cff&sort=createdAt,desc&page=0&size=10",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"offers"
+							],
+							"query": [
+								{
+									"key": "orderId",
+									"value": "1e1ecb87-c1a6-4770-9459-7bd393916cff"
+								},
+								{
+									"key": "sort",
+									"value": "createdAt,desc"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "contracts",
+			"item": [
+				{
+					"name": "confrim",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"offer\" : {\n        \"publicId\" : \"963c906b-a174-4ed0-b64b-90a7bbb37d61\"\n    },\n    \"contract\" : {\n        \"totalPrice\" : 500000,\n        \"startDate\" : \"2025-11-20\",\n        \"endDate\" : \"2025-11-25\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/contracts",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"contracts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "byOrder",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/contracts/by-order?orderId=1e1ecb87-c1a6-4770-9459-7bd393916cff",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"contracts",
+								"by-order"
+							],
+							"query": [
+								{
+									"key": "orderId",
+									"value": "1e1ecb87-c1a6-4770-9459-7bd393916cff"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "byId",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/contracts/9582eaba-baf5-4c26-af0e-b05528a3031c",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"contracts",
+								"9582eaba-baf5-4c26-af0e-b05528a3031c"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
