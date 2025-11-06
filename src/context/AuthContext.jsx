@@ -27,9 +27,15 @@ export const AuthProvider = ({ children }) => {
   const login = async (phone, password) => {
     try {
       const data = await authService.login(phone, password);
-      setUser(data.user);
+
+      // Get the updated user from localStorage (authService stores it)
+      const currentUser = authService.getCurrentUser();
+      console.log('Setting user in context:', currentUser);
+      setUser(currentUser);
+
       return { success: true, data };
     } catch (error) {
+      console.error('Login error:', error);
       return {
         success: false,
         error: error.response?.data?.message || 'Login failed',
@@ -40,9 +46,15 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const data = await authService.register(userData);
-      setUser(data.user);
+
+      // Get the updated user from localStorage (authService stores it)
+      const currentUser = authService.getCurrentUser();
+      console.log('Setting user in context after registration:', currentUser);
+      setUser(currentUser);
+
       return { success: true, data };
     } catch (error) {
+      console.error('Registration error:', error);
       return {
         success: false,
         error: error.response?.data?.message || 'Registration failed',

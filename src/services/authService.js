@@ -13,9 +13,25 @@ const authService = {
       },
     });
 
-    if (response.data.token) {
-      localStorage.setItem('authToken', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+    console.log('Login response:', response.data);
+
+    // Store token
+    const token = response.data.token || response.data.access_token;
+    if (token) {
+      localStorage.setItem('authToken', token);
+
+      // If user data is in the response, store it
+      if (response.data.user) {
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+      } else {
+        // Create a minimal user object from available data
+        const user = {
+          phone: phone,
+          fullName: response.data.fullName || response.data.full_name || phone,
+          role: response.data.role || 'CUSTOMER',
+        };
+        localStorage.setItem('user', JSON.stringify(user));
+      }
     }
 
     return response.data;
@@ -25,9 +41,25 @@ const authService = {
   register: async (userData) => {
     const response = await api.post('/api/v1/auth/register', userData);
 
-    if (response.data.token) {
-      localStorage.setItem('authToken', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+    console.log('Register response:', response.data);
+
+    // Store token
+    const token = response.data.token || response.data.access_token;
+    if (token) {
+      localStorage.setItem('authToken', token);
+
+      // If user data is in the response, store it
+      if (response.data.user) {
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+      } else {
+        // Create user object from registration data and response
+        const user = {
+          phone: userData.phone,
+          fullName: userData.fullName,
+          role: userData.role || 'CUSTOMER',
+        };
+        localStorage.setItem('user', JSON.stringify(user));
+      }
     }
 
     return response.data;
@@ -42,7 +74,15 @@ const authService = {
   // Get current user from local storage
   getCurrentUser: () => {
     const userStr = localStorage.getItem('user');
-    return userStr ? JSON.parse(userStr) : null;
+    if (!userStr || userStr === 'undefined' || userStr === 'null') {
+      return null;
+    }
+    try {
+      return JSON.parse(userStr);
+    } catch (error) {
+      console.error('Failed to parse user data from localStorage:', error);
+      return null;
+    }
   },
 
   // Check if user is authenticated
