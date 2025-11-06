@@ -1,0 +1,29 @@
+.offers-page {
+  padding: var(--spacing-8) 0;
+  min-height: calc(100vh - 80px);
+}
+
+.offers-header {
+  margin-bottom: var(--spacing-8);
+}
+
+.offers-header h1 {
+  margin: 0 0 var(--spacing-2) 0;
+}
+
+.offers-header p {
+  color: var(--color-text-secondary);
+}
+
+.modal-subtitle {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-6);
+  font-style: italic;
+}
+
+.offer-form,
+.contract-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}

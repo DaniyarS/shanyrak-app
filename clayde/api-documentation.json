@@ -1,0 +1,449 @@
+{
+  "name": "SHANYRAK",
+  "baseUrl": "",
+  "endpoints": [
+    {
+      "name": "all",
+      "method": "GET",
+      "path": "/api/v1/categories",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "category",
+      "method": "GET",
+      "path": "/api/v1/categories/5414ea67-5f82-4514-82e9-61afe37234cf",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "children",
+      "method": "GET",
+      "path": "/api/v1/categories/5414ea67-5f82-4514-82e9-61afe37234cf/children",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "login",
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "urlencoded",
+        "urlencoded": [
+          {
+            "key": "phone",
+            "value": "87020000796",
+            "type": "text"
+          },
+          {
+            "key": "password",
+            "value": "Beknur123!",
+            "type": "text"
+          }
+        ]
+      },
+      "examples": {
+        "request": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "phone",
+              "value": "87020000796",
+              "type": "text"
+            },
+            {
+              "key": "password",
+              "value": "Beknur123!",
+              "type": "text"
+            }
+          ]
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "register",
+      "method": "POST",
+      "path": "/api/v1/auth/register",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "{\n    \"fullName\": \"Beknur Slamkul\",\n    \"phone\" : \"87020000796\",\n    \"role\" : \"CUSTOMER\",\n    \"password\" : \"Beknur123!\"\n}",
+        "options": {
+          "raw": {
+            "language": "json"
+          }
+        }
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "{\n    \"fullName\": \"Beknur Slamkul\",\n    \"phone\" : \"87020000796\",\n    \"role\" : \"CUSTOMER\",\n    \"password\" : \"Beknur123!\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "createEstate",
+      "method": "POST",
+      "path": "/api/v1/estates",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "{\n    \"kind\" : \"kindTest\",\n    \"email\" : \"emailTest\",\n    \"addressLine\" : \"addressLineTest\",\n    \"city\" : \"cityTest\",\n    \"district\" : \"districtTest\",\n    \"lat\" : \"1123\",\n    \"lon\" : \"1233\",\n    \"areaM2\" : \"49.9\",\n    \"floor\" : \"7\"\n}",
+        "options": {
+          "raw": {
+            "language": "json"
+          }
+        }
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "{\n    \"kind\" : \"kindTest\",\n    \"email\" : \"emailTest\",\n    \"addressLine\" : \"addressLineTest\",\n    \"city\" : \"cityTest\",\n    \"district\" : \"districtTest\",\n    \"lat\" : \"1123\",\n    \"lon\" : \"1233\",\n    \"areaM2\" : \"49.9\",\n    \"floor\" : \"7\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "update",
+      "method": "PUT",
+      "path": "/api/v1/estates",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "{\n        \"publicId\": \"ebb078f0-d138-4878-8df0-0109218480ca\",\n        \"kind\": \"kindTest\",\n        \"email\": \"emailTest\",\n        \"addressLine\": \"addressLineTest\",\n        \"city\": \"cityTest\",\n        \"district\": \"hahaha\",\n        \"lat\": 1123.00,\n        \"lon\": 3221.00,\n        \"areaM2\": 49.90,\n        \"floor\": 7\n    }",
+        "options": {
+          "raw": {
+            "language": "json"
+          }
+        }
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "{\n        \"publicId\": \"ebb078f0-d138-4878-8df0-0109218480ca\",\n        \"kind\": \"kindTest\",\n        \"email\": \"emailTest\",\n        \"addressLine\": \"addressLineTest\",\n        \"city\": \"cityTest\",\n        \"district\": \"hahaha\",\n        \"lat\": 1123.00,\n        \"lon\": 3221.00,\n        \"areaM2\": 49.90,\n        \"floor\": 7\n    }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "getCustomerEstates",
+      "method": "GET",
+      "path": "/api/v1/estates",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "{\n    \"kind\" : \"kindTest\",\n    \"email\" : \"emailTest\",\n    \"addressLine\" : \"addressLineTest\",\n    \"city\" : \"cityTest\",\n    \"district\" : \"districtTest\",\n    \"lat\" : \"1123\",\n    \"lon\" : \"1233\",\n    \"areaM2\" : \"49.9\",\n    \"floor\" : \"7\"\n}",
+        "options": {
+          "raw": {
+            "language": "json"
+          }
+        }
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "{\n    \"kind\" : \"kindTest\",\n    \"email\" : \"emailTest\",\n    \"addressLine\" : \"addressLineTest\",\n    \"city\" : \"cityTest\",\n    \"district\" : \"districtTest\",\n    \"lat\" : \"1123\",\n    \"lon\" : \"1233\",\n    \"areaM2\" : \"49.9\",\n    \"floor\" : \"7\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "createOrder",
+      "method": "POST",
+      "path": "/api/v1/orders",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "{\n    \"category\" : {\n        \"publicId\" : \"075110d6-2a72-48fc-b0cf-93df38b79c16\"\n    },\n    \"realEstate\" : {\n        \"publicId\" : \"552d936b-4c64-47a8-9d6a-d84a861ecd03\"\n    },\n    \"order\" : {\n        \"title\" : \"Натяжной потолок\",\n        \"description\" : \"Надо сделать за кв метр готов 2000тг\",\n        \"budjetMin\" : 1000,\n        \"budjetMax\" : 2000\n    }\n}",
+        "options": {
+          "raw": {
+            "language": "json"
+          }
+        }
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "{\n    \"category\" : {\n        \"publicId\" : \"075110d6-2a72-48fc-b0cf-93df38b79c16\"\n    },\n    \"realEstate\" : {\n        \"publicId\" : \"552d936b-4c64-47a8-9d6a-d84a861ecd03\"\n    },\n    \"order\" : {\n        \"title\" : \"Натяжной потолок\",\n        \"description\" : \"Надо сделать за кв метр готов 2000тг\",\n        \"budjetMin\" : 1000,\n        \"budjetMax\" : 2000\n    }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "update",
+      "method": "PUT",
+      "path": "/api/v1/orders",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "{\n    \"uuid\": \"ddabc63a-96d0-4956-aa23-19932dc08542\",\n    \"title\": \"Натяжной потолок\",\n    \"description\": \"Надо сделать за кв метр готов 3000тг\",\n    \"budgetMin\": 1000,\n    \"budgetMax\": 0,\n    \"unit\": \"areaM2\"\n}",
+        "options": {
+          "raw": {
+            "language": "json"
+          }
+        }
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "{\n    \"uuid\": \"ddabc63a-96d0-4956-aa23-19932dc08542\",\n    \"title\": \"Натяжной потолок\",\n    \"description\": \"Надо сделать за кв метр готов 3000тг\",\n    \"budgetMin\": 1000,\n    \"budgetMax\": 0,\n    \"unit\": \"areaM2\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/orders/ddabc63a-96d0-4956-aa23-19932dc08542",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "{\n    \"category\" : {\n        \"publicId\" : \"075110d6-2a72-48fc-b0cf-93df38b79c16\"\n    },\n    \"realEstate\" : {\n        \"publicId\" : \"552d936b-4c64-47a8-9d6a-d84a861ecd03\"\n    },\n    \"order\" : {\n        \"title\" : \"Натяжной потолок\",\n        \"description\" : \"Надо сделать за кв метр готов 2000тг\",\n        \"budjetMin\" : 1000,\n        \"budjetMax\" : 2000\n    }\n}"
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "{\n    \"category\" : {\n        \"publicId\" : \"075110d6-2a72-48fc-b0cf-93df38b79c16\"\n    },\n    \"realEstate\" : {\n        \"publicId\" : \"552d936b-4c64-47a8-9d6a-d84a861ecd03\"\n    },\n    \"order\" : {\n        \"title\" : \"Натяжной потолок\",\n        \"description\" : \"Надо сделать за кв метр готов 2000тг\",\n        \"budjetMin\" : 1000,\n        \"budjetMax\" : 2000\n    }\n}"
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "search",
+      "method": "GET",
+      "path": "/api/v1/orders",
+      "description": "",
+      "headers": [],
+      "queryParams": [
+        {
+          "key": "page",
+          "value": "0"
+        },
+        {
+          "key": "size",
+          "value": "10"
+        },
+        {
+          "key": "sort",
+          "value": "createAt,desc"
+        },
+        {
+          "key": "categoryPublicId",
+          "value": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "disabled": true
+        },
+        {
+          "key": "budgetMinFrom",
+          "value": "300000",
+          "disabled": true
+        },
+        {
+          "key": "createdFrom",
+          "value": "2025-11-01T00:00:00Z",
+          "disabled": true
+        },
+        {
+          "key": "createdTo",
+          "value": "2025-11-03T00:00:00Z",
+          "disabled": true
+        },
+        {
+          "key": "city",
+          "value": "cityTest"
+        },
+        {
+          "key": "areaFrom",
+          "value": "49"
+        },
+        {
+          "key": "q",
+          "value": "Натяжной потолок"
+        }
+      ],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "send",
+      "method": "POST",
+      "path": "/api/v1/offers",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "{\n    \"order\" : {\n        \"uuid\" : \"1e1ecb87-c1a6-4770-9459-7bd393916cff\"\n    },\n    \"offer\" : {\n        \"price\" : 1200,\n        \"message\" : \"Братан за 1200 никто не предложит\",\n        \"unit\" : \"m2\",\n        \"daysEstimate\" : 3\n    }\n}",
+        "options": {
+          "raw": {
+            "language": "json"
+          }
+        }
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "{\n    \"order\" : {\n        \"uuid\" : \"1e1ecb87-c1a6-4770-9459-7bd393916cff\"\n    },\n    \"offer\" : {\n        \"price\" : 1200,\n        \"message\" : \"Братан за 1200 никто не предложит\",\n        \"unit\" : \"m2\",\n        \"daysEstimate\" : 3\n    }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "searchByOrder",
+      "method": "GET",
+      "path": "/api/v1/offers",
+      "description": "",
+      "headers": [],
+      "queryParams": [
+        {
+          "key": "orderId",
+          "value": "1e1ecb87-c1a6-4770-9459-7bd393916cff"
+        },
+        {
+          "key": "sort",
+          "value": "createdAt,desc"
+        },
+        {
+          "key": "page",
+          "value": "0"
+        },
+        {
+          "key": "size",
+          "value": "10"
+        }
+      ],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "confrim",
+      "method": "POST",
+      "path": "/api/v1/contracts",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "{\n    \"offer\" : {\n        \"publicId\" : \"963c906b-a174-4ed0-b64b-90a7bbb37d61\"\n    },\n    \"contract\" : {\n        \"totalPrice\" : 500000,\n        \"startDate\" : \"2025-11-20\",\n        \"endDate\" : \"2025-11-25\"\n    }\n}",
+        "options": {
+          "raw": {
+            "language": "json"
+          }
+        }
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "{\n    \"offer\" : {\n        \"publicId\" : \"963c906b-a174-4ed0-b64b-90a7bbb37d61\"\n    },\n    \"contract\" : {\n        \"totalPrice\" : 500000,\n        \"startDate\" : \"2025-11-20\",\n        \"endDate\" : \"2025-11-25\"\n    }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "byOrder",
+      "method": "GET",
+      "path": "/api/v1/contracts/by-order",
+      "description": "",
+      "headers": [],
+      "queryParams": [
+        {
+          "key": "orderId",
+          "value": "1e1ecb87-c1a6-4770-9459-7bd393916cff"
+        }
+      ],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "byId",
+      "method": "GET",
+      "path": "/api/v1/contracts/9582eaba-baf5-4c26-af0e-b05528a3031c",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    }
+  ]
+}
