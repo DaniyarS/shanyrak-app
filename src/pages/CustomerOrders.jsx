@@ -20,6 +20,7 @@ const CustomerOrders = () => {
   const [editingOrder, setEditingOrder] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [offers, setOffers] = useState([]);
+  const [openMenuId, setOpenMenuId] = useState(null);
   const [formData, setFormData] = useState({
     categoryId: '',
     estateId: '',
@@ -148,15 +149,31 @@ const CustomerOrders = () => {
     if (!window.confirm(t('orders.deleteConfirm'))) return;
 
     try {
+      // Add deleting class for animation
+      const orderCard = document.querySelector(`[data-order-id="${orderId}"]`);
+      if (orderCard) {
+        orderCard.classList.add('deleting');
+      }
+
       const deleteOrderUseCase = container.getDeleteOrderUseCase();
       const result = await deleteOrderUseCase.execute(orderId);
 
       if (result.success) {
-        fetchInitialData();
+        // Wait for animation to complete before removing from state
+        setTimeout(() => {
+          setOrders((prevOrders) => prevOrders.filter((order) => order.id !== orderId));
+        }, 300);
       } else {
+        if (orderCard) {
+          orderCard.classList.remove('deleting');
+        }
         alert(result.error || t('orders.deleteFailed'));
       }
     } catch (error) {
+      const orderCard = document.querySelector(`[data-order-id="${orderId}"]`);
+      if (orderCard) {
+        orderCard.classList.remove('deleting');
+      }
       alert(t('orders.deleteFailed'));
     }
   };
@@ -167,10 +184,15 @@ const CustomerOrders = () => {
       const getOrderOffersUseCase = container.getOrderOffersUseCase();
       const result = await getOrderOffersUseCase.execute(order.id);
       setOffers(result.offers || []);
+      setOpenMenuId(null);
     } catch (error) {
       console.error('Error fetching offers:', error);
       setOffers([]);
     }
+  };
+
+  const toggleMenu = (orderId) => {
+    setOpenMenuId(openMenuId === orderId ? null : orderId);
   };
 
   const resetForm = () => {
@@ -332,13 +354,54 @@ const CustomerOrders = () => {
             </Card>
           ) : (
             orders.map((order) => (
-              <Card key={order.id} className="order-card">
+              <Card key={order.id} className="order-card" data-order-id={order.id}>
                 <div className="order-header">
-                  <h3>{order.title}</h3>
-                  <span className="order-budget">
-                    {order.budgetMin}
-                    {order.budgetMax ? `-${order.budgetMax}` : '+'} ₸
-                  </span>
+                  <div className="order-title-row">
+                    <h3>{order.title}</h3>
+                  </div>
+                  <div className="order-header-actions">
+                    <span className="order-budget">
+                      {order.budgetMin}
+                      {order.budgetMax ? `-${order.budgetMax}` : '+'} ₸
+                    </span>
+                    <div className="order-menu">
+                      <button
+                        className="menu-button"
+                        onClick={() => toggleMenu(order.id)}
+                        aria-label="Options"
+                      >
+                        ⋮
+                      </button>
+                      {openMenuId === order.id && (
+                        <div className="menu-dropdown">
+                          <button
+                            className="menu-item"
+                            onClick={() => {
+                              handleEdit(order);
+                              setOpenMenuId(null);
+                            }}
+                          >
+                            {t('common.edit')}
+                          </button>
+                          <button
+                            className="menu-item"
+                            onClick={() => handleViewOffers(order)}
+                          >
+                            {t('common.viewOffers')}
+                          </button>
+                          <button
+                            className="menu-item delete"
+                            onClick={() => {
+                              handleDelete(order.id);
+                              setOpenMenuId(null);
+                            }}
+                          >
+                            {t('common.delete')}
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
                 <p className="order-description">{order.description}</p>
                 <div className="order-details">
@@ -358,28 +421,9 @@ const CustomerOrders = () => {
                     </>
                   )}
                 </div>
-                <div className="order-actions">
-                  <Button
-                    size="small"
-                    variant="outline"
-                    onClick={() => handleEdit(order)}
-                  >
-                    {t('common.edit')}
-                  </Button>
-                  <Button
-                    size="small"
-                    variant="ghost"
-                    onClick={() => handleViewOffers(order)}
-                  >
-                    {t('common.viewOffers')}
-                  </Button>
-                  <Button
-                    size="small"
-                    variant="error"
-                    onClick={() => handleDelete(order.id)}
-                  >
-                    {t('common.delete')}
-                  </Button>
+                <div className="order-offers-section" onClick={() => handleViewOffers(order)}>
+                  <span className="offers-label">{t('orders.receivedOffers')}:</span>
+                  <span className="offers-count">{order.offersCount}</span>
                 </div>
               </Card>
             ))

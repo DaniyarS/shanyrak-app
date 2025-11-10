@@ -134,6 +134,28 @@ API Documentation
 
 ---
 
+## delete
+
+**DELETE** `/api/v1/estates/9a818ca4-48db-4eb0-951b-d6fb5e19c7e4`
+
+### Request Body
+
+```json
+{
+  "kind": "kindTest",
+  "email": "emailTest",
+  "addressLine": "addressLineTest",
+  "city": "cityTest",
+  "district": "districtTest",
+  "lat": "1123",
+  "lon": "1233",
+  "areaM2": "49.9",
+  "floor": "7"
+}
+```
+
+---
+
 ## createOrder
 
 **POST** `/api/v1/orders`
@@ -222,6 +244,18 @@ API Documentation
 
 ---
 
+## customer
+
+**GET** `/api/v1/orders/customer`
+
+### Query Parameters
+
+- `page`
+- `size`
+- `sort`
+
+---
+
 ## send
 
 **POST** `/api/v1/offers`
@@ -291,6 +325,105 @@ API Documentation
 ## byId
 
 **GET** `/api/v1/contracts/9582eaba-baf5-4c26-af0e-b05528a3031c`
+
+---
+
+## search
+
+**GET** `/api/v1/builders/search`
+
+### Query Parameters
+
+- `city`
+- `ratingFrom`
+- `categoryPublicId`
+- `page`
+- `size`
+- `sort`
+- `q`
+- `priceFrom`
+- `priceTo`
+- `availability`
+
+---
+
+## me
+
+**GET** `/api/v1/builders/me`
+
+---
+
+## builder
+
+**GET** `/api/v1/builders/ceb3f0b3-3122-48d0-ba39-e256fe291d4b`
+
+---
+
+## update
+
+**PUT** `/api/v1/builders/ceb3f0b3-3122-48d0-ba39-e256fe291d4b`
+
+### Request Body
+
+```json
+{
+  "password": null,
+  "fullName": "Beknur Slamkul",
+  "email": "beknurslamkulov@gmail.com",
+  "phone": "87020000796",
+  "avatarLink": "",
+  "role": "BUILDER",
+  "token": null,
+  "login": "bekanur",
+  "ratingAvg": 2,
+  "aboutMe": "Мен мен едим мен едим",
+  "experienceYears": 10,
+  "city": "Алматы",
+  "district": "Besagash",
+  "jobsDone": 15,
+  "available": true,
+  "priceList": null
+}
+```
+
+---
+
+## addCategory
+
+**POST** `/api/v1/builders/ceb3f0b3-3122-48d0-ba39-e256fe291d4b/category`
+
+### Request Body
+
+```json
+{
+  "category": {
+    "publicId": "5414ea67-5f82-4514-82e9-61afe37234cf"
+  },
+  "price": "1200",
+  "description": "1 кубын куямыз осы акшага"
+}
+```
+
+---
+
+## category/delete
+
+**DELETE** `/api/v1/builders/category/1`
+
+---
+
+## update
+
+**PUT** `/api/v1/builders/category/3`
+
+### Request Body
+
+```json
+{
+  "price": "1400",
+  "description": "багасы котерилди"
+}
+```
 
 ---
 

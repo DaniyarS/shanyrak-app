@@ -34,6 +34,7 @@ export class OrderMapper {
       realEstate: apiData.realEstate ? EstateMapper.toDomain(apiData.realEstate) : null,
       createdAt: orderData.createdAt || orderData.createAt ? new Date(orderData.createdAt || orderData.createAt) : null,
       updatedAt: orderData.updatedAt ? new Date(orderData.updatedAt) : null,
+      offersCount: orderData.offersCount || apiData.offersCount || 0,
     });
   }
 

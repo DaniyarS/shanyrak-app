@@ -46,6 +46,9 @@ const Navbar = () => {
               <>
                 {user?.role === 'CUSTOMER' && (
                   <>
+                    <Link to="/services" className="navbar-link">
+                      {t('navbar.services')}
+                    </Link>
                     <Link to="/my-orders" className="navbar-link">
                       {t('navbar.myOrders')}
                     </Link>
@@ -65,7 +68,13 @@ const Navbar = () => {
                   </>
                 )}
                 <div className="navbar-user">
-                  <span className="navbar-user-name">{user?.fullName}</span>
+                  {user?.role === 'BUILDER' ? (
+                    <Link to="/profile" className="navbar-user-name clickable">
+                      {user?.fullName}
+                    </Link>
+                  ) : (
+                    <span className="navbar-user-name">{user?.fullName}</span>
+                  )}
                   <Button variant="outline" size="small" onClick={handleLogout}>
                     {t('navbar.logout')}
                   </Button>

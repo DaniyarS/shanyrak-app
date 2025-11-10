@@ -318,6 +318,40 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"kind\" : \"kindTest\",\n    \"email\" : \"emailTest\",\n    \"addressLine\" : \"addressLineTest\",\n    \"city\" : \"cityTest\",\n    \"district\" : \"districtTest\",\n    \"lat\" : \"1123\",\n    \"lon\" : \"1233\",\n    \"areaM2\" : \"49.9\",\n    \"floor\" : \"7\"\n}"
+						},
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/estates/9a818ca4-48db-4eb0-951b-d6fb5e19c7e4",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"estates",
+								"9a818ca4-48db-4eb0-951b-d6fb5e19c7e4"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -503,6 +537,50 @@
 								{
 									"key": "q",
 									"value": "Натяжной потолок"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "customer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/orders/customer?page=0&size=10&sort=createAt,desc",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"customer"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "sort",
+									"value": "createAt,desc"
 								}
 							]
 						}
@@ -703,6 +781,300 @@
 								"v1",
 								"contracts",
 								"9582eaba-baf5-4c26-af0e-b05528a3031c"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "builders",
+			"item": [
+				{
+					"name": "search",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/builders/search?page=0&size=10&sort=ratingAvg,desc",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"builders",
+								"search"
+							],
+							"query": [
+								{
+									"key": "city",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "ratingFrom",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "categoryPublicId",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "sort",
+									"value": "ratingAvg,desc"
+								},
+								{
+									"key": "q",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "priceFrom",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "priceTo",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "availability",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "me",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/builders/me",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"builders",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "builder",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/builders/ceb3f0b3-3122-48d0-ba39-e256fe291d4b",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"builders",
+								"ceb3f0b3-3122-48d0-ba39-e256fe291d4b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\": null,\n    \"fullName\": \"Beknur Slamkul\",\n    \"email\": \"beknurslamkulov@gmail.com\",\n    \"phone\": \"87020000796\",\n    \"avatarLink\": \"\",\n    \"role\": \"BUILDER\",\n    \"token\": null,\n    \"login\": \"bekanur\",\n    \"ratingAvg\": 2.00,\n    \"aboutMe\": \"Мен мен едим мен едим\",\n    \"experienceYears\": 10,\n    \"city\": \"Алматы\",\n    \"district\": \"Besagash\",\n    \"jobsDone\": 15,\n    \"available\": true,\n    \"priceList\": null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/builders/ceb3f0b3-3122-48d0-ba39-e256fe291d4b",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"builders",
+								"ceb3f0b3-3122-48d0-ba39-e256fe291d4b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addCategory",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"category\" : {\n        \"publicId\" : \"5414ea67-5f82-4514-82e9-61afe37234cf\"\n    },\n    \"price\" : \"1200\",\n    \"description\" : \"1 кубын куямыз осы акшага\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/builders/ceb3f0b3-3122-48d0-ba39-e256fe291d4b/category",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"builders",
+								"ceb3f0b3-3122-48d0-ba39-e256fe291d4b",
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "category/delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/builders/category/1",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"builders",
+								"category",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"price\" : \"1400\",\n    \"description\" : \"багасы котерилди\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/builders/category/3",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"builders",
+								"category",
+								"3"
 							]
 						}
 					},

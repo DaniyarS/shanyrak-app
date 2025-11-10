@@ -14,6 +14,7 @@ export class Order {
     realEstate,
     createdAt,
     updatedAt,
+    offersCount,
   }) {
     this.id = id;
     this.title = title;
@@ -24,6 +25,7 @@ export class Order {
     this.realEstate = realEstate; // Estate entity
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+    this.offersCount = offersCount || 0;
 
     Object.freeze(this); // Immutable entity
   }

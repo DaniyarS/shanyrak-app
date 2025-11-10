@@ -9,6 +9,7 @@ import { ApiOrderRepository } from '../api/repositories/ApiOrderRepository';
 import { ApiEstateRepository } from '../api/repositories/ApiEstateRepository';
 import { ApiCategoryRepository } from '../api/repositories/ApiCategoryRepository';
 import { ApiOfferRepository } from '../api/repositories/ApiOfferRepository';
+import { ApiBuilderRepository } from '../api/repositories/ApiBuilderRepository';
 
 // Use Cases - Orders
 import { CreateOrder } from '../../application/use-cases/orders/CreateOrder';
@@ -23,6 +24,10 @@ import { ManageEstates } from '../../application/use-cases/estates/ManageEstates
 
 // Use Cases - Offers
 import { CreateOffer } from '../../application/use-cases/offers/CreateOffer';
+
+// Use Cases - Builders
+import { SearchBuilders } from '../../application/use-cases/builders/SearchBuilders';
+import { GetBuilder } from '../../application/use-cases/builders/GetBuilder';
 
 /**
  * ServiceContainer - Singleton pattern for dependency injection
@@ -40,6 +45,7 @@ class ServiceContainer {
     this.repositories.estate = new ApiEstateRepository();
     this.repositories.category = new ApiCategoryRepository();
     this.repositories.offer = new ApiOfferRepository();
+    this.repositories.builder = new ApiBuilderRepository();
 
     // Initialize use cases with their dependencies
     this.useCases.createOrder = new CreateOrder(this.repositories.order);
@@ -52,6 +58,9 @@ class ServiceContainer {
     this.useCases.manageEstates = new ManageEstates(this.repositories.estate);
 
     this.useCases.createOffer = new CreateOffer(this.repositories.offer);
+
+    this.useCases.searchBuilders = new SearchBuilders(this.repositories.builder);
+    this.useCases.getBuilder = new GetBuilder(this.repositories.builder);
   }
 
   // Getters for repositories
@@ -69,6 +78,10 @@ class ServiceContainer {
 
   getOfferRepository() {
     return this.repositories.offer;
+  }
+
+  getBuilderRepository() {
+    return this.repositories.builder;
   }
 
   // Getters for use cases - Orders
@@ -104,6 +117,15 @@ class ServiceContainer {
   // Getters for use cases - Offers
   getCreateOfferUseCase() {
     return this.useCases.createOffer;
+  }
+
+  // Getters for use cases - Builders
+  getSearchBuildersUseCase() {
+    return this.useCases.searchBuilders;
+  }
+
+  getGetBuilderUseCase() {
+    return this.useCases.getBuilder;
   }
 }
 

@@ -21,6 +21,7 @@ export const en = {
   // Navbar
   navbar: {
     home: 'Home',
+    services: 'Services',
     orders: 'Orders',
     myOrders: 'My Orders',
     myProperties: 'My Properties',
@@ -164,7 +165,9 @@ export const en = {
     deleteConfirm: 'Are you sure you want to delete this order?',
     deleteSuccess: 'Order deleted successfully',
     deleteFailed: 'Failed to delete order',
+    offer: 'Offer',
     offers: 'Offers for',
+    receivedOffers: 'Received Offers',
     submittedOffers: 'Submitted Offers:',
     noOffers: 'No offers yet.',
     unit: 'Unit',
@@ -208,6 +211,44 @@ export const en = {
     noOrders: 'No orders available at the moment.',
     offerSubmitted: 'Offer submitted successfully!',
     contractCreated: 'Contract created successfully!',
+  },
+
+  // Services
+  services: {
+    title: 'Services',
+    categories: 'Categories',
+    selectCategory: 'Select a category to see available builders',
+    builders: 'Builders',
+    loading: 'Loading...',
+    noBuilders: 'No builders found in this category',
+    builderDetails: 'Builder Details',
+    phone: 'Phone',
+    rating: 'Rating',
+    aboutMe: 'About Me',
+    experienceYears: 'Experience',
+    city: 'City',
+    district: 'District',
+    jobsDone: 'Jobs Done',
+    available: 'Available',
+    notAvailable: 'Not Available',
+    years: 'years',
+    jobs: 'jobs',
+  },
+
+  // Profile
+  profile: {
+    myProfile: 'My Profile',
+    profileInfo: 'Profile Information',
+    editProfile: 'Edit Profile',
+    personalInfo: 'Personal Information',
+    professionalInfo: 'Professional Information',
+    fullName: 'Full Name',
+    phone: 'Phone',
+    login: 'Username',
+    status: 'Status',
+    aboutMePlaceholder: 'Tell us about yourself, your experience, and your specialties...',
+    updateSuccess: 'Profile updated successfully!',
+    updateFailed: 'Failed to update profile',
   },
 
   // Errors

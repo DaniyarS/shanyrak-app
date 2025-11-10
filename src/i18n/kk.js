@@ -21,6 +21,7 @@ export const kk = {
   // Navbar
   navbar: {
     home: 'Басты бет',
+    services: 'Қызметтер',
     orders: 'Тапсырыстар',
     myOrders: 'Менің тапсырыстарым',
     myProperties: 'Менің мүліктерім',
@@ -164,7 +165,9 @@ export const kk = {
     deleteConfirm: 'Бұл тапсырысты жоюға сенімдісіз бе?',
     deleteSuccess: 'Тапсырыс сәтті жойылды',
     deleteFailed: 'Тапсырысты жою сәтсіз аяқталды',
+    offer: 'Ұсыныс',
     offers: 'Ұсыныстар',
+    receivedOffers: 'Алынған ұсыныстар',
     submittedOffers: 'Алынған ұсыныстар:',
     noOffers: 'Әлі ұсыныстар жоқ.',
     unit: 'Өлшем бірлігі',
@@ -208,6 +211,44 @@ export const kk = {
     noOrders: 'Қазіргі уақытта қол жетімді тапсырыстар жоқ.',
     offerSubmitted: 'Ұсыныс сәтті жіберілді!',
     contractCreated: 'Келісімшарт сәтті жасалды!',
+  },
+
+  // Services
+  services: {
+    title: 'Қызметтер',
+    categories: 'Санаттар',
+    selectCategory: 'Қол жетімді шеберлерді көру үшін санатты таңдаңыз',
+    builders: 'Шеберлер',
+    loading: 'Жүктелуде...',
+    noBuilders: 'Бұл санатта шеберлер табылмады',
+    builderDetails: 'Шебер туралы ақпарат',
+    phone: 'Телефон',
+    rating: 'Рейтинг',
+    aboutMe: 'Өзім туралы',
+    experienceYears: 'Тәжірибе',
+    city: 'Қала',
+    district: 'Аудан',
+    jobsDone: 'Орындалған жұмыстар',
+    available: 'Қол жетімді',
+    notAvailable: 'Қол жетімсіз',
+    years: 'жыл',
+    jobs: 'жұмыс',
+  },
+
+  // Profile
+  profile: {
+    myProfile: 'Менің профилім',
+    profileInfo: 'Профиль ақпараты',
+    editProfile: 'Профильді өңдеу',
+    personalInfo: 'Жеке ақпарат',
+    professionalInfo: 'Кәсіби ақпарат',
+    fullName: 'Толық аты',
+    phone: 'Телефон',
+    login: 'Пайдаланушы аты',
+    status: 'Мәртебе',
+    aboutMePlaceholder: 'Өзіңіз туралы, тәжірибеңіз және мамандықтарыңыз туралы айтыңыз...',
+    updateSuccess: 'Профиль сәтті жаңартылды!',
+    updateFailed: 'Профильді жаңарту сәтсіз аяқталды',
   },
 
   // Errors

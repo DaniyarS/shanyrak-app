@@ -7,8 +7,10 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Estates from './pages/Estates';
+import Services from './pages/Services';
 import CustomerOrders from './pages/CustomerOrders';
 import BuilderOrders from './pages/BuilderOrders';
+import BuilderProfile from './pages/BuilderProfile';
 import Offers from './pages/Offers';
 import Unauthorized from './pages/Unauthorized';
 import './App.css';
@@ -27,6 +29,14 @@ function App() {
               <Route path="/unauthorized" element={<Unauthorized />} />
 
             {/* Protected routes with role-based access control */}
+            <Route
+              path="/services"
+              element={
+                <PrivateRoute allowedRoles={['CUSTOMER']}>
+                  <Services />
+                </PrivateRoute>
+              }
+            />
             <Route
               path="/estates"
               element={
@@ -56,6 +66,14 @@ function App() {
               element={
                 <PrivateRoute allowedRoles={['BUILDER']}>
                   <Offers />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <PrivateRoute allowedRoles={['BUILDER']}>
+                  <BuilderProfile />
                 </PrivateRoute>
               }
             />

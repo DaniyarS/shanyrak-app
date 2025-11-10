@@ -21,6 +21,7 @@ export const ru = {
   // Navbar
   navbar: {
     home: 'Главная',
+    services: 'Услуги',
     orders: 'Заказы',
     myOrders: 'Мои заказы',
     myProperties: 'Мои объекты',
@@ -164,7 +165,9 @@ export const ru = {
     deleteConfirm: 'Вы уверены, что хотите удалить этот заказ?',
     deleteSuccess: 'Заказ успешно удален',
     deleteFailed: 'Не удалось удалить заказ',
+    offer: 'Предложение',
     offers: 'Предложения для',
+    receivedOffers: 'Полученные предложения',
     submittedOffers: 'Полученные предложения:',
     noOffers: 'Пока нет предложений.',
     unit: 'Единица',
@@ -208,6 +211,44 @@ export const ru = {
     noOrders: 'В данный момент нет доступных заказов.',
     offerSubmitted: 'Предложение успешно отправлено!',
     contractCreated: 'Договор успешно создан!',
+  },
+
+  // Services
+  services: {
+    title: 'Услуги',
+    categories: 'Категории',
+    selectCategory: 'Выберите категорию, чтобы увидеть доступных мастеров',
+    builders: 'Мастера',
+    loading: 'Загрузка...',
+    noBuilders: 'Мастера в этой категории не найдены',
+    builderDetails: 'Информация о мастере',
+    phone: 'Телефон',
+    rating: 'Рейтинг',
+    aboutMe: 'О себе',
+    experienceYears: 'Опыт',
+    city: 'Город',
+    district: 'Район',
+    jobsDone: 'Выполнено работ',
+    available: 'Доступен',
+    notAvailable: 'Недоступен',
+    years: 'лет',
+    jobs: 'работ',
+  },
+
+  // Profile
+  profile: {
+    myProfile: 'Мой профиль',
+    profileInfo: 'Информация профиля',
+    editProfile: 'Редактировать профиль',
+    personalInfo: 'Личная информация',
+    professionalInfo: 'Профессиональная информация',
+    fullName: 'Полное имя',
+    phone: 'Телефон',
+    login: 'Имя пользователя',
+    status: 'Статус',
+    aboutMePlaceholder: 'Расскажите о себе, своем опыте и специализации...',
+    updateSuccess: 'Профиль успешно обновлен!',
+    updateFailed: 'Не удалось обновить профиль',
   },
 
   // Errors

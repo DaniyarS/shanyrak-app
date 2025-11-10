@@ -196,6 +196,25 @@
       }
     },
     {
+      "name": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/estates/9a818ca4-48db-4eb0-951b-d6fb5e19c7e4",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "{\n    \"kind\" : \"kindTest\",\n    \"email\" : \"emailTest\",\n    \"addressLine\" : \"addressLineTest\",\n    \"city\" : \"cityTest\",\n    \"district\" : \"districtTest\",\n    \"lat\" : \"1123\",\n    \"lon\" : \"1233\",\n    \"areaM2\" : \"49.9\",\n    \"floor\" : \"7\"\n}"
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "{\n    \"kind\" : \"kindTest\",\n    \"email\" : \"emailTest\",\n    \"addressLine\" : \"addressLineTest\",\n    \"city\" : \"cityTest\",\n    \"district\" : \"districtTest\",\n    \"lat\" : \"1123\",\n    \"lon\" : \"1233\",\n    \"areaM2\" : \"49.9\",\n    \"floor\" : \"7\"\n}"
+        },
+        "response": null
+      }
+    },
+    {
       "name": "createOrder",
       "method": "POST",
       "path": "/api/v1/orders",
@@ -330,6 +349,31 @@
       }
     },
     {
+      "name": "customer",
+      "method": "GET",
+      "path": "/api/v1/orders/customer",
+      "description": "",
+      "headers": [],
+      "queryParams": [
+        {
+          "key": "page",
+          "value": "0"
+        },
+        {
+          "key": "size",
+          "value": "10"
+        },
+        {
+          "key": "sort",
+          "value": "createAt,desc"
+        }
+      ],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
       "name": "send",
       "method": "POST",
       "path": "/api/v1/offers",
@@ -442,6 +486,189 @@
       "queryParams": [],
       "body": null,
       "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "search",
+      "method": "GET",
+      "path": "/api/v1/builders/search",
+      "description": "",
+      "headers": [],
+      "queryParams": [
+        {
+          "key": "city",
+          "value": null,
+          "disabled": true
+        },
+        {
+          "key": "ratingFrom",
+          "value": null,
+          "disabled": true
+        },
+        {
+          "key": "categoryPublicId",
+          "value": null,
+          "disabled": true
+        },
+        {
+          "key": "page",
+          "value": "0"
+        },
+        {
+          "key": "size",
+          "value": "10"
+        },
+        {
+          "key": "sort",
+          "value": "ratingAvg,desc"
+        },
+        {
+          "key": "q",
+          "value": null,
+          "disabled": true
+        },
+        {
+          "key": "priceFrom",
+          "value": null,
+          "disabled": true
+        },
+        {
+          "key": "priceTo",
+          "value": null,
+          "disabled": true
+        },
+        {
+          "key": "availability",
+          "value": null,
+          "disabled": true
+        }
+      ],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "me",
+      "method": "GET",
+      "path": "/api/v1/builders/me",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "builder",
+      "method": "GET",
+      "path": "/api/v1/builders/ceb3f0b3-3122-48d0-ba39-e256fe291d4b",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "update",
+      "method": "PUT",
+      "path": "/api/v1/builders/ceb3f0b3-3122-48d0-ba39-e256fe291d4b",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "{\n    \"password\": null,\n    \"fullName\": \"Beknur Slamkul\",\n    \"email\": \"beknurslamkulov@gmail.com\",\n    \"phone\": \"87020000796\",\n    \"avatarLink\": \"\",\n    \"role\": \"BUILDER\",\n    \"token\": null,\n    \"login\": \"bekanur\",\n    \"ratingAvg\": 2.00,\n    \"aboutMe\": \"Мен мен едим мен едим\",\n    \"experienceYears\": 10,\n    \"city\": \"Алматы\",\n    \"district\": \"Besagash\",\n    \"jobsDone\": 15,\n    \"available\": true,\n    \"priceList\": null\n}",
+        "options": {
+          "raw": {
+            "language": "json"
+          }
+        }
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "{\n    \"password\": null,\n    \"fullName\": \"Beknur Slamkul\",\n    \"email\": \"beknurslamkulov@gmail.com\",\n    \"phone\": \"87020000796\",\n    \"avatarLink\": \"\",\n    \"role\": \"BUILDER\",\n    \"token\": null,\n    \"login\": \"bekanur\",\n    \"ratingAvg\": 2.00,\n    \"aboutMe\": \"Мен мен едим мен едим\",\n    \"experienceYears\": 10,\n    \"city\": \"Алматы\",\n    \"district\": \"Besagash\",\n    \"jobsDone\": 15,\n    \"available\": true,\n    \"priceList\": null\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "addCategory",
+      "method": "POST",
+      "path": "/api/v1/builders/ceb3f0b3-3122-48d0-ba39-e256fe291d4b/category",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "{\n    \"category\" : {\n        \"publicId\" : \"5414ea67-5f82-4514-82e9-61afe37234cf\"\n    },\n    \"price\" : \"1200\",\n    \"description\" : \"1 кубын куямыз осы акшага\"\n}",
+        "options": {
+          "raw": {
+            "language": "json"
+          }
+        }
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "{\n    \"category\" : {\n        \"publicId\" : \"5414ea67-5f82-4514-82e9-61afe37234cf\"\n    },\n    \"price\" : \"1200\",\n    \"description\" : \"1 кубын куямыз осы акшага\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "category/delete",
+      "method": "DELETE",
+      "path": "/api/v1/builders/category/1",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "update",
+      "method": "PUT",
+      "path": "/api/v1/builders/category/3",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "{\n    \"price\" : \"1400\",\n    \"description\" : \"багасы котерилди\"\n}",
+        "options": {
+          "raw": {
+            "language": "json"
+          }
+        }
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "{\n    \"price\" : \"1400\",\n    \"description\" : \"багасы котерилди\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
         "response": null
       }
     }

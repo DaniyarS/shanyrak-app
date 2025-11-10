@@ -184,7 +184,7 @@ const BuilderOrders = () => {
               >
                 <option value="">{t('orders.allCategories')}</option>
                 {categories.map((cat) => (
-                  <option key={cat.publicId} value={cat.publicId}>
+                  <option key={cat.id} value={cat.id}>
                     {cat.name}
                   </option>
                 ))}

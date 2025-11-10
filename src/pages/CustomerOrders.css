@@ -50,12 +50,24 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-4);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.3s ease, max-height 0.3s ease;
+  opacity: 1;
+  max-height: 1000px;
+  overflow: hidden;
 }
 
 .order-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
+}
+
+.order-card.deleting {
+  opacity: 0;
+  transform: translateX(100%) scale(0.8);
+  max-height: 0;
+  margin-bottom: 0;
+  padding: 0;
+  transition: all 0.3s ease-out;
 }
 
 .order-header {
@@ -67,11 +79,21 @@
   border-bottom: 1px solid var(--color-neutral-200);
 }
 
+.order-title-row {
+  flex: 1;
+}
+
 .order-header h3 {
   margin: 0;
   color: var(--color-text-primary);
-  flex: 1;
   font-weight: 600;
+  font-size: var(--font-size-xl);
+}
+
+.order-header-actions {
+  display: flex;
+  gap: var(--spacing-3);
+  align-items: center;
 }
 
 .order-budget {
@@ -82,6 +104,77 @@
   font-size: var(--font-size-sm);
   font-weight: 600;
   white-space: nowrap;
+}
+
+.order-menu {
+  position: relative;
+}
+
+.menu-button {
+  background: none;
+  border: none;
+  font-size: var(--font-size-3xl);
+  font-weight: bold;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--radius-md);
+  transition: all 0.2s;
+  line-height: 1;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-button:hover {
+  background-color: var(--color-neutral-100);
+  color: var(--color-text-primary);
+}
+
+.menu-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: var(--spacing-1);
+  background: var(--color-bg-default);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  min-width: 150px;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.menu-item {
+  display: block;
+  width: 100%;
+  padding: var(--spacing-3) var(--spacing-4);
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  transition: background-color 0.2s;
+  border-bottom: 1px solid var(--color-neutral-100);
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-item:hover {
+  background-color: var(--color-neutral-50);
+}
+
+.menu-item.delete {
+  color: var(--color-error);
+}
+
+.menu-item.delete:hover {
+  background-color: rgba(244, 67, 54, 0.1);
 }
 
 .order-description {
@@ -107,12 +200,37 @@
   font-weight: 600;
 }
 
-.order-actions {
+.order-offers-section {
   display: flex;
-  gap: var(--spacing-2);
-  padding-top: var(--spacing-3);
-  border-top: 1px solid var(--color-neutral-200);
-  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-3) var(--spacing-4);
+  margin-top: var(--spacing-3);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.order-offers-section:hover {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
+  border-color: var(--color-primary-light);
+  transform: translateY(-1px);
+}
+
+.offers-label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.offers-count {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--color-primary);
 }
 
 .empty-message {
@@ -243,11 +361,17 @@
     grid-template-columns: 1fr;
   }
 
-  .order-actions {
+  .order-header {
     flex-direction: column;
+    align-items: flex-start;
   }
 
-  .order-actions button {
+  .order-header-actions {
     width: 100%;
+    justify-content: space-between;
+  }
+
+  .order-header h3 {
+    font-size: var(--font-size-lg);
   }
 }
