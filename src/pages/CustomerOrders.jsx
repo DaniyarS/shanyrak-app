@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import orderService from '../services/orderService';
-import categoryService from '../services/categoryService';
-import estateService from '../services/estateService';
-import offerService from '../services/offerService';
+import { useLanguage } from '../context/LanguageContext';
+import { container } from '../infrastructure/di/ServiceContainer';
 import Button from '../components/Button';
 import Card from '../components/Card';
 import Input from '../components/Input';
-import './Orders.css';
+import './CustomerOrders.css';
 
-const Orders = () => {
+const CustomerOrders = () => {
   const { user } = useAuth();
+  const { t } = useLanguage();
+  const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [categories, setCategories] = useState([]);
   const [estates, setEstates] = useState([]);
@@ -27,11 +28,6 @@ const Orders = () => {
     budgetMin: '',
     budgetMax: '',
   });
-  const [searchFilters, setSearchFilters] = useState({
-    q: '',
-    city: '',
-    categoryPublicId: '',
-  });
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -41,15 +37,25 @@ const Orders = () => {
   const fetchInitialData = async () => {
     try {
       setLoading(true);
-      const [categoriesData, estatesData, ordersData] = await Promise.all([
-        categoryService.getAllCategories(),
-        estateService.getCustomerEstates(),
-        orderService.searchOrders(),
+
+      const categoryRepo = container.getCategoryRepository();
+      const estateUseCase = container.getManageEstatesUseCase();
+      const getCustomerOrdersUseCase = container.getCustomerOrdersUseCase();
+
+      const ordersResult = await getCustomerOrdersUseCase.execute({
+        page: 0,
+        size: 10,
+        sort: 'createAt,desc',
+      });
+
+      const [categoriesData, estatesResult] = await Promise.all([
+        categoryRepo.getAll(),
+        estateUseCase.getAll(),
       ]);
 
-      setCategories(Array.isArray(categoriesData) ? categoriesData : []);
-      setEstates(Array.isArray(estatesData) ? estatesData : []);
-      setOrders(Array.isArray(ordersData) ? ordersData : ordersData?.content || []);
+      setCategories(categoriesData || []);
+      setEstates(estatesResult.estates || []);
+      setOrders(ordersResult.orders || []);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -57,28 +63,21 @@ const Orders = () => {
     }
   };
 
+  const handleCreateOrderClick = () => {
+    if (estates.length === 0) {
+      if (window.confirm(t('orders.needPropertyFirst'))) {
+        navigate('/estates');
+      }
+      return;
+    }
+    setShowForm(true);
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: '' }));
-    }
-  };
-
-  const handleSearchChange = (e) => {
-    const { name, value } = e.target;
-    setSearchFilters((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSearch = async () => {
-    try {
-      setLoading(true);
-      const data = await orderService.searchOrders(searchFilters);
-      setOrders(Array.isArray(data) ? data : data?.content || []);
-    } catch (error) {
-      console.error('Error searching orders:', error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -102,29 +101,31 @@ const Orders = () => {
 
     try {
       const orderData = {
-        category: { publicId: formData.categoryId },
-        realEstate: { publicId: formData.estateId },
-        order: {
-          title: formData.title,
-          description: formData.description,
-          budjetMin: parseInt(formData.budgetMin),
-          budjetMax: formData.budgetMax ? parseInt(formData.budgetMax) : 0,
-        },
+        title: formData.title,
+        description: formData.description,
+        budgetMin: parseInt(formData.budgetMin),
+        budgetMax: formData.budgetMax ? parseInt(formData.budgetMax) : 0,
       };
 
+      let result;
       if (editingOrder) {
-        await orderService.updateOrder({
-          uuid: editingOrder.uuid,
-          ...orderData.order,
-          budgetMin: parseInt(formData.budgetMin),
-          budgetMax: formData.budgetMax ? parseInt(formData.budgetMax) : 0,
-        });
+        const updateOrderUseCase = container.getUpdateOrderUseCase();
+        result = await updateOrderUseCase.execute(editingOrder.id, orderData);
       } else {
-        await orderService.createOrder(orderData);
+        const createOrderUseCase = container.getCreateOrderUseCase();
+        result = await createOrderUseCase.execute(
+          orderData,
+          formData.categoryId,
+          formData.estateId
+        );
       }
 
-      fetchInitialData();
-      resetForm();
+      if (result.success) {
+        fetchInitialData();
+        resetForm();
+      } else {
+        setErrors(result.errors || { submit: 'Operation failed' });
+      }
     } catch (error) {
       setErrors({ submit: error.response?.data?.message || 'Operation failed' });
     }
@@ -133,8 +134,8 @@ const Orders = () => {
   const handleEdit = (order) => {
     setEditingOrder(order);
     setFormData({
-      categoryId: order.category?.publicId || '',
-      estateId: order.realEstate?.publicId || '',
+      categoryId: order.category?.id || '',
+      estateId: order.realEstate?.id || '',
       title: order.title || '',
       description: order.description || '',
       budgetMin: order.budgetMin?.toString() || '',
@@ -144,21 +145,28 @@ const Orders = () => {
   };
 
   const handleDelete = async (orderId) => {
-    if (!window.confirm('Are you sure you want to delete this order?')) return;
+    if (!window.confirm(t('orders.deleteConfirm'))) return;
 
     try {
-      await orderService.deleteOrder(orderId);
-      fetchInitialData();
+      const deleteOrderUseCase = container.getDeleteOrderUseCase();
+      const result = await deleteOrderUseCase.execute(orderId);
+
+      if (result.success) {
+        fetchInitialData();
+      } else {
+        alert(result.error || t('orders.deleteFailed'));
+      }
     } catch (error) {
-      alert('Failed to delete order');
+      alert(t('orders.deleteFailed'));
     }
   };
 
   const handleViewOffers = async (order) => {
     try {
       setSelectedOrder(order);
-      const offersData = await offerService.searchByOrder(order.uuid);
-      setOffers(Array.isArray(offersData) ? offersData : offersData?.content || []);
+      const getOrderOffersUseCase = container.getOrderOffersUseCase();
+      const result = await getOrderOffersUseCase.execute(order.id);
+      setOffers(result.offers || []);
     } catch (error) {
       console.error('Error fetching offers:', error);
       setOffers([]);
@@ -181,70 +189,32 @@ const Orders = () => {
 
   if (loading && !showForm) {
     return (
-      <div className="orders-page">
+      <div className="customer-orders-page">
         <div className="container">
-          <p>Loading orders...</p>
+          <p>{t('orders.loadingOrders')}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="orders-page">
+    <div className="customer-orders-page">
       <div className="container">
         <div className="orders-header">
-          <h1>Service Orders</h1>
-          {user?.role === 'CUSTOMER' && !showForm && (
-            <Button onClick={() => setShowForm(true)}>Create Order</Button>
+          <h1>{t('orders.myOrders')}</h1>
+          {!showForm && (
+            <Button onClick={handleCreateOrderClick}>{t('orders.createOrder')}</Button>
           )}
         </div>
 
-        {/* Search Filters */}
-        <Card className="search-card">
-          <h3>Search Orders</h3>
-          <div className="search-form">
-            <Input
-              label="Search"
-              name="q"
-              value={searchFilters.q}
-              onChange={handleSearchChange}
-              placeholder="Search by title or description"
-            />
-            <Input
-              label="City"
-              name="city"
-              value={searchFilters.city}
-              onChange={handleSearchChange}
-              placeholder="Filter by city"
-            />
-            <div className="input-wrapper">
-              <label className="input-label">Category</label>
-              <select
-                name="categoryPublicId"
-                value={searchFilters.categoryPublicId}
-                onChange={handleSearchChange}
-                className="input"
-              >
-                <option value="">All Categories</option>
-                {categories.map((cat) => (
-                  <option key={cat.publicId} value={cat.publicId}>
-                    {cat.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <Button onClick={handleSearch}>Search</Button>
-          </div>
-        </Card>
-
         {/* Create/Edit Order Form */}
-        {showForm && user?.role === 'CUSTOMER' && (
+        {showForm && (
           <Card className="order-form-card">
-            <h2>{editingOrder ? 'Edit Order' : 'Create New Order'}</h2>
+            <h2>{editingOrder ? t('orders.editOrder') : t('orders.createNewOrder')}</h2>
             <form onSubmit={handleSubmit} className="order-form">
               <div className="input-wrapper">
                 <label className="input-label">
-                  Category <span className="input-required">*</span>
+                  {t('orders.category')} <span className="input-required">*</span>
                 </label>
                 <select
                   name="categoryId"
@@ -252,9 +222,9 @@ const Orders = () => {
                   onChange={handleChange}
                   className={`input ${errors.categoryId ? 'input-error' : ''}`}
                 >
-                  <option value="">Select a category</option>
+                  <option value="">{t('orders.selectCategory')}</option>
                   {categories.map((cat) => (
-                    <option key={cat.publicId} value={cat.publicId}>
+                    <option key={cat.id} value={cat.id}>
                       {cat.name}
                     </option>
                   ))}
@@ -266,7 +236,7 @@ const Orders = () => {
 
               <div className="input-wrapper">
                 <label className="input-label">
-                  Property <span className="input-required">*</span>
+                  {t('orders.property')} <span className="input-required">*</span>
                 </label>
                 <select
                   name="estateId"
@@ -274,9 +244,9 @@ const Orders = () => {
                   onChange={handleChange}
                   className={`input ${errors.estateId ? 'input-error' : ''}`}
                 >
-                  <option value="">Select a property</option>
+                  <option value="">{t('orders.selectProperty')}</option>
                   {estates.map((estate) => (
-                    <option key={estate.publicId} value={estate.publicId}>
+                    <option key={estate.id} value={estate.id}>
                       {estate.kind} - {estate.addressLine}, {estate.city}
                     </option>
                   ))}
@@ -287,24 +257,24 @@ const Orders = () => {
               </div>
 
               <Input
-                label="Title"
+                label={t('orders.orderTitle')}
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                placeholder="e.g., Install ceiling"
+                placeholder={t('orders.titlePlaceholder')}
                 error={errors.title}
                 required
               />
 
               <div className="input-wrapper">
                 <label className="input-label">
-                  Description <span className="input-required">*</span>
+                  {t('orders.description')} <span className="input-required">*</span>
                 </label>
                 <textarea
                   name="description"
                   value={formData.description}
                   onChange={handleChange}
-                  placeholder="Describe the work needed"
+                  placeholder={t('orders.descriptionPlaceholder')}
                   className={`input ${errors.description ? 'input-error' : ''}`}
                   rows="4"
                 />
@@ -315,7 +285,7 @@ const Orders = () => {
 
               <div className="form-row">
                 <Input
-                  label="Minimum Budget"
+                  label={t('orders.minBudget')}
                   name="budgetMin"
                   type="number"
                   value={formData.budgetMin}
@@ -325,7 +295,7 @@ const Orders = () => {
                   required
                 />
                 <Input
-                  label="Maximum Budget (optional)"
+                  label={t('orders.maxBudget')}
                   name="budgetMax"
                   type="number"
                   value={formData.budgetMax}
@@ -340,10 +310,10 @@ const Orders = () => {
 
               <div className="form-actions">
                 <Button type="submit" variant="primary">
-                  {editingOrder ? 'Update Order' : 'Create Order'}
+                  {editingOrder ? t('orders.updateOrder') : t('orders.createOrder')}
                 </Button>
                 <Button type="button" variant="ghost" onClick={resetForm}>
-                  Cancel
+                  {t('common.cancel')}
                 </Button>
               </div>
             </form>
@@ -355,12 +325,14 @@ const Orders = () => {
           {orders.length === 0 ? (
             <Card>
               <p className="empty-message">
-                No orders found. Try adjusting your search filters.
+                {showForm
+                  ? t('orders.noOrdersForm')
+                  : t('orders.noOrdersCustomer')}
               </p>
             </Card>
           ) : (
             orders.map((order) => (
-              <Card key={order.uuid} className="order-card">
+              <Card key={order.id} className="order-card">
                 <div className="order-header">
                   <h3>{order.title}</h3>
                   <span className="order-budget">
@@ -371,56 +343,43 @@ const Orders = () => {
                 <p className="order-description">{order.description}</p>
                 <div className="order-details">
                   <p>
-                    <strong>Category:</strong> {order.category?.name || 'N/A'}
+                    <strong>{t('orders.category')}:</strong> {order.category?.name || 'N/A'}
                   </p>
                   {order.realEstate && (
                     <>
                       <p>
-                        <strong>Location:</strong> {order.realEstate.city},{' '}
+                        <strong>{t('orders.location')}:</strong> {order.realEstate.city},{' '}
                         {order.realEstate.district}
                       </p>
                       <p>
-                        <strong>Property:</strong> {order.realEstate.kind} -{' '}
+                        <strong>{t('orders.property')}:</strong> {order.realEstate.kind} -{' '}
                         {order.realEstate.areaM2} m²
                       </p>
                     </>
                   )}
                 </div>
                 <div className="order-actions">
-                  {user?.role === 'CUSTOMER' && (
-                    <>
-                      <Button
-                        size="small"
-                        variant="outline"
-                        onClick={() => handleEdit(order)}
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        size="small"
-                        variant="ghost"
-                        onClick={() => handleViewOffers(order)}
-                      >
-                        View Offers
-                      </Button>
-                      <Button
-                        size="small"
-                        variant="error"
-                        onClick={() => handleDelete(order.uuid)}
-                      >
-                        Delete
-                      </Button>
-                    </>
-                  )}
-                  {user?.role === 'SERVICE_PROVIDER' && (
-                    <Button
-                      size="small"
-                      variant="primary"
-                      onClick={() => handleViewOffers(order)}
-                    >
-                      Make Offer
-                    </Button>
-                  )}
+                  <Button
+                    size="small"
+                    variant="outline"
+                    onClick={() => handleEdit(order)}
+                  >
+                    {t('common.edit')}
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="ghost"
+                    onClick={() => handleViewOffers(order)}
+                  >
+                    {t('common.viewOffers')}
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="error"
+                    onClick={() => handleDelete(order.id)}
+                  >
+                    {t('common.delete')}
+                  </Button>
                 </div>
               </Card>
             ))
@@ -434,24 +393,32 @@ const Orders = () => {
               className="modal-content"
               onClick={(e) => e.stopPropagation()}
             >
-              <h2>Offers for: {selectedOrder.title}</h2>
+              <h2>{t('orders.offers')}: {selectedOrder.title}</h2>
+              <p className="modal-order-description">{selectedOrder.description}</p>
+              <div className="order-modal-details">
+                <p><strong>{t('orders.budget')}:</strong> {selectedOrder.budgetMin}{selectedOrder.budgetMax ? `-${selectedOrder.budgetMax}` : '+'} ₸</p>
+                {selectedOrder.category && (
+                  <p><strong>{t('orders.category')}:</strong> {selectedOrder.category.name}</p>
+                )}
+              </div>
+              <h3 style={{ marginTop: '1.5rem', marginBottom: '1rem' }}>{t('orders.submittedOffers')}</h3>
               <div className="offers-list">
                 {offers.length === 0 ? (
-                  <p className="empty-message">No offers yet.</p>
+                  <p className="empty-message">{t('orders.noOffers')}</p>
                 ) : (
                   offers.map((offer) => (
-                    <div key={offer.publicId} className="offer-item">
+                    <div key={offer.id} className="offer-item">
                       <div className="offer-header">
                         <strong>{offer.price} ₸</strong>
-                        <span>{offer.daysEstimate} days</span>
+                        <span>{offer.daysEstimate} {t('orders.days')}</span>
                       </div>
                       <p>{offer.message}</p>
-                      <p className="offer-unit">Unit: {offer.unit}</p>
+                      <p className="offer-unit">{t('orders.unit')}: {offer.unit}</p>
                     </div>
                   ))
                 )}
               </div>
-              <Button onClick={() => setSelectedOrder(null)}>Close</Button>
+              <Button onClick={() => setSelectedOrder(null)}>{t('common.close')}</Button>
             </Card>
           </div>
         )}
@@ -460,4 +427,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default CustomerOrders;

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useLanguage } from '../context/LanguageContext';
 import estateService from '../services/estateService';
 import Button from '../components/Button';
 import Card from '../components/Card';
@@ -6,6 +7,7 @@ import Input from '../components/Input';
 import './Estates.css';
 
 const Estates = () => {
+  const { t } = useLanguage();
   const [estates, setEstates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -54,16 +56,16 @@ const Estates = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.kind) newErrors.kind = 'Property type is required';
-    if (!formData.email) newErrors.email = 'Email is required';
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
-    if (!formData.addressLine) newErrors.addressLine = 'Address is required';
-    if (!formData.city) newErrors.city = 'City is required';
-    if (!formData.district) newErrors.district = 'District is required';
-    if (!formData.lat) newErrors.lat = 'Latitude is required';
-    if (!formData.lon) newErrors.lon = 'Longitude is required';
-    if (!formData.areaM2) newErrors.areaM2 = 'Area is required';
-    if (!formData.floor) newErrors.floor = 'Floor is required';
+    if (!formData.kind) newErrors.kind = t('estates.propertyTypeRequired');
+    if (!formData.email) newErrors.email = t('estates.emailRequired');
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = t('estates.emailInvalid');
+    if (!formData.addressLine) newErrors.addressLine = t('estates.addressRequired');
+    if (!formData.city) newErrors.city = t('estates.cityRequired');
+    if (!formData.district) newErrors.district = t('estates.districtRequired');
+    if (!formData.lat) newErrors.lat = t('estates.latitudeRequired');
+    if (!formData.lon) newErrors.lon = t('estates.longitudeRequired');
+    if (!formData.areaM2) newErrors.areaM2 = t('estates.areaRequired');
+    if (!formData.floor) newErrors.floor = t('estates.floorRequired');
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -91,7 +93,7 @@ const Estates = () => {
       fetchEstates();
       resetForm();
     } catch (error) {
-      setErrors({ submit: error.response?.data?.message || 'Operation failed' });
+      setErrors({ submit: error.response?.data?.message || t('estates.operationFailed') });
     }
   };
 
@@ -112,13 +114,13 @@ const Estates = () => {
   };
 
   const handleDelete = async (estateId) => {
-    if (!window.confirm('Are you sure you want to delete this property?')) return;
+    if (!window.confirm(t('estates.deleteConfirm'))) return;
 
     try {
       await estateService.deleteEstate(estateId);
       fetchEstates();
     } catch (error) {
-      alert('Failed to delete property');
+      alert(t('estates.deleteFailed'));
     }
   };
 
@@ -143,7 +145,7 @@ const Estates = () => {
     return (
       <div className="estates-page">
         <div className="container">
-          <p>Loading properties...</p>
+          <p>{t('estates.loadingProperties')}</p>
         </div>
       </div>
     );
@@ -153,64 +155,64 @@ const Estates = () => {
     <div className="estates-page">
       <div className="container">
         <div className="estates-header">
-          <h1>My Properties</h1>
+          <h1>{t('estates.title')}</h1>
           {!showForm && (
-            <Button onClick={() => setShowForm(true)}>Add Property</Button>
+            <Button onClick={() => setShowForm(true)}>{t('estates.addProperty')}</Button>
           )}
         </div>
 
         {showForm && (
           <Card className="estate-form-card">
-            <h2>{editingEstate ? 'Edit Property' : 'Add New Property'}</h2>
+            <h2>{editingEstate ? t('estates.editProperty') : t('estates.addNewProperty')}</h2>
             <form onSubmit={handleSubmit} className="estate-form">
               <div className="form-row">
                 <Input
-                  label="Property Type"
+                  label={t('estates.propertyType')}
                   name="kind"
                   value={formData.kind}
                   onChange={handleChange}
-                  placeholder="e.g., Apartment, House"
+                  placeholder={t('estates.propertyTypePlaceholder')}
                   error={errors.kind}
                   required
                 />
                 <Input
-                  label="Email"
+                  label={t('estates.email')}
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="contact@example.com"
+                  placeholder={t('estates.emailPlaceholder')}
                   error={errors.email}
                   required
                 />
               </div>
 
               <Input
-                label="Address"
+                label={t('estates.address')}
                 name="addressLine"
                 value={formData.addressLine}
                 onChange={handleChange}
-                placeholder="Street address"
+                placeholder={t('estates.addressPlaceholder')}
                 error={errors.addressLine}
                 required
               />
 
               <div className="form-row">
                 <Input
-                  label="City"
+                  label={t('estates.city')}
                   name="city"
                   value={formData.city}
                   onChange={handleChange}
-                  placeholder="City"
+                  placeholder={t('estates.cityPlaceholder')}
                   error={errors.city}
                   required
                 />
                 <Input
-                  label="District"
+                  label={t('estates.district')}
                   name="district"
                   value={formData.district}
                   onChange={handleChange}
-                  placeholder="District"
+                  placeholder={t('estates.districtPlaceholder')}
                   error={errors.district}
                   required
                 />
@@ -218,7 +220,7 @@ const Estates = () => {
 
               <div className="form-row">
                 <Input
-                  label="Latitude"
+                  label={t('estates.latitude')}
                   name="lat"
                   type="number"
                   step="any"
@@ -229,7 +231,7 @@ const Estates = () => {
                   required
                 />
                 <Input
-                  label="Longitude"
+                  label={t('estates.longitude')}
                   name="lon"
                   type="number"
                   step="any"
@@ -243,7 +245,7 @@ const Estates = () => {
 
               <div className="form-row">
                 <Input
-                  label="Area (m²)"
+                  label={t('estates.area')}
                   name="areaM2"
                   type="number"
                   step="0.1"
@@ -254,12 +256,12 @@ const Estates = () => {
                   required
                 />
                 <Input
-                  label="Floor"
+                  label={t('estates.floor')}
                   name="floor"
                   type="number"
                   value={formData.floor}
                   onChange={handleChange}
-                  placeholder="5"
+                  placeholder={t('estates.floorPlaceholder')}
                   error={errors.floor}
                   required
                 />
@@ -271,10 +273,10 @@ const Estates = () => {
 
               <div className="form-actions">
                 <Button type="submit" variant="primary">
-                  {editingEstate ? 'Update Property' : 'Add Property'}
+                  {editingEstate ? t('estates.updateProperty') : t('estates.addProperty')}
                 </Button>
                 <Button type="button" variant="ghost" onClick={resetForm}>
-                  Cancel
+                  {t('common.cancel')}
                 </Button>
               </div>
             </form>
@@ -285,7 +287,7 @@ const Estates = () => {
           {estates.length === 0 ? (
             <Card>
               <p className="empty-message">
-                No properties yet. Add your first property to get started.
+                {t('estates.noProperties')}
               </p>
             </Card>
           ) : (
@@ -297,19 +299,19 @@ const Estates = () => {
                 </div>
                 <div className="estate-details">
                   <p>
-                    <strong>Address:</strong> {estate.addressLine}
+                    <strong>{t('estates.address')}:</strong> {estate.addressLine}
                   </p>
                   <p>
-                    <strong>City:</strong> {estate.city}, {estate.district}
+                    <strong>{t('estates.city')}:</strong> {estate.city}, {estate.district}
                   </p>
                   <p>
-                    <strong>Floor:</strong> {estate.floor}
+                    <strong>{t('estates.floor')}:</strong> {estate.floor}
                   </p>
                   <p>
-                    <strong>Contact:</strong> {estate.email}
+                    <strong>{t('estates.contact')}:</strong> {estate.email}
                   </p>
                   <p className="estate-coords">
-                    <strong>Coordinates:</strong> {estate.lat}, {estate.lon}
+                    <strong>{t('estates.coordinates')}:</strong> {estate.lat}, {estate.lon}
                   </p>
                 </div>
                 <div className="estate-actions">
@@ -318,14 +320,14 @@ const Estates = () => {
                     variant="outline"
                     onClick={() => handleEdit(estate)}
                   >
-                    Edit
+                    {t('common.edit')}
                   </Button>
                   <Button
                     size="small"
                     variant="error"
                     onClick={() => handleDelete(estate.publicId)}
                   >
-                    Delete
+                    {t('common.delete')}
                   </Button>
                 </div>
               </Card>

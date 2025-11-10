@@ -44,16 +44,25 @@ const Navbar = () => {
 
             {isAuthenticated ? (
               <>
-                <Link to="/orders" className="navbar-link">
-                  {t('navbar.orders')}
-                </Link>
-                <Link to="/estates" className="navbar-link">
-                  {t('navbar.myProperties')}
-                </Link>
-                {user?.role === 'SERVICE_PROVIDER' && (
-                  <Link to="/offers" className="navbar-link">
-                    {t('navbar.myOffers')}
-                  </Link>
+                {user?.role === 'CUSTOMER' && (
+                  <>
+                    <Link to="/my-orders" className="navbar-link">
+                      {t('navbar.myOrders')}
+                    </Link>
+                    <Link to="/estates" className="navbar-link">
+                      {t('navbar.myProperties')}
+                    </Link>
+                  </>
+                )}
+                {user?.role === 'BUILDER' && (
+                  <>
+                    <Link to="/orders" className="navbar-link">
+                      {t('navbar.orders')}
+                    </Link>
+                    <Link to="/offers" className="navbar-link">
+                      {t('navbar.myOffers')}
+                    </Link>
+                  </>
                 )}
                 <div className="navbar-user">
                   <span className="navbar-user-name">{user?.fullName}</span>

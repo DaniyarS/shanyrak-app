@@ -53,11 +53,13 @@ const Register = () => {
 
     if (!formData.password) {
       newErrors.password = t('validation.passwordRequired');
-    } else if (formData.password.length < 8) {
-      newErrors.password = t('validation.passwordLength');
-    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/.test(formData.password)) {
-      newErrors.password = t('validation.passwordStrength');
     }
+    // Commented out password validation for now
+    // else if (formData.password.length < 8) {
+    //   newErrors.password = t('validation.passwordLength');
+    // } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/.test(formData.password)) {
+    //   newErrors.password = t('validation.passwordStrength');
+    // }
 
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = t('validation.confirmPasswordRequired');
@@ -130,7 +132,7 @@ const Register = () => {
                 className="input"
               >
                 <option value="CUSTOMER">{t('auth.customer')}</option>
-                <option value="SERVICE_PROVIDER">{t('auth.serviceProvider')}</option>
+                <option value="BUILDER">{t('auth.serviceProvider')}</option>
               </select>
             </div>
 

@@ -7,8 +7,10 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Estates from './pages/Estates';
-import Orders from './pages/Orders';
+import CustomerOrders from './pages/CustomerOrders';
+import BuilderOrders from './pages/BuilderOrders';
 import Offers from './pages/Offers';
+import Unauthorized from './pages/Unauthorized';
 import './App.css';
 
 function App() {
@@ -22,28 +24,37 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/unauthorized" element={<Unauthorized />} />
 
-            {/* Protected routes - will be implemented in next steps */}
+            {/* Protected routes with role-based access control */}
             <Route
               path="/estates"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['CUSTOMER']}>
                   <Estates />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/my-orders"
+              element={
+                <PrivateRoute allowedRoles={['CUSTOMER']}>
+                  <CustomerOrders />
                 </PrivateRoute>
               }
             />
             <Route
               path="/orders"
               element={
-                <PrivateRoute>
-                  <Orders />
+                <PrivateRoute allowedRoles={['BUILDER']}>
+                  <BuilderOrders />
                 </PrivateRoute>
               }
             />
             <Route
               path="/offers"
               element={
-                <PrivateRoute>
+                <PrivateRoute allowedRoles={['BUILDER']}>
                   <Offers />
                 </PrivateRoute>
               }
