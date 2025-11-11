@@ -67,11 +67,23 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  const updateUser = (updatedData) => {
+    // Merge updated data with current user
+    const updatedUser = { ...user, ...updatedData };
+    setUser(updatedUser);
+
+    // Update localStorage
+    if (updatedUser) {
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+    }
+  };
+
   const value = {
     user,
     login,
     register,
     logout,
+    updateUser,
     isAuthenticated: !!user,
     loading,
   };

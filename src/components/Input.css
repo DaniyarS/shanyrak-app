@@ -39,6 +39,17 @@
   cursor: not-allowed;
 }
 
+.input:read-only {
+  background-color: var(--color-neutral-100);
+  color: var(--color-text-secondary);
+  cursor: not-allowed;
+}
+
+.input:read-only:focus {
+  border-color: var(--color-neutral-300);
+  box-shadow: none;
+}
+
 .input-error {
   border-color: var(--color-error);
 }

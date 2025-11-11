@@ -47,20 +47,27 @@ export class BuilderMapper {
 
   /**
    * Convert Domain entity to API DTO for update
-   * @param {Builder} builder - Builder domain entity
+   * @param {Builder} builder - Builder domain entity or data object
    * @returns {Object} API DTO
    */
   static toUpdateDTO(builder) {
     return {
+      password: null,
       fullName: builder.fullName,
-      email: builder.email,
+      email: builder.email || '',
       phone: builder.phone,
-      avatarLink: builder.avatarLink,
-      aboutMe: builder.aboutMe,
-      experienceYears: builder.experienceYears,
-      city: builder.city,
-      district: builder.district,
-      available: builder.available,
+      avatarLink: builder.avatarLink || '',
+      role: builder.role || 'BUILDER',
+      token: null,
+      login: builder.login || '',
+      ratingAvg: builder.ratingAvg || 0,
+      aboutMe: builder.aboutMe || '',
+      experienceYears: builder.experienceYears || 0,
+      city: builder.city || '',
+      district: builder.district || '',
+      jobsDone: builder.jobsDone || 0,
+      available: builder.available !== undefined ? builder.available : true,
+      priceList: builder.priceList || null,
     };
   }
 }

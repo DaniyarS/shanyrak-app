@@ -9,20 +9,20 @@ export class GetBuilder {
 
   /**
    * Execute the get builder use case
-   * @param {string} id - Builder ID
+   * @param {string} id - Builder ID (optional - if not provided, gets current user)
    * @returns {Promise<Object>} Result with builder data
    */
   async execute(id) {
     try {
-      if (!id) {
-        return {
-          success: false,
-          builder: null,
-          error: 'Builder ID is required',
-        };
-      }
+      let builder;
 
-      const builder = await this.builderRepository.getById(id);
+      if (!id) {
+        // Get current builder (me)
+        builder = await this.builderRepository.getMe();
+      } else {
+        // Get builder by ID
+        builder = await this.builderRepository.getById(id);
+      }
 
       return {
         success: true,

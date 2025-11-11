@@ -70,10 +70,16 @@ export class ApiBuilderRepository extends IBuilderRepository {
   async update(id, data) {
     try {
       const dto = BuilderMapper.toUpdateDTO(data);
+      console.log('ApiBuilderRepository - Update DTO:', dto);
+      console.log('ApiBuilderRepository - URL:', `/api/v1/builders/${id}`);
+
       const response = await api.put(`/api/v1/builders/${id}`, dto);
+      console.log('ApiBuilderRepository - Response:', response.data);
+
       return BuilderMapper.toDomain(response.data);
     } catch (error) {
       console.error('Error updating builder:', error);
+      console.error('Error response:', error.response?.data);
       throw error;
     }
   }

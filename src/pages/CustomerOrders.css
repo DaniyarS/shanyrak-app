@@ -233,6 +233,30 @@
   color: var(--color-primary);
 }
 
+.offers-count-shimmer {
+  display: inline-block;
+  width: 40px;
+  height: 32px;
+  background: linear-gradient(
+    90deg,
+    rgba(102, 126, 234, 0.2) 0%,
+    rgba(102, 126, 234, 0.4) 50%,
+    rgba(102, 126, 234, 0.2) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-sm);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
 .empty-message {
   text-align: center;
   color: var(--color-text-secondary);
@@ -319,21 +343,90 @@
   background-color: var(--color-neutral-50);
 }
 
-.offer-header {
+.offer-builder-info {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--spacing-2);
+  padding: var(--spacing-3);
+  margin-bottom: var(--spacing-3);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-primary-light);
+  transition: all 0.2s;
 }
 
-.offer-header strong {
-  color: var(--color-success);
+.offer-builder-info.clickable {
+  cursor: pointer;
+}
+
+.offer-builder-info.clickable:hover {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.builder-name-rating {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.builder-name {
+  color: var(--color-text-primary);
   font-size: var(--font-size-lg);
+  font-weight: 600;
+  margin: 0;
 }
 
-.offer-header span {
+.builder-rating {
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+.builder-phone {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  padding: var(--spacing-2) var(--spacing-3);
+  background-color: white;
+  border-radius: var(--radius-md);
+  transition: all 0.2s;
+  border: 1px solid var(--color-primary);
+}
+
+.builder-phone:hover {
+  background-color: var(--color-primary);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.offer-pricing {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-3);
+  padding: var(--spacing-3);
+  background-color: white;
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--color-success);
+}
+
+.offer-price {
+  color: var(--color-success);
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  margin: 0;
+}
+
+.offer-estimate {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  margin: 0;
+  font-weight: 500;
 }
 
 .offer-item p {
@@ -341,9 +434,17 @@
   color: var(--color-text-primary);
 }
 
+.offer-message {
+  margin: var(--spacing-2) 0;
+  color: var(--color-text-primary);
+  line-height: 1.6;
+}
+
 .offer-unit {
+  margin: var(--spacing-2) 0 0 0;
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
+  font-weight: 500;
 }
 
 @media (max-width: 768px) {
@@ -351,6 +452,17 @@
     flex-direction: column;
     gap: var(--spacing-4);
     align-items: flex-start;
+  }
+
+  .offer-builder-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-3);
+  }
+
+  .builder-phone {
+    width: 100%;
+    text-align: center;
   }
 
   .form-row {

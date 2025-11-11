@@ -12,6 +12,7 @@ export class Offer {
     message,
     createdAt,
     updatedAt,
+    builder,
   }) {
     this.id = id;
     this.orderId = orderId;
@@ -21,6 +22,7 @@ export class Offer {
     this.message = message;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+    this.builder = builder; // Builder object with phone, fullName, ratingAvg, etc.
 
     Object.freeze(this);
   }

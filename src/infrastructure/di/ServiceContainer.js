@@ -28,6 +28,7 @@ import { CreateOffer } from '../../application/use-cases/offers/CreateOffer';
 // Use Cases - Builders
 import { SearchBuilders } from '../../application/use-cases/builders/SearchBuilders';
 import { GetBuilder } from '../../application/use-cases/builders/GetBuilder';
+import { UpdateBuilder } from '../../application/use-cases/builders/UpdateBuilder';
 
 /**
  * ServiceContainer - Singleton pattern for dependency injection
@@ -61,6 +62,7 @@ class ServiceContainer {
 
     this.useCases.searchBuilders = new SearchBuilders(this.repositories.builder);
     this.useCases.getBuilder = new GetBuilder(this.repositories.builder);
+    this.useCases.updateBuilder = new UpdateBuilder(this.repositories.builder);
   }
 
   // Getters for repositories
@@ -126,6 +128,10 @@ class ServiceContainer {
 
   getGetBuilderUseCase() {
     return this.useCases.getBuilder;
+  }
+
+  getUpdateBuilderUseCase() {
+    return this.useCases.updateBuilder;
   }
 }
 

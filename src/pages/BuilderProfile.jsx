@@ -8,7 +8,7 @@ import Input from '../components/Input';
 import './BuilderProfile.css';
 
 const BuilderProfile = () => {
-  const { user, updateUser } = useAuth();
+  const { updateUser } = useAuth();
   const { t } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
@@ -73,9 +73,13 @@ const BuilderProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!builderData?.id) {
+      setErrors({ submit: 'Builder ID not found. Please refresh the page.' });
+      return;
+    }
+
     try {
-      const updateBuilderUseCase = container.getUpdateBuilderUseCase();
-      const result = await updateBuilderUseCase.execute(user.id, {
+      const updateData = {
         fullName: formData.fullName,
         email: formData.email,
         phone: formData.phone,
@@ -86,7 +90,20 @@ const BuilderProfile = () => {
         district: formData.district,
         jobsDone: formData.jobsDone ? parseInt(formData.jobsDone) : 0,
         available: formData.available,
-      });
+        // Include existing fields that shouldn't be changed
+        avatarLink: builderData?.avatarLink || '',
+        role: builderData?.role || 'BUILDER',
+        ratingAvg: builderData?.ratingAvg || 0,
+        priceList: builderData?.priceList || null,
+      };
+
+      console.log('Updating builder with data:', updateData);
+      console.log('Builder ID:', builderData.id);
+
+      const updateBuilderUseCase = container.getUpdateBuilderUseCase();
+      const result = await updateBuilderUseCase.execute(builderData.id, updateData);
+
+      console.log('Update result:', result);
 
       if (result.success) {
         setBuilderData(result.builder);
@@ -94,9 +111,11 @@ const BuilderProfile = () => {
         updateUser(result.builder);
         alert(t('profile.updateSuccess'));
       } else {
+        console.error('Update failed:', result.errors);
         setErrors(result.errors || { submit: t('profile.updateFailed') });
       }
     } catch (error) {
+      console.error('Update error:', error);
       setErrors({ submit: error.response?.data?.message || t('profile.updateFailed') });
     }
   };
@@ -151,6 +170,7 @@ const BuilderProfile = () => {
                 onChange={handleChange}
                 error={errors.phone}
                 required
+                readOnly
               />
 
               <Input

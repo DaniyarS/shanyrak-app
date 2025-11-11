@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import { container } from '../infrastructure/di/ServiceContainer';
 import Button from '../components/Button';
@@ -9,7 +8,6 @@ import Input from '../components/Input';
 import './CustomerOrders.css';
 
 const CustomerOrders = () => {
-  const { user } = useAuth();
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
@@ -21,6 +19,8 @@ const CustomerOrders = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [offers, setOffers] = useState([]);
   const [openMenuId, setOpenMenuId] = useState(null);
+  const [offerCounts, setOfferCounts] = useState({});
+  const [loadingOfferCounts, setLoadingOfferCounts] = useState({});
   const [formData, setFormData] = useState({
     categoryId: '',
     estateId: '',
@@ -57,11 +57,51 @@ const CustomerOrders = () => {
       setCategories(categoriesData || []);
       setEstates(estatesResult.estates || []);
       setOrders(ordersResult.orders || []);
+
+      // Fetch offer counts for each order separately
+      if (ordersResult.orders && ordersResult.orders.length > 0) {
+        fetchOfferCounts(ordersResult.orders);
+      }
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchOfferCounts = async (ordersList) => {
+    const offerRepo = container.getOfferRepository();
+
+    // Set all orders as loading
+    const loadingState = {};
+    ordersList.forEach((order) => {
+      loadingState[order.id] = true;
+    });
+    setLoadingOfferCounts(loadingState);
+
+    // Fetch counts for each order
+    const countsPromises = ordersList.map(async (order) => {
+      try {
+        const offers = await offerRepo.getByOrderId(order.id, { page: 0, size: 100 });
+        return { orderId: order.id, count: offers.length };
+      } catch (error) {
+        console.error(`Error fetching offers for order ${order.id}:`, error);
+        return { orderId: order.id, count: 0 };
+      }
+    });
+
+    const countsResults = await Promise.all(countsPromises);
+
+    // Update counts state
+    const counts = {};
+    const loading = {};
+    countsResults.forEach((result) => {
+      counts[result.orderId] = result.count;
+      loading[result.orderId] = false;
+    });
+
+    setOfferCounts(counts);
+    setLoadingOfferCounts(loading);
   };
 
   const handleCreateOrderClick = () => {
@@ -423,7 +463,11 @@ const CustomerOrders = () => {
                 </div>
                 <div className="order-offers-section" onClick={() => handleViewOffers(order)}>
                   <span className="offers-label">{t('orders.receivedOffers')}:</span>
-                  <span className="offers-count">{order.offersCount}</span>
+                  {loadingOfferCounts[order.id] ? (
+                    <span className="offers-count-shimmer"></span>
+                  ) : (
+                    <span className="offers-count">{offerCounts[order.id] || 0}</span>
+                  )}
                 </div>
               </Card>
             ))
@@ -450,16 +494,69 @@ const CustomerOrders = () => {
                 {offers.length === 0 ? (
                   <p className="empty-message">{t('orders.noOffers')}</p>
                 ) : (
-                  offers.map((offer) => (
-                    <div key={offer.id} className="offer-item">
-                      <div className="offer-header">
-                        <strong>{offer.price} ₸</strong>
-                        <span>{offer.daysEstimate} {t('orders.days')}</span>
+                  offers.map((offer) => {
+                    const getUnitLabel = (unit) => {
+                      const unitMap = {
+                        'm2': t('offers.perM2'),
+                        'areaM2': t('offers.perM2'),
+                        'unit': t('offers.perUnit'),
+                        'hour': t('offers.perHour'),
+                        'day': t('offers.perDay'),
+                        'fixed': '',
+                      };
+                      return unitMap[unit] || unit;
+                    };
+
+                    const getDaysLabel = (days) => {
+                      return days === 1 ? t('offers.day') : t('offers.days');
+                    };
+
+                    const handleBuilderClick = (e) => {
+                      e.preventDefault();
+                      if (offer.builder?.id) {
+                        navigate(`/builders/${offer.builder.id}`);
+                      }
+                    };
+
+                    return (
+                      <div key={offer.id} className="offer-item">
+                        {offer.builder && (
+                          <div
+                            className="offer-builder-info clickable"
+                            onClick={handleBuilderClick}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter' || e.key === ' ') {
+                                handleBuilderClick(e);
+                              }
+                            }}
+                          >
+                            <div className="builder-name-rating">
+                              <strong className="builder-name">{offer.builder.fullName || offer.builder.login}</strong>
+                              <span className="builder-rating">⭐ {offer.builder.ratingAvg?.toFixed(1) || '0.0'}</span>
+                            </div>
+                            <a
+                              href={`tel:${offer.builder.phone}`}
+                              className="builder-phone"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              📞 {offer.builder.phone}
+                            </a>
+                          </div>
+                        )}
+                        <div className="offer-pricing">
+                          <strong className="offer-price">
+                            {offer.price} ₸ {getUnitLabel(offer.unit)}
+                          </strong>
+                          <p className="offer-estimate">
+                            {t('offers.estimatedDays')}: {offer.daysEstimate} {getDaysLabel(offer.daysEstimate)}
+                          </p>
+                        </div>
+                        <p className="offer-message">{offer.message}</p>
                       </div>
-                      <p>{offer.message}</p>
-                      <p className="offer-unit">{t('orders.unit')}: {offer.unit}</p>
-                    </div>
-                  ))
+                    );
+                  })
                 )}
               </div>
               <Button onClick={() => setSelectedOrder(null)}>{t('common.close')}</Button>

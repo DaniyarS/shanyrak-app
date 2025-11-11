@@ -24,11 +24,14 @@ const authService = {
       if (response.data.user) {
         localStorage.setItem('user', JSON.stringify(response.data.user));
       } else {
-        // Create a minimal user object from available data
+        // Create a user object from available data
         const user = {
+          id: response.data.uuid || response.data.publicId || response.data.id,
           phone: phone,
           fullName: response.data.fullName || response.data.full_name || phone,
           role: response.data.role || 'CUSTOMER',
+          email: response.data.email,
+          login: response.data.login,
         };
         localStorage.setItem('user', JSON.stringify(user));
       }
@@ -54,9 +57,12 @@ const authService = {
       } else {
         // Create user object from registration data and response
         const user = {
+          id: response.data.uuid || response.data.publicId || response.data.id,
           phone: userData.phone,
           fullName: userData.fullName,
           role: userData.role || 'CUSTOMER',
+          email: response.data.email,
+          login: response.data.login,
         };
         localStorage.setItem('user', JSON.stringify(user));
       }

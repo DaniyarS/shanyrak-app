@@ -1,4 +1,5 @@
 import { Offer } from '../../../domain/entities/Offer';
+import { BuilderMapper } from './BuilderMapper';
 
 /**
  * OfferMapper - Maps between API DTOs and Offer Domain Entities
@@ -6,19 +7,25 @@ import { Offer } from '../../../domain/entities/Offer';
 export class OfferMapper {
   /**
    * Map API response to Offer entity
+   * Handles both nested format (from searchByOrder) and flat format
    */
   static toDomain(apiData) {
     if (!apiData) return null;
 
+    // Check if data is nested (from searchByOrder endpoint)
+    const offerData = apiData.offer || apiData;
+    const builderData = apiData.appUser || apiData.builder;
+
     return new Offer({
-      id: apiData.publicId || apiData.uuid || apiData.id,
-      orderId: apiData.orderId || (apiData.order && apiData.order.uuid),
-      price: apiData.price,
-      unit: apiData.unit,
-      daysEstimate: apiData.daysEstimate,
-      message: apiData.message,
-      createdAt: apiData.createdAt ? new Date(apiData.createdAt) : null,
-      updatedAt: apiData.updatedAt ? new Date(apiData.updatedAt) : null,
+      id: offerData.publicId || offerData.uuid || offerData.id,
+      orderId: offerData.orderId || (apiData.order && apiData.order.uuid),
+      price: offerData.price,
+      unit: offerData.unit,
+      daysEstimate: offerData.daysEstimate,
+      message: offerData.message,
+      createdAt: offerData.createdAt ? new Date(offerData.createdAt) : null,
+      updatedAt: offerData.updatedAt ? new Date(offerData.updatedAt) : null,
+      builder: builderData ? BuilderMapper.toDomain(builderData) : null,
     });
   }
 
