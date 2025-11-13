@@ -2,7 +2,7 @@
   font-family: var(--font-family-primary);
   font-weight: 500;
   border-radius: var(--radius-md);
-  border: none;
+  border: 2px solid transparent;
   cursor: pointer;
   transition: all 0.2s ease;
   display: inline-flex;
@@ -93,4 +93,34 @@
 /* Full Width */
 .btn-full-width {
   width: 100%;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .btn-large {
+    font-size: var(--font-size-base);
+    padding: var(--spacing-2) var(--spacing-4);
+  }
+
+  .btn-medium {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-2) var(--spacing-3);
+  }
+
+  .btn-small {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-1) var(--spacing-2);
+  }
+}
+
+@media (max-width: 480px) {
+  /* Make buttons slightly easier to tap on small screens */
+  .btn {
+    min-height: 44px;
+    padding: var(--spacing-2) var(--spacing-4);
+  }
+
+  .btn-small {
+    min-height: 36px;
+  }
 }

@@ -67,3 +67,41 @@
 .login-link:hover {
   text-decoration: underline;
 }
+
+@media (max-width: 768px) {
+  .login-page {
+    padding: var(--spacing-3);
+  }
+
+  .login-header h1 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .login-header p {
+    font-size: var(--font-size-sm);
+  }
+
+  .login-form {
+    gap: var(--spacing-3);
+  }
+}
+
+@media (max-width: 480px) {
+  .login-page {
+    padding: var(--spacing-2);
+    align-items: flex-start;
+    padding-top: var(--spacing-8);
+  }
+
+  .login-header {
+    margin-bottom: var(--spacing-6);
+  }
+
+  .login-header h1 {
+    font-size: var(--font-size-xl);
+  }
+
+  .login-container {
+    max-width: 100%;
+  }
+}

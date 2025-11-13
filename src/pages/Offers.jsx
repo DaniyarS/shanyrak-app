@@ -1,178 +1,62 @@
 import { useState, useEffect } from 'react';
+import { useLanguage } from '../context/LanguageContext';
 import offerService from '../services/offerService';
-import orderService from '../services/orderService';
-import contractService from '../services/contractService';
-import Button from '../components/Button';
 import Card from '../components/Card';
-import Input from '../components/Input';
 import './Offers.css';
 
 const Offers = () => {
-  const [orders, setOrders] = useState([]);
-  const [selectedOrder, setSelectedOrder] = useState(null);
-  const [showOfferForm, setShowOfferForm] = useState(false);
-  const [showContractForm, setShowContractForm] = useState(false);
-  const [selectedOffer, setSelectedOffer] = useState(null);
+  const { t } = useLanguage();
+  const [offers, setOffers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [offerFormData, setOfferFormData] = useState({
-    price: '',
-    message: '',
-    unit: 'm2',
-    daysEstimate: '',
-  });
-  const [contractFormData, setContractFormData] = useState({
-    totalPrice: '',
-    startDate: '',
-    endDate: '',
-  });
-  const [errors, setErrors] = useState({});
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchOrders();
+    fetchBuilderOffers();
   }, []);
 
-  const fetchOrders = async () => {
+  const fetchBuilderOffers = async () => {
     try {
       setLoading(true);
-      const data = await orderService.searchOrders();
-      setOrders(Array.isArray(data) ? data : data?.content || []);
+      setError(null);
+      const response = await offerService.getBuilderOffers();
+      // Handle paginated response
+      const offersData = response?.content || [];
+      setOffers(offersData);
     } catch (error) {
-      console.error('Error fetching orders:', error);
+      console.error('Error fetching builder offers:', error);
+      setError(error.response?.data?.message || 'Failed to load offers');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleOfferChange = (e) => {
-    const { name, value } = e.target;
-    setOfferFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: '' }));
-    }
+  const getUnitText = (unit) => {
+    const units = {
+      m2: t('offers.perM2'),
+      unit: t('offers.perUnit'),
+      hour: t('offers.perHour'),
+      day: t('offers.perDay'),
+      fixed: t('offers.fixedPrice'),
+    };
+    return units[unit] || unit;
   };
 
-  const handleContractChange = (e) => {
-    const { name, value } = e.target;
-    setContractFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: '' }));
-    }
-  };
+  const getOfferStatusBadge = (status) => {
+    const statusMap = {
+      'NEW': { className: 'pending', label: t('offers.statusPending') },
+      'ACCEPTED': { className: 'accepted', label: t('offers.statusAccepted') },
+      'REJECTED': { className: 'rejected', label: t('offers.statusRejected') },
+    };
 
-  const validateOfferForm = () => {
-    const newErrors = {};
-
-    if (!offerFormData.price) newErrors.price = 'Price is required';
-    if (!offerFormData.message) newErrors.message = 'Message is required';
-    if (!offerFormData.daysEstimate) newErrors.daysEstimate = 'Days estimate is required';
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const validateContractForm = () => {
-    const newErrors = {};
-
-    if (!contractFormData.totalPrice) newErrors.totalPrice = 'Total price is required';
-    if (!contractFormData.startDate) newErrors.startDate = 'Start date is required';
-    if (!contractFormData.endDate) newErrors.endDate = 'End date is required';
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmitOffer = async (e) => {
-    e.preventDefault();
-
-    if (!validateOfferForm()) return;
-
-    try {
-      const offerData = {
-        order: { uuid: selectedOrder.uuid },
-        offer: {
-          price: parseInt(offerFormData.price),
-          message: offerFormData.message,
-          unit: offerFormData.unit,
-          daysEstimate: parseInt(offerFormData.daysEstimate),
-        },
-      };
-
-      await offerService.sendOffer(offerData);
-      alert('Offer submitted successfully!');
-      resetOfferForm();
-    } catch (error) {
-      setErrors({ submit: error.response?.data?.message || 'Failed to submit offer' });
-    }
-  };
-
-  const handleSubmitContract = async (e) => {
-    e.preventDefault();
-
-    if (!validateContractForm()) return;
-
-    try {
-      const contractData = {
-        offer: { publicId: selectedOffer.publicId },
-        contract: {
-          totalPrice: parseInt(contractFormData.totalPrice),
-          startDate: contractFormData.startDate,
-          endDate: contractFormData.endDate,
-        },
-      };
-
-      await contractService.confirmOffer(contractData);
-      alert('Contract created successfully!');
-      resetContractForm();
-    } catch (error) {
-      setErrors({ submit: error.response?.data?.message || 'Failed to create contract' });
-    }
-  };
-
-  const handleMakeOffer = (order) => {
-    setSelectedOrder(order);
-    setShowOfferForm(true);
-  };
-
-  const handleCreateContract = (order, offer) => {
-    setSelectedOrder(order);
-    setSelectedOffer(offer);
-    setContractFormData({
-      totalPrice: offer.price?.toString() || '',
-      startDate: '',
-      endDate: '',
-    });
-    setShowContractForm(true);
-  };
-
-  const resetOfferForm = () => {
-    setOfferFormData({
-      price: '',
-      message: '',
-      unit: 'm2',
-      daysEstimate: '',
-    });
-    setSelectedOrder(null);
-    setShowOfferForm(false);
-    setErrors({});
-  };
-
-  const resetContractForm = () => {
-    setContractFormData({
-      totalPrice: '',
-      startDate: '',
-      endDate: '',
-    });
-    setSelectedOrder(null);
-    setSelectedOffer(null);
-    setShowContractForm(false);
-    setErrors({});
+    const statusConfig = statusMap[status] || statusMap['NEW'];
+    return <span className={`status-badge ${statusConfig.className}`}>{statusConfig.label}</span>;
   };
 
   if (loading) {
     return (
       <div className="offers-page">
         <div className="container">
-          <p>Loading...</p>
+          <p className="loading-message">{t('common.loading')}</p>
         </div>
       </div>
     );
@@ -182,198 +66,100 @@ const Offers = () => {
     <div className="offers-page">
       <div className="container">
         <div className="offers-header">
-          <h1>Available Orders</h1>
-          <p>Browse orders and submit your offers</p>
+          <h1>{t('navbar.myOffers')}</h1>
+          <p>{t('offers.myOffersSubtitle')}</p>
         </div>
 
-        {/* Offer Form Modal */}
-        {showOfferForm && selectedOrder && (
-          <div className="modal-overlay" onClick={resetOfferForm}>
-            <Card className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <h2>Make an Offer</h2>
-              <p className="modal-subtitle">{selectedOrder.title}</p>
-
-              <form onSubmit={handleSubmitOffer} className="offer-form">
-                <Input
-                  label="Your Price"
-                  name="price"
-                  type="number"
-                  value={offerFormData.price}
-                  onChange={handleOfferChange}
-                  placeholder="Enter your price"
-                  error={errors.price}
-                  required
-                />
-
-                <div className="input-wrapper">
-                  <label className="input-label">
-                    Unit <span className="input-required">*</span>
-                  </label>
-                  <select
-                    name="unit"
-                    value={offerFormData.unit}
-                    onChange={handleOfferChange}
-                    className="input"
-                  >
-                    <option value="m2">Per m²</option>
-                    <option value="unit">Per unit</option>
-                    <option value="hour">Per hour</option>
-                    <option value="day">Per day</option>
-                    <option value="fixed">Fixed price</option>
-                  </select>
-                </div>
-
-                <Input
-                  label="Estimated Days"
-                  name="daysEstimate"
-                  type="number"
-                  value={offerFormData.daysEstimate}
-                  onChange={handleOfferChange}
-                  placeholder="Number of days to complete"
-                  error={errors.daysEstimate}
-                  required
-                />
-
-                <div className="input-wrapper">
-                  <label className="input-label">
-                    Your Message <span className="input-required">*</span>
-                  </label>
-                  <textarea
-                    name="message"
-                    value={offerFormData.message}
-                    onChange={handleOfferChange}
-                    placeholder="Describe your offer and qualifications"
-                    className={`input ${errors.message ? 'input-error' : ''}`}
-                    rows="4"
-                  />
-                  {errors.message && (
-                    <span className="input-error-message">{errors.message}</span>
-                  )}
-                </div>
-
-                {errors.submit && (
-                  <div className="error-message">{errors.submit}</div>
-                )}
-
-                <div className="form-actions">
-                  <Button type="submit" variant="primary">
-                    Submit Offer
-                  </Button>
-                  <Button type="button" variant="ghost" onClick={resetOfferForm}>
-                    Cancel
-                  </Button>
-                </div>
-              </form>
-            </Card>
-          </div>
+        {error && (
+          <Card className="error-card">
+            <p className="error-message">{error}</p>
+          </Card>
         )}
 
-        {/* Contract Form Modal */}
-        {showContractForm && selectedOrder && selectedOffer && (
-          <div className="modal-overlay" onClick={resetContractForm}>
-            <Card className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <h2>Create Contract</h2>
-              <p className="modal-subtitle">{selectedOrder.title}</p>
+        {offers.length === 0 ? (
+          <Card>
+            <div className="empty-state">
+              <div className="empty-state-icon">💼</div>
+              <h3>{t('offers.noOffersYet')}</h3>
+              <p>{t('offers.noOffersDescription')}</p>
+            </div>
+          </Card>
+        ) : (
+          <div className="offers-grid">
+            {offers.map((item) => (
+              <Card key={item.offer?.publicId} className="offer-card">
+                {/* Offer Status */}
+                <div className="offer-card-header">
+                  <h3 className="offer-order-title">
+                    {item.order?.title || 'Order'}
+                  </h3>
+                  {getOfferStatusBadge(item.offer?.status)}
+                </div>
 
-              <form onSubmit={handleSubmitContract} className="contract-form">
-                <Input
-                  label="Total Price"
-                  name="totalPrice"
-                  type="number"
-                  value={contractFormData.totalPrice}
-                  onChange={handleContractChange}
-                  placeholder="Total contract price"
-                  error={errors.totalPrice}
-                  required
-                />
+                {/* Order Details */}
+                {item.order && (
+                  <div className="offer-order-details">
+                    <p className="order-description">{item.order.description}</p>
 
-                <Input
-                  label="Start Date"
-                  name="startDate"
-                  type="date"
-                  value={contractFormData.startDate}
-                  onChange={handleContractChange}
-                  error={errors.startDate}
-                  required
-                />
+                    <div className="order-info">
+                      {item.category && (
+                        <p className="info-item">
+                          <strong className="info-label">{t('orders.category')}:</strong> {item.category.name}
+                        </p>
+                      )}
 
-                <Input
-                  label="End Date"
-                  name="endDate"
-                  type="date"
-                  value={contractFormData.endDate}
-                  onChange={handleContractChange}
-                  error={errors.endDate}
-                  required
-                />
+                      {item.realEstate && (
+                        <>
+                          <p className="info-item">
+                            <strong className="info-label">{t('orders.location')}:</strong> {item.realEstate.city}, {item.realEstate.district}
+                          </p>
+                          <p className="info-item">
+                            <strong className="info-label">{t('orders.area')}:</strong> {item.realEstate.areaM2} m²
+                          </p>
+                        </>
+                      )}
 
-                {errors.submit && (
-                  <div className="error-message">{errors.submit}</div>
+                      {item.order.budgetMin && (
+                        <p className="info-item">
+                          <strong className="info-label">{t('orders.budget')}:</strong> {item.order.budgetMin}
+                            {item.order.budgetMax ? `-${item.order.budgetMax}` : '+'} ₸
+                        </p>
+                      )}
+                    </div>
+                  </div>
                 )}
 
-                <div className="form-actions">
-                  <Button type="submit" variant="success">
-                    Create Contract
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    onClick={resetContractForm}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </form>
-            </Card>
-          </div>
-        )}
+                {/* Offer Details */}
+                <div className="offer-details-section">
+                  <h4>{t('offers.yourOffer')}</h4>
 
-        {/* Orders List */}
-        <div className="orders-grid">
-          {orders.length === 0 ? (
-            <Card>
-              <p className="empty-message">No orders available at the moment.</p>
-            </Card>
-          ) : (
-            orders.map((order) => (
-              <Card key={order.uuid} className="order-card">
-                <div className="order-header">
-                  <h3>{order.title}</h3>
-                  <span className="order-budget">
-                    {order.budgetMin}
-                    {order.budgetMax ? `-${order.budgetMax}` : '+'} ₸
-                  </span>
-                </div>
-                <p className="order-description">{order.description}</p>
-                <div className="order-details">
-                  <p>
-                    <strong>Category:</strong> {order.category?.name || 'N/A'}
-                  </p>
-                  {order.realEstate && (
+                  <div className="offer-pricing">
+                    <p className="offer-price-item">
+                      <strong className="offer-price-label">{t('orders.yourPrice')}:</strong> {item.offer?.price} ₸ {getUnitText(item.offer?.unit)}
+                    </p>
+                    <p className="offer-price-item">
+                      <strong className="offer-price-label">{t('offers.estimatedDays')}:</strong> {item.offer?.daysEstimate} {item.offer?.daysEstimate === 1 ? t('offers.day') : t('offers.days')}
+                    </p>
+                  </div>
+
+                  {item.offer?.message && (
                     <>
-                      <p>
-                        <strong>Location:</strong> {order.realEstate.city},{' '}
-                        {order.realEstate.district}
-                      </p>
-                      <p>
-                        <strong>Property:</strong> {order.realEstate.kind} -{' '}
-                        {order.realEstate.areaM2} m²
-                      </p>
+                      <h4>{t('orders.yourMessage')}</h4>
+                      <div className="offer-message-box">
+                        {item.offer?.createdAt && (
+                          <p className="message-date">
+                            {new Date(item.offer.createdAt).toLocaleDateString()}
+                          </p>
+                        )}
+                        <p className="message-text">{item.offer.message}</p>
+                      </div>
                     </>
                   )}
                 </div>
-                <div className="order-actions">
-                  <Button
-                    variant="primary"
-                    onClick={() => handleMakeOffer(order)}
-                  >
-                    Make Offer
-                  </Button>
-                </div>
               </Card>
-            ))
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

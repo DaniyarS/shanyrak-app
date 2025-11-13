@@ -5,3 +5,16 @@
   padding: var(--spacing-6);
   overflow: visible;
 }
+
+@media (max-width: 768px) {
+  .card {
+    padding: var(--spacing-4);
+    border-radius: var(--radius-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: var(--spacing-3);
+  }
+}

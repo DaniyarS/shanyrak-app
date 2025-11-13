@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { LanguageProvider } from './context/LanguageContext';
 import Navbar from './components/Navbar';
+import BottomNav from './components/BottomNav';
 import PrivateRoute from './components/PrivateRoute';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -10,10 +11,11 @@ import Estates from './pages/Estates';
 import Services from './pages/Services';
 import CustomerOrders from './pages/CustomerOrders';
 import BuilderOrders from './pages/BuilderOrders';
-import BuilderProfile from './pages/BuilderProfile';
+import ProfileRouter from './pages/ProfileRouter';
 import BuilderDetail from './pages/BuilderDetail';
 import Offers from './pages/Offers';
 import Unauthorized from './pages/Unauthorized';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import './App.css';
 
 function App() {
@@ -27,6 +29,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/unauthorized" element={<Unauthorized />} />
 
             {/* Protected routes with role-based access control */}
@@ -73,8 +76,8 @@ function App() {
             <Route
               path="/profile"
               element={
-                <PrivateRoute allowedRoles={['BUILDER']}>
-                  <BuilderProfile />
+                <PrivateRoute allowedRoles={['BUILDER', 'CUSTOMER']}>
+                  <ProfileRouter />
                 </PrivateRoute>
               }
             />
@@ -91,6 +94,7 @@ function App() {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
+        <BottomNav />
       </div>
     </AuthProvider>
     </LanguageProvider>

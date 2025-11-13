@@ -20,7 +20,7 @@ API Documentation
 
 ## children
 
-**GET** `/api/v1/categories/5414ea67-5f82-4514-82e9-61afe37234cf/children`
+**GET** `/api/v1/categories/f184baa9-543e-4eea-ae10-022c8fce5d1e/children`
 
 ---
 
@@ -291,6 +291,19 @@ API Documentation
 
 ---
 
+## myOffers
+
+**GET** `/api/v1/offers/my`
+
+### Query Parameters
+
+- `orderId`
+- `sort`
+- `page`
+- `size`
+
+---
+
 ## confrim
 
 **POST** `/api/v1/contracts`
@@ -361,22 +374,22 @@ API Documentation
 
 ## update
 
-**PUT** `/api/v1/builders/ceb3f0b3-3122-48d0-ba39-e256fe291d4b`
+**PUT** `/api/v1/builders/2ad93af8-75d4-4936-b98d-4c5d66458805`
 
 ### Request Body
 
 ```json
 {
   "password": null,
-  "fullName": "Beknur Slamkul",
-  "email": "beknurslamkulov@gmail.com",
-  "phone": "87020000796",
+  "fullName": "Данияр строитель",
+  "email": "daniyarslamkul@gmail.com",
+  "phone": "87076770092",
   "avatarLink": "",
   "role": "BUILDER",
   "token": null,
-  "login": "bekanur",
+  "login": "daniyars",
   "ratingAvg": 2,
-  "aboutMe": "Мен мен едим мен едим",
+  "aboutMe": "Опытный электрик",
   "experienceYears": 10,
   "city": "Алматы",
   "district": "Besagash",
@@ -390,14 +403,14 @@ API Documentation
 
 ## addCategory
 
-**POST** `/api/v1/builders/ceb3f0b3-3122-48d0-ba39-e256fe291d4b/category`
+**POST** `/api/v1/builders/2ad93af8-75d4-4936-b98d-4c5d66458805/category`
 
 ### Request Body
 
 ```json
 {
   "category": {
-    "publicId": "5414ea67-5f82-4514-82e9-61afe37234cf"
+    "publicId": "f184baa9-543e-4eea-ae10-022c8fce5d1e"
   },
   "price": "1200",
   "description": "1 кубын куямыз осы акшага"
@@ -414,7 +427,7 @@ API Documentation
 
 ## update
 
-**PUT** `/api/v1/builders/category/3`
+**PUT** `/api/v1/builders/category/2`
 
 ### Request Body
 
@@ -424,6 +437,148 @@ API Documentation
   "description": "багасы котерилди"
 }
 ```
+
+---
+
+## uploadAvatar
+
+**POST** `/api/v1/files/upload`
+
+### Request Body
+
+```json
+{
+  "mode": "formdata",
+  "formdata": [
+    {
+      "key": "file",
+      "type": "file",
+      "src": "/Users/daniyars/Downloads/Gemini_Generated_Image_fribz7fribz7frib.png"
+    },
+    {
+      "key": "scope",
+      "value": "avatars",
+      "type": "text"
+    },
+    {
+      "key": "linkType",
+      "value": "USER_AVATAR",
+      "type": "text"
+    }
+  ]
+}
+```
+
+---
+
+## uploadOrderPhoto
+
+**POST** `/api/v1/files/upload`
+
+### Request Body
+
+```json
+{
+  "mode": "formdata",
+  "formdata": [
+    {
+      "key": "file",
+      "type": "file",
+      "src": "/Users/kaspi/Documents/1111.jpg"
+    },
+    {
+      "key": "scope",
+      "value": "orders",
+      "type": "text"
+    },
+    {
+      "key": "linkType",
+      "value": "ORDER_PHOTO",
+      "type": "text"
+    },
+    {
+      "key": "linkPublicId",
+      "value": "9aa84dd2-0fb5-4c9b-b4cf-cb0b1b5304f1",
+      "type": "text"
+    }
+  ]
+}
+```
+
+---
+
+## uploadBuilderPortfolio
+
+**POST** `/api/v1/files/upload`
+
+### Request Body
+
+```json
+{
+  "mode": "formdata",
+  "formdata": [
+    {
+      "key": "file",
+      "type": "file",
+      "src": "/Users/kaspi/Documents/1111.jpg"
+    },
+    {
+      "key": "scope",
+      "value": "portfolio",
+      "type": "text"
+    },
+    {
+      "key": "linkType",
+      "value": "BUILDER_PORTFOLIO",
+      "type": "text"
+    },
+    {
+      "key": "sortOrder",
+      "value": "0",
+      "type": "text"
+    }
+  ]
+}
+```
+
+---
+
+## getBuildersPortfolioPhotos
+
+**GET** `/api/v1/files`
+
+### Query Parameters
+
+- `linkType`
+- `linkPublicId` - builder's public id
+
+---
+
+## getOrderPhotos
+
+**GET** `/api/v1/files`
+
+### Query Parameters
+
+- `linkType`
+- `linkPublicId` - order's public
+
+---
+
+## getAvatarPhoto
+
+**GET** `/api/v1/files`
+
+### Query Parameters
+
+- `linkType`
+- `linkPublicId` - Optional param, for user want's to get other user's avatar by using his publicId
+
+---
+
+## delete
+
+**DELETE** `/api/v1/files/1df07d31-bf1e-44b0-ad76-8ed67c53e2cf`
 
 ---
 

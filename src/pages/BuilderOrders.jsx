@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import { container } from '../infrastructure/di/ServiceContainer';
+import offerService from '../services/offerService';
 import Button from '../components/Button';
 import Card from '../components/Card';
 import Input from '../components/Input';
@@ -27,6 +28,7 @@ const BuilderOrders = () => {
     categoryPublicId: '',
   });
   const [errors, setErrors] = useState({});
+  const [ordersWithOffers, setOrdersWithOffers] = useState(new Set());
 
   useEffect(() => {
     fetchInitialData();
@@ -42,8 +44,15 @@ const BuilderOrders = () => {
       const ordersResult = await searchOrdersUseCase.execute();
       const categoriesData = await categoryRepo.getAll();
 
+      // Fetch builder's offers to check which orders already have offers
+      const builderOffers = await offerService.getBuilderOffers({ size: 100 });
+      const offerOrderIds = new Set(
+        (builderOffers?.content || []).map(item => item.order?.uuid || item.order?.publicId || item.order?.id)
+      );
+
       setCategories(categoriesData || []);
       setOrders(ordersResult.orders || []);
+      setOrdersWithOffers(offerOrderIds);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -123,6 +132,8 @@ const BuilderOrders = () => {
 
       if (result.success) {
         alert(t('orders.offerSubmitted'));
+        // Add this order to the set of orders with offers
+        setOrdersWithOffers(prev => new Set([...prev, selectedOrder.id]));
         setSelectedOrder(null);
         setShowOfferForm(false);
         setOfferFormData({
@@ -231,13 +242,17 @@ const BuilderOrders = () => {
                   )}
                 </div>
                 <div className="order-actions">
-                  <Button
-                    size="small"
-                    variant="primary"
-                    onClick={() => handleMakeOffer(order)}
-                  >
-                    {t('common.makeOffer')}
-                  </Button>
+                  {ordersWithOffers.has(order.id) ? (
+                    <span className="already-responded-label">{t('common.alreadyResponded')}</span>
+                  ) : (
+                    <Button
+                      size="small"
+                      variant="primary"
+                      onClick={() => handleMakeOffer(order)}
+                    >
+                      {t('common.makeOffer')}
+                    </Button>
+                  )}
                 </div>
               </Card>
             ))

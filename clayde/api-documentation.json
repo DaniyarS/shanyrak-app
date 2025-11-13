@@ -29,7 +29,7 @@
     {
       "name": "children",
       "method": "GET",
-      "path": "/api/v1/categories/5414ea67-5f82-4514-82e9-61afe37234cf/children",
+      "path": "/api/v1/categories/f184baa9-543e-4eea-ae10-022c8fce5d1e/children",
       "description": "",
       "headers": [],
       "queryParams": [],
@@ -432,6 +432,36 @@
       }
     },
     {
+      "name": "myOffers",
+      "method": "GET",
+      "path": "/api/v1/offers/my",
+      "description": "",
+      "headers": [],
+      "queryParams": [
+        {
+          "key": "orderId",
+          "value": "1e1ecb87-c1a6-4770-9459-7bd393916cff",
+          "disabled": true
+        },
+        {
+          "key": "sort",
+          "value": "createdAt,desc"
+        },
+        {
+          "key": "page",
+          "value": "0"
+        },
+        {
+          "key": "size",
+          "value": "10"
+        }
+      ],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
       "name": "confrim",
       "method": "POST",
       "path": "/api/v1/contracts",
@@ -576,13 +606,13 @@
     {
       "name": "update",
       "method": "PUT",
-      "path": "/api/v1/builders/ceb3f0b3-3122-48d0-ba39-e256fe291d4b",
+      "path": "/api/v1/builders/2ad93af8-75d4-4936-b98d-4c5d66458805",
       "description": "",
       "headers": [],
       "queryParams": [],
       "body": {
         "mode": "raw",
-        "raw": "{\n    \"password\": null,\n    \"fullName\": \"Beknur Slamkul\",\n    \"email\": \"beknurslamkulov@gmail.com\",\n    \"phone\": \"87020000796\",\n    \"avatarLink\": \"\",\n    \"role\": \"BUILDER\",\n    \"token\": null,\n    \"login\": \"bekanur\",\n    \"ratingAvg\": 2.00,\n    \"aboutMe\": \"Мен мен едим мен едим\",\n    \"experienceYears\": 10,\n    \"city\": \"Алматы\",\n    \"district\": \"Besagash\",\n    \"jobsDone\": 15,\n    \"available\": true,\n    \"priceList\": null\n}",
+        "raw": "{\n    \"password\": null,\n    \"fullName\": \"Данияр строитель\",\n    \"email\": \"daniyarslamkul@gmail.com\",\n    \"phone\": \"87076770092\",\n    \"avatarLink\": \"\",\n    \"role\": \"BUILDER\",\n    \"token\": null,\n    \"login\": \"daniyars\",\n    \"ratingAvg\": 2.00,\n    \"aboutMe\": \"Опытный электрик\",\n    \"experienceYears\": 10,\n    \"city\": \"Алматы\",\n    \"district\": \"Besagash\",\n    \"jobsDone\": 15,\n    \"available\": true,\n    \"priceList\": null\n}",
         "options": {
           "raw": {
             "language": "json"
@@ -592,7 +622,7 @@
       "examples": {
         "request": {
           "mode": "raw",
-          "raw": "{\n    \"password\": null,\n    \"fullName\": \"Beknur Slamkul\",\n    \"email\": \"beknurslamkulov@gmail.com\",\n    \"phone\": \"87020000796\",\n    \"avatarLink\": \"\",\n    \"role\": \"BUILDER\",\n    \"token\": null,\n    \"login\": \"bekanur\",\n    \"ratingAvg\": 2.00,\n    \"aboutMe\": \"Мен мен едим мен едим\",\n    \"experienceYears\": 10,\n    \"city\": \"Алматы\",\n    \"district\": \"Besagash\",\n    \"jobsDone\": 15,\n    \"available\": true,\n    \"priceList\": null\n}",
+          "raw": "{\n    \"password\": null,\n    \"fullName\": \"Данияр строитель\",\n    \"email\": \"daniyarslamkul@gmail.com\",\n    \"phone\": \"87076770092\",\n    \"avatarLink\": \"\",\n    \"role\": \"BUILDER\",\n    \"token\": null,\n    \"login\": \"daniyars\",\n    \"ratingAvg\": 2.00,\n    \"aboutMe\": \"Опытный электрик\",\n    \"experienceYears\": 10,\n    \"city\": \"Алматы\",\n    \"district\": \"Besagash\",\n    \"jobsDone\": 15,\n    \"available\": true,\n    \"priceList\": null\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -605,13 +635,13 @@
     {
       "name": "addCategory",
       "method": "POST",
-      "path": "/api/v1/builders/ceb3f0b3-3122-48d0-ba39-e256fe291d4b/category",
+      "path": "/api/v1/builders/2ad93af8-75d4-4936-b98d-4c5d66458805/category",
       "description": "",
       "headers": [],
       "queryParams": [],
       "body": {
         "mode": "raw",
-        "raw": "{\n    \"category\" : {\n        \"publicId\" : \"5414ea67-5f82-4514-82e9-61afe37234cf\"\n    },\n    \"price\" : \"1200\",\n    \"description\" : \"1 кубын куямыз осы акшага\"\n}",
+        "raw": "{\n    \"category\" : {\n        \"publicId\" : \"f184baa9-543e-4eea-ae10-022c8fce5d1e\"\n    },\n    \"price\" : \"1200\",\n    \"description\" : \"1 кубын куямыз осы акшага\"\n}",
         "options": {
           "raw": {
             "language": "json"
@@ -621,7 +651,7 @@
       "examples": {
         "request": {
           "mode": "raw",
-          "raw": "{\n    \"category\" : {\n        \"publicId\" : \"5414ea67-5f82-4514-82e9-61afe37234cf\"\n    },\n    \"price\" : \"1200\",\n    \"description\" : \"1 кубын куямыз осы акшага\"\n}",
+          "raw": "{\n    \"category\" : {\n        \"publicId\" : \"f184baa9-543e-4eea-ae10-022c8fce5d1e\"\n    },\n    \"price\" : \"1200\",\n    \"description\" : \"1 кубын куямыз осы акшага\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -646,7 +676,7 @@
     {
       "name": "update",
       "method": "PUT",
-      "path": "/api/v1/builders/category/3",
+      "path": "/api/v1/builders/category/2",
       "description": "",
       "headers": [],
       "queryParams": [],
@@ -669,6 +699,257 @@
             }
           }
         },
+        "response": null
+      }
+    },
+    {
+      "name": "uploadAvatar",
+      "method": "POST",
+      "path": "/api/v1/files/upload",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "formdata",
+        "formdata": [
+          {
+            "key": "file",
+            "type": "file",
+            "src": "/Users/daniyars/Downloads/Gemini_Generated_Image_fribz7fribz7frib.png"
+          },
+          {
+            "key": "scope",
+            "value": "avatars",
+            "type": "text"
+          },
+          {
+            "key": "linkType",
+            "value": "USER_AVATAR",
+            "type": "text"
+          }
+        ]
+      },
+      "examples": {
+        "request": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/Users/daniyars/Downloads/Gemini_Generated_Image_fribz7fribz7frib.png"
+            },
+            {
+              "key": "scope",
+              "value": "avatars",
+              "type": "text"
+            },
+            {
+              "key": "linkType",
+              "value": "USER_AVATAR",
+              "type": "text"
+            }
+          ]
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "uploadOrderPhoto",
+      "method": "POST",
+      "path": "/api/v1/files/upload",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "formdata",
+        "formdata": [
+          {
+            "key": "file",
+            "type": "file",
+            "src": "/Users/kaspi/Documents/1111.jpg"
+          },
+          {
+            "key": "scope",
+            "value": "orders",
+            "type": "text"
+          },
+          {
+            "key": "linkType",
+            "value": "ORDER_PHOTO",
+            "type": "text"
+          },
+          {
+            "key": "linkPublicId",
+            "value": "9aa84dd2-0fb5-4c9b-b4cf-cb0b1b5304f1",
+            "type": "text"
+          }
+        ]
+      },
+      "examples": {
+        "request": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/Users/kaspi/Documents/1111.jpg"
+            },
+            {
+              "key": "scope",
+              "value": "orders",
+              "type": "text"
+            },
+            {
+              "key": "linkType",
+              "value": "ORDER_PHOTO",
+              "type": "text"
+            },
+            {
+              "key": "linkPublicId",
+              "value": "9aa84dd2-0fb5-4c9b-b4cf-cb0b1b5304f1",
+              "type": "text"
+            }
+          ]
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "uploadBuilderPortfolio",
+      "method": "POST",
+      "path": "/api/v1/files/upload",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "formdata",
+        "formdata": [
+          {
+            "key": "file",
+            "type": "file",
+            "src": "/Users/kaspi/Documents/1111.jpg"
+          },
+          {
+            "key": "scope",
+            "value": "portfolio",
+            "type": "text"
+          },
+          {
+            "key": "linkType",
+            "value": "BUILDER_PORTFOLIO",
+            "type": "text"
+          },
+          {
+            "key": "sortOrder",
+            "value": "0",
+            "type": "text"
+          }
+        ]
+      },
+      "examples": {
+        "request": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/Users/kaspi/Documents/1111.jpg"
+            },
+            {
+              "key": "scope",
+              "value": "portfolio",
+              "type": "text"
+            },
+            {
+              "key": "linkType",
+              "value": "BUILDER_PORTFOLIO",
+              "type": "text"
+            },
+            {
+              "key": "sortOrder",
+              "value": "0",
+              "type": "text"
+            }
+          ]
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "getBuildersPortfolioPhotos",
+      "method": "GET",
+      "path": "/api/v1/files",
+      "description": "",
+      "headers": [],
+      "queryParams": [
+        {
+          "key": "linkType",
+          "value": "BUILDER_PORTFOLIO"
+        },
+        {
+          "key": "linkPublicId",
+          "value": "ceb3f0b3-3122-48d0-ba39-e256fe291d4b",
+          "description": "builder's public id"
+        }
+      ],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "getOrderPhotos",
+      "method": "GET",
+      "path": "/api/v1/files",
+      "description": "",
+      "headers": [],
+      "queryParams": [
+        {
+          "key": "linkType",
+          "value": "ORDER_PHOTO"
+        },
+        {
+          "key": "linkPublicId",
+          "value": "ceb3f0b3-3122-48d0-ba39-e256fe291d4b",
+          "description": "order's public"
+        }
+      ],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "getAvatarPhoto",
+      "method": "GET",
+      "path": "/api/v1/files",
+      "description": "",
+      "headers": [],
+      "queryParams": [
+        {
+          "key": "linkType",
+          "value": "USER_AVATAR"
+        },
+        {
+          "key": "linkPublicId",
+          "value": "ceb3f0b3-3122-48d0-ba39-e256fe291d4b",
+          "description": "Optional param, for user want's to get other user's avatar by using his publicId"
+        }
+      ],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/files/1df07d31-bf1e-44b0-ad76-8ed67c53e2cf",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": null,
+      "examples": {
         "response": null
       }
     }

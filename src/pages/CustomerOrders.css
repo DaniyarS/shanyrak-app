@@ -448,10 +448,24 @@
 }
 
 @media (max-width: 768px) {
+  .customer-orders-page {
+    padding: var(--spacing-4) 0;
+    min-height: calc(100vh - 160px);
+  }
+
   .orders-header {
     flex-direction: column;
-    gap: var(--spacing-4);
+    gap: var(--spacing-3);
     align-items: flex-start;
+    margin-bottom: var(--spacing-4);
+  }
+
+  .orders-header h1 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .order-form-card {
+    margin-bottom: var(--spacing-6);
   }
 
   .offer-builder-info {
@@ -469,8 +483,17 @@
     grid-template-columns: 1fr;
   }
 
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+
   .orders-grid {
     grid-template-columns: 1fr;
+    gap: var(--spacing-4);
   }
 
   .order-header {
@@ -484,6 +507,50 @@
   }
 
   .order-header h3 {
+    font-size: var(--font-size-base);
+  }
+
+  .order-modal-details {
+    flex-direction: column;
+    gap: var(--spacing-3);
+  }
+
+  .modal-content {
+    max-height: 70vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .customer-orders-page {
+    padding: var(--spacing-3) 0;
+  }
+
+  .orders-header h1 {
+    font-size: var(--font-size-xl);
+  }
+
+  .order-form-card h2 {
+    font-size: var(--font-size-lg);
+  }
+
+  .order-header h3 {
+    font-size: var(--font-size-sm);
+  }
+
+  .order-budget {
+    font-size: var(--font-size-xs);
+    padding: 4px 8px;
+  }
+
+  .offers-count {
+    font-size: var(--font-size-xl);
+  }
+
+  .builder-name {
+    font-size: var(--font-size-base);
+  }
+
+  .offer-price {
     font-size: var(--font-size-lg);
   }
 }

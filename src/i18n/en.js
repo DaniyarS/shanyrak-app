@@ -16,6 +16,7 @@ export const en = {
     confirm: 'Confirm',
     viewOffers: 'View Offers',
     makeOffer: 'Make Offer',
+    alreadyResponded: 'You responded',
   },
 
   // Navbar
@@ -29,13 +30,14 @@ export const en = {
     signIn: 'Sign In',
     register: 'Register',
     logout: 'Logout',
+    profile: 'Profile',
   },
 
   // Home Page
   home: {
     title: 'Welcome to Shanyrak',
-    subtitle: 'Connect property owners with trusted service providers',
-    description: 'Post service requests for your property or offer your services to help property owners. Shanyrak makes it easy to find and hire qualified professionals for any job.',
+    subtitle: 'Find skilled service providers based on ratings and experience',
+    description: 'Post service requests for your property or offer your services to help property owners. Shanyrak makes it easy to compare and choose qualified professionals for any job.',
     getStarted: 'Get Started',
     welcomeBack: 'Welcome back',
     browseOrders: 'Browse Orders',
@@ -48,6 +50,26 @@ export const en = {
     feature3Text: 'Service providers submit their offers with pricing and timelines.',
     feature4Title: 'Create Contracts',
     feature4Text: 'Accept an offer and create a contract to formalize the agreement.',
+    myActiveOrders: 'My Active Orders',
+    viewAll: 'View All',
+    noActiveOrders: 'No active orders',
+    createFirstOrder: 'Create your first order to start receiving offers from service providers.',
+    quickActions: 'Quick Actions',
+    manageOrders: 'View and manage your service orders',
+    manageProperties: 'Add or edit your properties',
+    browseServices: 'Find service providers',
+    newOrders: 'New Orders Available',
+    noNewOrders: 'No new orders available',
+    checkBackLater: 'Check back later for new service opportunities.',
+    findNewOrders: 'Browse available orders',
+    manageOffers: 'Track your submitted offers',
+    profile: 'My Profile',
+    updateProfile: 'Update your profile information',
+    whyShanyrak: 'Why Choose Shanyrak?',
+    activeUsers: 'Active Users',
+    completedJobs: 'Completed Jobs',
+    serviceCategories: 'Service Categories',
+    averageRating: 'Average Rating',
   },
 
   // Auth
@@ -65,6 +87,10 @@ export const en = {
     role: 'I am a',
     customer: 'Property Owner (Customer)',
     serviceProvider: 'Service Provider',
+    customerTitle: 'Customer',
+    customerDescription: 'I post orders',
+    builderTitle: 'Builder',
+    builderDescription: 'I make offers',
     signingIn: 'Signing in...',
     signIn: 'Sign In',
     creatingAccount: 'Creating account...',
@@ -73,6 +99,8 @@ export const en = {
     signInHere: 'Sign in here',
     noAccount: "Don't have an account?",
     registerHere: 'Register here',
+    privacyPolicy: 'Privacy Policy',
+    policyNoticeStart: 'By registering, you agree to our',
   },
 
   // Validation
@@ -86,8 +114,75 @@ export const en = {
     passwordsNotMatch: 'Passwords do not match',
     fullNameRequired: 'Full name is required',
     fullNameLength: 'Full name must be at least 2 characters',
+    roleRequired: 'Please select your user type',
     required: 'This field is required',
     emailInvalid: 'Email is invalid',
+  },
+
+  // Privacy Policy
+  privacy: {
+    title: 'Privacy Policy',
+    lastUpdated: 'Last updated',
+    introduction: {
+      title: '1. Introduction',
+      text: 'This Privacy Policy describes how Shanyrak ("we", "our", or "the Platform") collects, uses, stores, and protects the personal data of users of our property service marketplace. We are committed to protecting your privacy and ensuring the security of your personal information in accordance with the laws of the Republic of Kazakhstan, including the Law "On Personal Data and Their Protection" dated May 21, 2013 No. 94-V.',
+    },
+    dataCollected: {
+      title: '2. Personal Data We Collect',
+      intro: 'We collect the following categories of personal data:',
+      item1: 'Identification data: full name, phone number, email address',
+      item2: 'Account data: username (login), password (stored in encrypted form)',
+      item3: 'Property information: property type, address, area, coordinates (for property owners)',
+      item4: 'Professional information: experience years, completed jobs count, specialization, availability status (for service providers)',
+      item5: 'Transaction data: service orders, offers, pricing information, messages between users',
+    },
+    dataUsage: {
+      title: '3. How We Use Your Data',
+      intro: 'We use your personal data solely for the following purposes:',
+      item1: 'To provide and maintain the functionality of the Platform',
+      item2: 'To facilitate connections between property owners and service providers',
+      item3: 'To process and manage service orders, offers, and contracts',
+      item4: 'To enable communication between users regarding service requests',
+      item5: 'To improve the quality of our services and user experience',
+    },
+    dataSecurity: {
+      title: '4. Data Security',
+      text1: 'We implement comprehensive technical and organizational measures to protect your personal data from unauthorized access, alteration, disclosure, or destruction.',
+      text2: 'Security measures include:',
+      item1: 'All personal data is stored in encrypted form in our secure database',
+      item2: 'Password are protected using industry-standard encryption algorithms',
+      item3: 'Access to personal data is restricted to authorized personnel only',
+      item4: 'Regular security audits and updates to our protection systems',
+    },
+    thirdParty: {
+      title: '5. Third-Party Data Sharing',
+      text: 'We guarantee that your personal data will NOT be transferred, sold, or disclosed to any third parties without your explicit consent, except as required by the laws of the Republic of Kazakhstan. Your sensitive information remains exclusively within our secure database and is never shared with external organizations or individuals.',
+    },
+    userRights: {
+      title: '6. Your Rights',
+      intro: 'In accordance with Kazakhstan legislation, you have the following rights:',
+      item1: 'The right to access your personal data and receive information about its processing',
+      item2: 'The right to correct inaccurate or incomplete personal data',
+      item3: 'The right to delete your personal data (right to be forgotten)',
+      item4: 'The right to withdraw your consent to data processing at any time',
+      item5: 'The right to file a complaint with supervisory authorities if your rights are violated',
+    },
+    dataRetention: {
+      title: '7. Data Retention',
+      text: 'We retain your personal data only for as long as necessary to fulfill the purposes outlined in this Privacy Policy or as required by Kazakhstan law. When your data is no longer needed, it will be securely deleted or anonymized.',
+    },
+    kazakhstanLaw: {
+      title: '8. Compliance with Kazakhstan Law',
+      text: 'This Privacy Policy and our data processing practices comply with the Law of the Republic of Kazakhstan "On Personal Data and Their Protection" No. 94-V, the Law "On Informatization" No. 418-V, and other applicable regulations governing the protection of personal data of Kazakhstan citizens. Our data processing is registered with the authorized body for personal data protection in accordance with Kazakhstan legislation.',
+    },
+    changes: {
+      title: '9. Changes to Privacy Policy',
+      text: 'We reserve the right to update this Privacy Policy as necessary to reflect changes in our practices or legal requirements. Users will be notified of significant changes through the Platform. Continued use of our services after changes indicates acceptance of the updated Privacy Policy.',
+    },
+    contact: {
+      title: '10. Contact Information',
+      text: 'If you have any questions about this Privacy Policy or wish to exercise your rights regarding your personal data, please contact us through the support section of the Platform.',
+    },
   },
 
   // Estates
@@ -191,16 +286,18 @@ export const en = {
   offers: {
     title: 'Available Orders',
     subtitle: 'Browse orders and submit your offers',
+    myOffersSubtitle: 'View and track all your submitted offers',
     makeOffer: 'Make an Offer',
     createContract: 'Create Contract',
     yourPrice: 'Your Price',
+    yourOffer: 'Your Offer',
     priceUnit: 'Unit',
     perM2: 'for each m²',
     perUnit: 'per unit',
     perHour: 'per hour',
     perDay: 'per day',
     fixedPrice: 'Fixed price',
-    estimatedDays: 'Estimated days',
+    estimatedDays: 'Completion time',
     daysToComplete: 'Number of days to complete',
     yourMessage: 'Your Message',
     messagePlaceholder: 'Describe your offer and qualifications',
@@ -211,8 +308,14 @@ export const en = {
     day: 'day',
     days: 'days',
     noOrders: 'No orders available at the moment.',
+    noOffersYet: 'No offers yet',
+    noOffersDescription: 'You haven\'t submitted any offers yet. Browse available orders to start bidding on projects.',
     offerSubmitted: 'Offer submitted successfully!',
     contractCreated: 'Contract created successfully!',
+    submittedOn: 'Submitted on',
+    statusPending: 'Pending',
+    statusAccepted: 'Accepted',
+    statusRejected: 'Rejected',
   },
 
   // Services
@@ -251,6 +354,8 @@ export const en = {
     aboutMePlaceholder: 'Tell us about yourself, your experience, and your specialties...',
     updateSuccess: 'Profile updated successfully!',
     updateFailed: 'Failed to update profile',
+    accountSettings: 'Account Settings',
+    logoutDescription: 'Sign out of your account and return to the login page.',
   },
 
   // Errors

@@ -10,13 +10,13 @@ import './Register.css';
 const Register = () => {
   const navigate = useNavigate();
   const { register } = useAuth();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [formData, setFormData] = useState({
     fullName: '',
     phone: '',
     password: '',
     confirmPassword: '',
-    role: 'CUSTOMER',
+    role: '',
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -49,6 +49,10 @@ const Register = () => {
       newErrors.phone = t('validation.phoneRequired');
     } else if (!/^[0-9]{11}$/.test(formData.phone)) {
       newErrors.phone = t('validation.phoneInvalid');
+    }
+
+    if (!formData.role) {
+      newErrors.role = t('validation.roleRequired');
     }
 
     if (!formData.password) {
@@ -120,20 +124,41 @@ const Register = () => {
               required
             />
 
-            <div className="input-wrapper">
-              <label htmlFor="role" className="input-label">
+            <div className="role-selector-wrapper">
+              <label className="input-label">
                 {t('auth.role')} <span className="input-required">*</span>
               </label>
-              <select
-                id="role"
-                name="role"
-                value={formData.role}
-                onChange={handleChange}
-                className="input"
-              >
-                <option value="CUSTOMER">{t('auth.customer')}</option>
-                <option value="BUILDER">{t('auth.serviceProvider')}</option>
-              </select>
+              <div className={`role-selector ${errors.role ? 'has-error' : ''}`}>
+                <label className={`role-option ${formData.role === 'CUSTOMER' ? 'selected' : ''}`}>
+                  <input
+                    type="radio"
+                    name="role"
+                    value="CUSTOMER"
+                    checked={formData.role === 'CUSTOMER'}
+                    onChange={handleChange}
+                    className="role-radio"
+                  />
+                  <div className="role-content">
+                    <span className="role-title">{t('auth.customerTitle')}</span>
+                    <span className="role-description">{t('auth.customerDescription')}</span>
+                  </div>
+                </label>
+                <label className={`role-option ${formData.role === 'BUILDER' ? 'selected' : ''}`}>
+                  <input
+                    type="radio"
+                    name="role"
+                    value="BUILDER"
+                    checked={formData.role === 'BUILDER'}
+                    onChange={handleChange}
+                    className="role-radio"
+                  />
+                  <div className="role-content">
+                    <span className="role-title">{t('auth.builderTitle')}</span>
+                    <span className="role-description">{t('auth.builderDescription')}</span>
+                  </div>
+                </label>
+              </div>
+              {errors.role && <span className="input-error-message">{errors.role}</span>}
             </div>
 
             <Input
@@ -170,6 +195,14 @@ const Register = () => {
             >
               {loading ? t('auth.creatingAccount') : t('auth.createAccountBtn')}
             </Button>
+
+            <p className="policy-notice">
+              {t('auth.policyNoticeStart')}{' '}
+              <Link to="/privacy-policy" target="_blank" className="policy-link">
+                {t('auth.privacyPolicy')}
+              </Link>
+              {language === 'kk' && ` ${t('auth.policyNoticeEnd')}`}
+            </p>
           </form>
 
           <div className="register-footer">

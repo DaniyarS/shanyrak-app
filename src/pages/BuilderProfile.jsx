@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import { container } from '../infrastructure/di/ServiceContainer';
@@ -8,8 +9,9 @@ import Input from '../components/Input';
 import './BuilderProfile.css';
 
 const BuilderProfile = () => {
-  const { updateUser } = useAuth();
+  const { updateUser, logout } = useAuth();
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [builderData, setBuilderData] = useState(null);
@@ -120,6 +122,11 @@ const BuilderProfile = () => {
     }
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
   if (loading) {
     return (
       <div className="builder-profile-page">
@@ -135,9 +142,6 @@ const BuilderProfile = () => {
       <div className="container">
         <div className="profile-header">
           <h1>{t('profile.myProfile')}</h1>
-          {!editing && (
-            <Button onClick={() => setEditing(true)}>{t('common.edit')}</Button>
-          )}
         </div>
 
         <Card className="profile-card">
@@ -265,7 +269,10 @@ const BuilderProfile = () => {
             </form>
           ) : (
             <div className="profile-view">
-              <h2>{t('profile.profileInfo')}</h2>
+              <div className="profile-view-header">
+                <h2>{t('profile.profileInfo')}</h2>
+                <Button onClick={() => setEditing(true)}>{t('common.edit')}</Button>
+              </div>
 
               <div className="profile-section">
                 <h3>{t('profile.personalInfo')}</h3>
@@ -329,6 +336,18 @@ const BuilderProfile = () => {
               </div>
             </div>
           )}
+        </Card>
+
+        <Card className="logout-section">
+          <div className="logout-content">
+            <div>
+              <h3>{t('profile.accountSettings')}</h3>
+              <p>{t('profile.logoutDescription')}</p>
+            </div>
+            <Button variant="outline" onClick={handleLogout}>
+              {t('navbar.logout')}
+            </Button>
+          </div>
         </Card>
       </div>
     </div>

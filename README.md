@@ -1,6 +1,6 @@
 # Shanyrak - Property Service Marketplace
 
-A modern web application connecting property owners with trusted service providers. Property owners can post service requests for their properties, and service providers can browse orders and submit competitive offers.
+A modern web application that helps property owners find skilled service providers based on ratings and experience. Property owners can post service requests for their properties, compare offers, and choose the best service provider for their needs.
 
 ## Features
 

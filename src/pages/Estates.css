@@ -119,17 +119,76 @@
 }
 
 @media (max-width: 768px) {
+  .estates-page {
+    padding: var(--spacing-4) 0;
+    min-height: calc(100vh - 160px);
+  }
+
   .estates-header {
     flex-direction: column;
-    gap: var(--spacing-4);
+    gap: var(--spacing-3);
     align-items: flex-start;
+    margin-bottom: var(--spacing-6);
+  }
+
+  .estates-header h1 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .estate-form-card {
+    margin-bottom: var(--spacing-6);
+  }
+
+  .estate-form-card h2 {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-4);
   }
 
   .form-row {
     grid-template-columns: 1fr;
   }
 
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+
   .estates-grid {
     grid-template-columns: 1fr;
+    gap: var(--spacing-4);
+  }
+
+  .estate-actions {
+    flex-direction: column;
+  }
+
+  .estate-actions button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .estates-page {
+    padding: var(--spacing-3) 0;
+  }
+
+  .estates-header h1 {
+    font-size: var(--font-size-xl);
+  }
+
+  .estate-form-card h2 {
+    font-size: var(--font-size-lg);
+  }
+
+  .estate-header h3 {
+    font-size: var(--font-size-base);
+  }
+
+  .estate-area {
+    font-size: var(--font-size-xs);
+    padding: 4px 8px;
   }
 }

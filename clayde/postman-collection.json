@@ -85,7 +85,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{shanyrak_url}}/api/v1/categories/5414ea67-5f82-4514-82e9-61afe37234cf/children",
+							"raw": "{{shanyrak_url}}/api/v1/categories/f184baa9-543e-4eea-ae10-022c8fce5d1e/children",
 							"host": [
 								"{{shanyrak_url}}"
 							],
@@ -93,7 +93,7 @@
 								"api",
 								"v1",
 								"categories",
-								"5414ea67-5f82-4514-82e9-61afe37234cf",
+								"f184baa9-543e-4eea-ae10-022c8fce5d1e",
 								"children"
 							]
 						}
@@ -676,6 +676,55 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "myOffers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/offers/my?sort=createdAt,desc&page=0&size=10",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"offers",
+								"my"
+							],
+							"query": [
+								{
+									"key": "orderId",
+									"value": "1e1ecb87-c1a6-4770-9459-7bd393916cff",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "createdAt,desc"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -947,7 +996,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"password\": null,\n    \"fullName\": \"Beknur Slamkul\",\n    \"email\": \"beknurslamkulov@gmail.com\",\n    \"phone\": \"87020000796\",\n    \"avatarLink\": \"\",\n    \"role\": \"BUILDER\",\n    \"token\": null,\n    \"login\": \"bekanur\",\n    \"ratingAvg\": 2.00,\n    \"aboutMe\": \"Мен мен едим мен едим\",\n    \"experienceYears\": 10,\n    \"city\": \"Алматы\",\n    \"district\": \"Besagash\",\n    \"jobsDone\": 15,\n    \"available\": true,\n    \"priceList\": null\n}",
+							"raw": "{\n    \"password\": null,\n    \"fullName\": \"Данияр строитель\",\n    \"email\": \"daniyarslamkul@gmail.com\",\n    \"phone\": \"87076770092\",\n    \"avatarLink\": \"\",\n    \"role\": \"BUILDER\",\n    \"token\": null,\n    \"login\": \"daniyars\",\n    \"ratingAvg\": 2.00,\n    \"aboutMe\": \"Опытный электрик\",\n    \"experienceYears\": 10,\n    \"city\": \"Алматы\",\n    \"district\": \"Besagash\",\n    \"jobsDone\": 15,\n    \"available\": true,\n    \"priceList\": null\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -955,7 +1004,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{shanyrak_url}}/api/v1/builders/ceb3f0b3-3122-48d0-ba39-e256fe291d4b",
+							"raw": "{{shanyrak_url}}/api/v1/builders/2ad93af8-75d4-4936-b98d-4c5d66458805",
 							"host": [
 								"{{shanyrak_url}}"
 							],
@@ -963,7 +1012,7 @@
 								"api",
 								"v1",
 								"builders",
-								"ceb3f0b3-3122-48d0-ba39-e256fe291d4b"
+								"2ad93af8-75d4-4936-b98d-4c5d66458805"
 							]
 						}
 					},
@@ -986,7 +1035,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"category\" : {\n        \"publicId\" : \"5414ea67-5f82-4514-82e9-61afe37234cf\"\n    },\n    \"price\" : \"1200\",\n    \"description\" : \"1 кубын куямыз осы акшага\"\n}",
+							"raw": "{\n    \"category\" : {\n        \"publicId\" : \"f184baa9-543e-4eea-ae10-022c8fce5d1e\"\n    },\n    \"price\" : \"1200\",\n    \"description\" : \"1 кубын куямыз осы акшага\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -994,7 +1043,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{shanyrak_url}}/api/v1/builders/ceb3f0b3-3122-48d0-ba39-e256fe291d4b/category",
+							"raw": "{{shanyrak_url}}/api/v1/builders/2ad93af8-75d4-4936-b98d-4c5d66458805/category",
 							"host": [
 								"{{shanyrak_url}}"
 							],
@@ -1002,7 +1051,7 @@
 								"api",
 								"v1",
 								"builders",
-								"ceb3f0b3-3122-48d0-ba39-e256fe291d4b",
+								"2ad93af8-75d4-4936-b98d-4c5d66458805",
 								"category"
 							]
 						}
@@ -1065,7 +1114,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{shanyrak_url}}/api/v1/builders/category/3",
+							"raw": "{{shanyrak_url}}/api/v1/builders/category/2",
 							"host": [
 								"{{shanyrak_url}}"
 							],
@@ -1074,7 +1123,430 @@
 								"v1",
 								"builders",
 								"category",
-								"3"
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "files",
+			"item": [
+				{
+					"name": "uploadAvatar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/daniyars/Downloads/Gemini_Generated_Image_fribz7fribz7frib.png"
+								},
+								{
+									"key": "scope",
+									"value": "avatars",
+									"type": "text"
+								},
+								{
+									"key": "linkType",
+									"value": "USER_AVATAR",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/files/upload",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"files",
+								"upload"
+							]
+						}
+					},
+					"response": {
+						"publicId": "c08eb992-12e3-46a4-98ed-f2f838c5d312",
+						"bucket": "shanyrak-files",
+						"objectKey": "avatars/5e30514d-f0a6-46a7-9133-5eb38850755f.png",
+						"contentType": "image/png",
+						"sizeBytes": 59998,
+						"url": "http://185.197.194.111:9000/shanyrak-files/avatars/5e30514d-f0a6-46a7-9133-5eb38850755f.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=shanyrak%2F20251113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20251113T075312Z&X-Amz-Expires=900&X-Amz-SignedHeaders=host&X-Amz-Signature=23c9399767ed6de1d6194607b10636a1cb7ff5db17dfbbc97f1531fe16cb8365",
+						"linkType": null,
+						"linkPublicId": null,
+						"sortOrder": null,
+						"role": null
+					}
+				},
+				{
+					"name": "uploadOrderPhoto",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/kaspi/Documents/1111.jpg"
+								},
+								{
+									"key": "scope",
+									"value": "orders",
+									"type": "text"
+								},
+								{
+									"key": "linkType",
+									"value": "ORDER_PHOTO",
+									"type": "text"
+								},
+								{
+									"key": "linkPublicId",
+									"value": "9aa84dd2-0fb5-4c9b-b4cf-cb0b1b5304f1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/files/upload",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"files",
+								"upload"
+							]
+						}
+					},
+					"response": {
+						"publicId": "d885ceb9-781a-4500-af33-28663bf311e3",
+						"bucket": "shanyrak-files",
+						"objectKey": "orders/44ec23c7-41a2-498f-a004-dae651a89a21.png",
+						"contentType": "image/png",
+						"sizeBytes": 54315,
+						"url": "http://185.197.194.111:9000/shanyrak-files/orders/44ec23c7-41a2-498f-a004-dae651a89a21.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=shanyrak%2F20251113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20251113T075507Z&X-Amz-Expires=900&X-Amz-SignedHeaders=host&X-Amz-Signature=6278f7953d72228216ae2d77e7afa725005176f081a517cd99f55013323b1112",
+						"linkType": null,
+						"linkPublicId": null,
+						"sortOrder": null,
+						"role": null
+					}
+				},
+				{
+					"name": "uploadBuilderPortfolio",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/kaspi/Documents/1111.jpg"
+								},
+								{
+									"key": "scope",
+									"value": "portfolio",
+									"type": "text"
+								},
+								{
+									"key": "linkType",
+									"value": "BUILDER_PORTFOLIO",
+									"type": "text"
+								},
+								{
+									"key": "sortOrder",
+									"value": "0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/files/upload",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"files",
+								"upload"
+							]
+						}
+					},
+					"response": {
+						"publicId": "466e06e5-94c9-4a08-8926-e73af81d613b",
+						"bucket": "shanyrak-files",
+						"objectKey": "portfolio/65725e32-d3de-4a8a-ac72-58b8a1c24926.png",
+						"contentType": "image/png",
+						"sizeBytes": 15604,
+						"url": "http://185.197.194.111:9000/shanyrak-files/portfolio/65725e32-d3de-4a8a-ac72-58b8a1c24926.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=shanyrak%2F20251113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20251113T075741Z&X-Amz-Expires=900&X-Amz-SignedHeaders=host&X-Amz-Signature=15b439a5c20b8eabddc30c2e15e44c5816cb3c289cbb2fed13b11f30af52fd50",
+						"linkType": null,
+						"linkPublicId": null,
+						"sortOrder": null,
+						"role": null
+					}
+				},
+				{
+					"name": "getBuildersPortfolioPhotos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/files?linkType=BUILDER_PORTFOLIO&linkPublicId=ceb3f0b3-3122-48d0-ba39-e256fe291d4b",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"files"
+							],
+							"query": [
+								{
+									"key": "linkType",
+									"value": "BUILDER_PORTFOLIO"
+								},
+								{
+									"key": "linkPublicId",
+									"value": "ceb3f0b3-3122-48d0-ba39-e256fe291d4b",
+									"description": "builder's public id"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"publicId": "466e06e5-94c9-4a08-8926-e73af81d613b",
+							"bucket": "shanyrak-files",
+							"objectKey": "portfolio/65725e32-d3de-4a8a-ac72-58b8a1c24926.png",
+							"contentType": "image/png",
+							"sizeBytes": 15604,
+							"url": "http://185.197.194.111:9000/shanyrak-files/portfolio/65725e32-d3de-4a8a-ac72-58b8a1c24926.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=shanyrak%2F20251113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20251113T080211Z&X-Amz-Expires=900&X-Amz-SignedHeaders=host&X-Amz-Signature=9d19570c4165ecdea8f397d7593b43a7a28afc881f78beb54a7814f1b3d99ba6",
+							"linkType": "BUILDER_PORTFOLIO",
+							"linkPublicId": "2ad93af8-75d4-4936-b98d-4c5d66458805",
+							"sortOrder": 0,
+							"role": null
+						},
+						{
+							"publicId": "3cf21f40-2251-4ff4-af92-422cd8bcba10",
+							"bucket": "shanyrak-files",
+							"objectKey": "portfolio/bcb6dbaf-de5b-47ef-be6a-45f7353653c7.png",
+							"contentType": "image/png",
+							"sizeBytes": 15604,
+							"url": "http://185.197.194.111:9000/shanyrak-files/portfolio/bcb6dbaf-de5b-47ef-be6a-45f7353653c7.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=shanyrak%2F20251113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20251113T080211Z&X-Amz-Expires=900&X-Amz-SignedHeaders=host&X-Amz-Signature=8601b2faa2dd691e73e05f863d881a1a564a79214a4541ca55fc7a8916ddc80d",
+							"linkType": "BUILDER_PORTFOLIO",
+							"linkPublicId": "2ad93af8-75d4-4936-b98d-4c5d66458805",
+							"sortOrder": 0,
+							"role": null
+						}
+					]
+				},
+				{
+					"name": "getOrderPhotos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/files?linkType=ORDER_PHOTO&linkPublicId=ceb3f0b3-3122-48d0-ba39-e256fe291d4b",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"files"
+							],
+							"query": [
+								{
+									"key": "linkType",
+									"value": "ORDER_PHOTO"
+								},
+								{
+									"key": "linkPublicId",
+									"value": "ceb3f0b3-3122-48d0-ba39-e256fe291d4b",
+									"description": "order's public"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"publicId": "270ca0d8-b926-4e89-863d-84c957d3f7a4",
+							"bucket": "shanyrak-files",
+							"objectKey": "orders/9a49ef4d-3f78-4d54-a835-4839505deebd.png",
+							"contentType": "image/png",
+							"sizeBytes": 145109,
+							"url": "http://185.197.194.111:9000/shanyrak-files/orders/9a49ef4d-3f78-4d54-a835-4839505deebd.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=shanyrak%2F20251113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20251113T080330Z&X-Amz-Expires=900&X-Amz-SignedHeaders=host&X-Amz-Signature=c465dd077d98f30a9048526b659835315a8b029cda14110051d1913177226a52",
+							"linkType": "ORDER_PHOTO",
+							"linkPublicId": "9aa84dd2-0fb5-4c9b-b4cf-cb0b1b5304f1",
+							"sortOrder": 0,
+							"role": null
+						},
+						{
+							"publicId": "d885ceb9-781a-4500-af33-28663bf311e3",
+							"bucket": "shanyrak-files",
+							"objectKey": "orders/44ec23c7-41a2-498f-a004-dae651a89a21.png",
+							"contentType": "image/png",
+							"sizeBytes": 54315,
+							"url": "http://185.197.194.111:9000/shanyrak-files/orders/44ec23c7-41a2-498f-a004-dae651a89a21.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=shanyrak%2F20251113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20251113T080330Z&X-Amz-Expires=900&X-Amz-SignedHeaders=host&X-Amz-Signature=4ff312bd972e1fae9e5de6eab645fe58a342da4cf67695eef825cb54f4228e69",
+							"linkType": "ORDER_PHOTO",
+							"linkPublicId": "9aa84dd2-0fb5-4c9b-b4cf-cb0b1b5304f1",
+							"sortOrder": 0,
+							"role": null
+						},
+						{
+							"publicId": "49a4801d-0a40-43bb-a731-7fa5467a55f5",
+							"bucket": "shanyrak-files",
+							"objectKey": "orders/c017aa4b-3b48-4ba4-be61-0709a5572ff3.png",
+							"contentType": "image/png",
+							"sizeBytes": 54315,
+							"url": "http://185.197.194.111:9000/shanyrak-files/orders/c017aa4b-3b48-4ba4-be61-0709a5572ff3.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=shanyrak%2F20251113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20251113T080330Z&X-Amz-Expires=900&X-Amz-SignedHeaders=host&X-Amz-Signature=3f999512bd9694ecebfc0031e6fc8640c882d84f05b12f6ebfb8439dbf64e166",
+							"linkType": "ORDER_PHOTO",
+							"linkPublicId": "9aa84dd2-0fb5-4c9b-b4cf-cb0b1b5304f1",
+							"sortOrder": 0,
+							"role": null
+						}
+					]
+				},
+				{
+					"name": "getAvatarPhoto",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/files?linkType=USER_AVATAR&linkPublicId=ceb3f0b3-3122-48d0-ba39-e256fe291d4b",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"files"
+							],
+							"query": [
+								{
+									"key": "linkType",
+									"value": "USER_AVATAR"
+								},
+								{
+									"key": "linkPublicId",
+									"value": "ceb3f0b3-3122-48d0-ba39-e256fe291d4b",
+									"description": "Optional param, for user want's to get other user's avatar by using his publicId"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"publicId": "c08eb992-12e3-46a4-98ed-f2f838c5d312",
+							"bucket": "shanyrak-files",
+							"objectKey": "avatars/5e30514d-f0a6-46a7-9133-5eb38850755f.png",
+							"contentType": "image/png",
+							"sizeBytes": 59998,
+							"url": "http://185.197.194.111:9000/shanyrak-files/avatars/5e30514d-f0a6-46a7-9133-5eb38850755f.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=shanyrak%2F20251113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20251113T080545Z&X-Amz-Expires=900&X-Amz-SignedHeaders=host&X-Amz-Signature=67341150da4a39066d33ef8fe836b084d8f52e6d6f183b29bca8ac1b9f366c37",
+							"linkType": "USER_AVATAR",
+							"linkPublicId": "2ad93af8-75d4-4936-b98d-4c5d66458805",
+							"sortOrder": 0,
+							"role": null
+						}
+					]
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/files/1df07d31-bf1e-44b0-ad76-8ed67c53e2cf",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"files",
+								"1df07d31-bf1e-44b0-ad76-8ed67c53e2cf"
 							]
 						}
 					},

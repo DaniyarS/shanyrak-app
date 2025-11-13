@@ -1,4 +1,4 @@
-.builder-profile-page {
+.customer-profile-page {
   padding: var(--spacing-8) 0;
   min-height: calc(100vh - 80px);
 }
@@ -27,27 +27,6 @@
   margin-bottom: var(--spacing-4);
 }
 
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-4);
-}
-
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-2);
-  font-size: var(--font-size-base);
-  color: var(--color-text-primary);
-  cursor: pointer;
-}
-
-.checkbox-label input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-}
-
 .form-actions {
   display: flex;
   gap: var(--spacing-3);
@@ -67,6 +46,10 @@
 
 .profile-section {
   margin-bottom: var(--spacing-6);
+}
+
+.profile-section:last-child {
+  margin-bottom: 0;
 }
 
 .profile-section h3 {
@@ -108,45 +91,6 @@
   font-size: var(--font-size-base);
 }
 
-.about-text {
-  color: var(--color-text-primary);
-  line-height: 1.6;
-  margin: 0;
-  padding: var(--spacing-3);
-  background-color: var(--color-neutral-50);
-  border-left: 3px solid var(--color-primary);
-  border-radius: var(--radius-sm);
-}
-
-.status-badge {
-  display: inline-block;
-  padding: var(--spacing-1) var(--spacing-3);
-  border-radius: var(--radius-full);
-  font-size: var(--font-size-xs);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.status-badge.available {
-  background-color: rgba(76, 175, 80, 0.1);
-  color: var(--color-success);
-}
-
-.status-badge.unavailable {
-  background-color: var(--color-neutral-200);
-  color: var(--color-text-secondary);
-}
-
-.error-message {
-  background-color: rgba(244, 67, 54, 0.1);
-  border: 1px solid var(--color-error);
-  border-radius: var(--radius-md);
-  padding: var(--spacing-3);
-  color: var(--color-error);
-  font-size: var(--font-size-sm);
-}
-
 .logout-section {
   max-width: 800px;
   margin: 0 auto;
@@ -173,7 +117,7 @@
 }
 
 @media (max-width: 768px) {
-  .builder-profile-page {
+  .customer-profile-page {
     padding: var(--spacing-4) 0;
     min-height: calc(100vh - 160px);
   }
@@ -211,10 +155,6 @@
     margin-bottom: var(--spacing-3);
   }
 
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-
   .form-actions {
     flex-direction: column;
   }
@@ -241,7 +181,7 @@
 }
 
 @media (max-width: 480px) {
-  .builder-profile-page {
+  .customer-profile-page {
     padding: var(--spacing-3) 0;
   }
 
@@ -265,9 +205,5 @@
 
   .logout-content h3 {
     font-size: var(--font-size-base);
-  }
-
-  .checkbox-label {
-    font-size: var(--font-size-sm);
   }
 }
