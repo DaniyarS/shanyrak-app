@@ -1,0 +1,226 @@
+.contracts-page {
+  padding: var(--spacing-8) 0;
+  min-height: calc(100vh - 80px);
+}
+
+.contracts-header {
+  margin-bottom: var(--spacing-8);
+}
+
+.contracts-header h1 {
+  margin: 0;
+  font-size: var(--font-size-3xl);
+  color: var(--color-text-primary);
+}
+
+.loading-message {
+  text-align: center;
+  padding: var(--spacing-12);
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-12) var(--spacing-6);
+}
+
+.empty-state-icon {
+  font-size: 4rem;
+  margin-bottom: var(--spacing-4);
+}
+
+.empty-state h3 {
+  font-size: var(--font-size-2xl);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-3);
+}
+
+.empty-state p {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Contracts Grid */
+.contracts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: var(--spacing-6);
+}
+
+/* Contract Card */
+.contract-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.contract-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.contract-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding-bottom: var(--spacing-3);
+  border-bottom: 1px solid var(--color-neutral-200);
+}
+
+.contract-header h3 {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+/* Status Badges */
+.status-badge {
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-badge.active {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.status-badge.completed {
+  background-color: var(--color-success);
+  color: white;
+}
+
+.status-badge.cancelled {
+  background-color: var(--color-error);
+  color: white;
+}
+
+.status-badge.pending {
+  background-color: #f57c00;
+  color: white;
+}
+
+/* Contract Details */
+.contract-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-2);
+  background-color: var(--color-neutral-50);
+  border-radius: var(--radius-sm);
+}
+
+.detail-label {
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.detail-value {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+/* Completion Status */
+.completion-status {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3);
+  background-color: rgba(33, 150, 243, 0.1);
+  border-left: 3px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+.status-icon {
+  font-size: var(--font-size-lg);
+}
+
+/* Contract Actions */
+.contract-actions {
+  margin-top: var(--spacing-2);
+  padding-top: var(--spacing-3);
+  border-top: 1px solid var(--color-neutral-200);
+}
+
+.contract-actions .btn {
+  width: 100%;
+  padding: var(--spacing-3) var(--spacing-4);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .contracts-page {
+    padding: var(--spacing-4) 0;
+    min-height: calc(100vh - 160px);
+  }
+
+  .contracts-header {
+    margin-bottom: var(--spacing-6);
+  }
+
+  .contracts-header h1 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .contracts-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-4);
+  }
+
+  .contract-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .empty-state {
+    padding: var(--spacing-8) var(--spacing-4);
+  }
+
+  .empty-state-icon {
+    font-size: 3rem;
+  }
+
+  .empty-state h3 {
+    font-size: var(--font-size-xl);
+  }
+}
+
+@media (max-width: 480px) {
+  .contracts-page {
+    padding: var(--spacing-3) 0;
+  }
+
+  .contracts-header h1 {
+    font-size: var(--font-size-xl);
+  }
+
+  .contract-header h3 {
+    font-size: var(--font-size-base);
+  }
+
+  .status-badge {
+    font-size: 0.7rem;
+    padding: 4px 10px;
+  }
+}

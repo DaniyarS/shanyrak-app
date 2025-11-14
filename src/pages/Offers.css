@@ -1,0 +1,323 @@
+.offers-page {
+  padding: var(--spacing-8) 0;
+  min-height: calc(100vh - 80px);
+}
+
+.offers-header {
+  margin-bottom: var(--spacing-8);
+}
+
+.offers-header h1 {
+  margin: 0 0 var(--spacing-2) 0;
+  font-size: var(--font-size-3xl);
+  color: var(--color-text-primary);
+}
+
+.offers-header p {
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.loading-message {
+  text-align: center;
+  padding: var(--spacing-12);
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+}
+
+.error-card {
+  background-color: rgba(244, 67, 54, 0.1);
+  border: 1px solid var(--color-error);
+  margin-bottom: var(--spacing-6);
+}
+
+.error-message {
+  color: var(--color-error);
+  margin: 0;
+  text-align: center;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-12) var(--spacing-6);
+}
+
+.empty-state-icon {
+  font-size: 4rem;
+  margin-bottom: var(--spacing-4);
+}
+
+.empty-state h3 {
+  font-size: var(--font-size-2xl);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-3);
+}
+
+.empty-state p {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Offers Grid */
+.offers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: var(--spacing-6);
+}
+
+/* Offer Card */
+.offer-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.offer-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Offer Card Header */
+.offer-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding-bottom: var(--spacing-3);
+  border-bottom: 1px solid var(--color-neutral-200);
+}
+
+.offer-order-title {
+  flex: 1;
+  margin: 0;
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+/* Status Badge */
+.status-badge {
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-badge.pending {
+  background-color: #f57c00;
+  color: white;
+}
+
+.status-badge.accepted {
+  background-color: var(--color-success);
+  color: white;
+}
+
+.status-badge.rejected {
+  background-color: var(--color-error);
+  color: white;
+}
+
+.status-badge.withdrawn {
+  background-color: var(--color-neutral-400);
+  color: white;
+}
+
+/* Order Details Section */
+.offer-order-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.order-description {
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.order-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.info-item {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+}
+
+.info-label {
+  color: var(--color-text-secondary);
+  font-weight: 600;
+}
+
+/* Offer Details Section */
+.offer-details-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.offer-details-section h4 {
+  margin: 0 0 var(--spacing-1) 0;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+/* Offer Pricing */
+.offer-pricing {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.offer-price-item {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+}
+
+.offer-price-label {
+  color: var(--color-text-secondary);
+  font-weight: 600;
+}
+
+/* Offer Message */
+.offer-message-box {
+  position: relative;
+  margin-top: var(--spacing-1);
+  padding: var(--spacing-3);
+  background-color: var(--color-neutral-50);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--color-primary);
+}
+
+.message-date {
+  position: absolute;
+  top: var(--spacing-2);
+  right: var(--spacing-3);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.message-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  margin: 0;
+  padding-right: var(--spacing-12);
+}
+
+/* Offer Actions */
+.offer-actions {
+  display: flex;
+  gap: var(--spacing-3);
+  margin-top: var(--spacing-3);
+  padding-top: var(--spacing-3);
+  border-top: 1px solid var(--color-neutral-200);
+}
+
+.offer-actions .btn {
+  flex: 1;
+  padding: var(--spacing-2) var(--spacing-4);
+  font-size: var(--font-size-sm);
+}
+
+.offer-actions .btn-danger {
+  background-color: var(--color-error);
+  color: white;
+}
+
+.offer-actions .btn-danger:hover:not(:disabled) {
+  background-color: #d32f2f;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .offers-page {
+    padding: var(--spacing-4) 0;
+    min-height: calc(100vh - 160px);
+  }
+
+  .offers-header {
+    margin-bottom: var(--spacing-6);
+  }
+
+  .offers-header h1 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .offers-header p {
+    font-size: var(--font-size-sm);
+  }
+
+  .offers-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-4);
+  }
+
+  .offer-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .offer-order-title {
+    font-size: var(--font-size-lg);
+  }
+
+  .info-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-1);
+  }
+
+  .empty-state {
+    padding: var(--spacing-8) var(--spacing-4);
+  }
+
+  .empty-state-icon {
+    font-size: 3rem;
+  }
+
+  .empty-state h3 {
+    font-size: var(--font-size-xl);
+  }
+}
+
+@media (max-width: 480px) {
+  .offers-page {
+    padding: var(--spacing-3) 0;
+  }
+
+  .offers-header h1 {
+    font-size: var(--font-size-xl);
+  }
+
+  .offers-header p {
+    font-size: var(--font-size-xs);
+  }
+
+  .offer-order-title {
+    font-size: var(--font-size-base);
+  }
+
+  .status-badge {
+    font-size: 0.65rem;
+    padding: 4px 8px;
+  }
+
+  .offer-details-section h4 {
+    font-size: var(--font-size-base);
+  }
+}

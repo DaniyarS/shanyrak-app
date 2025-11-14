@@ -1,0 +1,80 @@
+.unauthorized-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.unauthorized-content {
+  background: white;
+  border-radius: 20px;
+  padding: 3rem;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.unauthorized-icon {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.unauthorized-title {
+  color: #333;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.unauthorized-message {
+  color: #666;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.unauthorized-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.unauthorized-actions button {
+  min-width: 120px;
+}
+
+@media (max-width: 480px) {
+  .unauthorized-content {
+    padding: 2rem;
+  }
+
+  .unauthorized-title {
+    font-size: 1.5rem;
+  }
+
+  .unauthorized-message {
+    font-size: 1rem;
+  }
+
+  .unauthorized-actions {
+    flex-direction: column;
+  }
+
+  .unauthorized-actions button {
+    width: 100%;
+  }
+}
