@@ -7,6 +7,9 @@ import Card from '../components/Card';
 import Input from '../components/Input';
 import Select from '../components/Select';
 import OrderPhotoGallery from '../components/OrderPhotoGallery';
+import ConfirmDealModal from '../components/ConfirmDealModal';
+import { OrderStatus } from '../domain/entities/Order';
+import { OfferStatus } from '../domain/entities/Offer';
 import './CustomerOrders.css';
 
 const CustomerOrders = () => {
@@ -44,6 +47,9 @@ const CustomerOrders = () => {
     areaM2: '',
     floor: '',
   });
+  const [requestingPhone, setRequestingPhone] = useState(false);
+  const [builderContacts, setBuilderContacts] = useState({}); // Store requested builder contacts
+  const [confirmingDealOffer, setConfirmingDealOffer] = useState(null); // Offer being confirmed/rejected
 
   useEffect(() => {
     fetchInitialData();
@@ -454,6 +460,49 @@ const CustomerOrders = () => {
     }
   };
 
+  const handleRequestPhone = async (offerId) => {
+    if (!selectedOrder || requestingPhone) return;
+
+    setRequestingPhone(true);
+    try {
+      const requestPhoneUseCase = container.getRequestBuilderPhoneUseCase();
+      const result = await requestPhoneUseCase.execute(selectedOrder.id, offerId);
+
+      if (result.success) {
+        // Store the builder contact info
+        setBuilderContacts(prev => ({
+          ...prev,
+          [offerId]: result.builderContact
+        }));
+
+        // Update order status to IN_PROGRESS
+        setSelectedOrder(prev => ({ ...prev, status: OrderStatus.IN_PROGRESS }));
+
+        // Refresh orders list
+        fetchInitialData();
+
+        alert(t('orders.phoneRequested'));
+      } else {
+        alert(result.errors?.submit || 'Failed to request phone');
+      }
+    } catch (error) {
+      console.error('Error requesting phone:', error);
+      alert(error.response?.data?.message || 'Failed to request phone');
+    } finally {
+      setRequestingPhone(false);
+    }
+  };
+
+  const handleConfirmDealClick = (offer) => {
+    setConfirmingDealOffer(offer);
+  };
+
+  const handleDealConfirmed = () => {
+    setConfirmingDealOffer(null);
+    setSelectedOrder(null);
+    fetchInitialData(); // Refresh orders list
+  };
+
   const toggleMenu = (orderId) => {
     setOpenMenuId(openMenuId === orderId ? null : orderId);
   };
@@ -824,6 +873,16 @@ const CustomerOrders = () => {
           )}
         </div>
 
+        {/* Confirm Deal Modal */}
+        {confirmingDealOffer && selectedOrder && (
+          <ConfirmDealModal
+            offer={confirmingDealOffer}
+            order={selectedOrder}
+            onClose={() => setConfirmingDealOffer(null)}
+            onSuccess={handleDealConfirmed}
+          />
+        )}
+
         {/* Offers Modal */}
         {selectedOrder && (
           <div className="modal-overlay" onClick={() => setSelectedOrder(null)}>
@@ -868,8 +927,28 @@ const CustomerOrders = () => {
                       }
                     };
 
+                    const getOfferStatusBadge = (status) => {
+                      const statusMap = {
+                        [OfferStatus.PENDING]: { className: 'pending', label: t('offers.statusPending') },
+                        [OfferStatus.ACCEPTED]: { className: 'accepted', label: t('offers.statusAccepted') },
+                        [OfferStatus.REJECTED]: { className: 'rejected', label: t('offers.statusRejected') },
+                        [OfferStatus.WITHDRAWN]: { className: 'withdrawn', label: t('offers.statusWithdrawn') },
+                      };
+
+                      const statusConfig = statusMap[status] || statusMap[OfferStatus.PENDING];
+                      return <span className={`status-badge ${statusConfig.className}`}>{statusConfig.label}</span>;
+                    };
+
+                    const builderContact = builderContacts[offer.id];
+                    const isPending = offer.status === OfferStatus.PENDING || !offer.status;
+                    const showPhone = builderContact || selectedOrder.status === OrderStatus.IN_PROGRESS;
+
                     return (
                       <div key={offer.id} className="offer-item">
+                        <div className="offer-header">
+                          {getOfferStatusBadge(offer.status)}
+                        </div>
+
                         {offer.builder && (
                           <div
                             className="offer-builder-info clickable"
@@ -886,15 +965,18 @@ const CustomerOrders = () => {
                               <strong className="builder-name">{offer.builder.fullName || offer.builder.login}</strong>
                               <span className="builder-rating">⭐ {offer.builder.ratingAvg?.toFixed(1) || '0.0'}</span>
                             </div>
-                            <a
-                              href={`tel:${offer.builder.phone}`}
-                              className="builder-phone"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              📞 {offer.builder.phone}
-                            </a>
+                            {showPhone && (
+                              <a
+                                href={`tel:${builderContact?.phone || offer.builder.phone}`}
+                                className="builder-phone"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                📞 {builderContact?.phone || offer.builder.phone}
+                              </a>
+                            )}
                           </div>
                         )}
+
                         <div className="offer-pricing">
                           <strong className="offer-price">
                             {offer.price} ₸ {getUnitLabel(offer.unit)}
@@ -904,6 +986,36 @@ const CustomerOrders = () => {
                           </p>
                         </div>
                         <p className="offer-message">{offer.message}</p>
+
+                        {/* Offer Actions */}
+                        {isPending && !builderContact && (
+                          <div className="offer-actions">
+                            <button
+                              className="btn btn-primary"
+                              onClick={() => handleRequestPhone(offer.id)}
+                              disabled={requestingPhone}
+                            >
+                              {requestingPhone ? t('common.loading') : t('orders.requestPhone')}
+                            </button>
+                          </div>
+                        )}
+
+                        {builderContact && isPending && (
+                          <div className="offer-actions">
+                            <button
+                              className="btn btn-success"
+                              onClick={() => handleConfirmDealClick(offer)}
+                            >
+                              {t('orders.confirmDeal')}
+                            </button>
+                            <button
+                              className="btn btn-secondary"
+                              onClick={() => handleConfirmDealClick(offer)}
+                            >
+                              {t('orders.rejectDeal')}
+                            </button>
+                          </div>
+                        )}
                       </div>
                     );
                   })

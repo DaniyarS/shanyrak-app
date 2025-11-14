@@ -7,9 +7,9 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://185.197.194.111:8080',
+        target: 'https://api.shanyrak.group/',
         changeOrigin: true,
-        secure: false,
+        secure: true,
       }
     }
   }

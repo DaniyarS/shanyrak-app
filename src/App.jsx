@@ -15,6 +15,7 @@ import BuilderOrders from './pages/BuilderOrders';
 import ProfileRouter from './pages/ProfileRouter';
 import BuilderDetail from './pages/BuilderDetail';
 import Offers from './pages/Offers';
+import Contracts from './pages/Contracts';
 import Unauthorized from './pages/Unauthorized';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import './App.css';
@@ -72,6 +73,14 @@ function App() {
               element={
                 <PrivateRoute allowedRoles={['BUILDER']}>
                   <Offers />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/contracts"
+              element={
+                <PrivateRoute allowedRoles={['BUILDER', 'CUSTOMER']}>
+                  <Contracts />
                 </PrivateRoute>
               }
             />

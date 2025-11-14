@@ -59,4 +59,26 @@ export class IOrderRepository {
   async getCustomerOrders(params) {
     throw new Error('Method not implemented');
   }
+
+  /**
+   * Request builder's phone number
+   * POST /api/v1/orders/{orderPublicId}/request-phone
+   * @param {string} orderId - Order ID
+   * @param {string} offerId - Offer ID
+   * @returns {Promise<Object>} Builder contact information
+   */
+  async requestBuilderPhone(orderId, offerId) {
+    throw new Error('Method not implemented');
+  }
+
+  /**
+   * Confirm deal with builder
+   * POST /api/v1/orders/{orderPublicId}/confirm-deal
+   * @param {string} orderId - Order ID
+   * @param {Object} dealData - { offerPublicId, agreed, startDate, endDate }
+   * @returns {Promise<Object>} Result with contract if agreed=true
+   */
+  async confirmDeal(orderId, dealData) {
+    throw new Error('Method not implemented');
+  }
 }

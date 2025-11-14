@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import offerService from '../services/offerService';
 import Card from '../components/Card';
+import EditOfferModal from '../components/EditOfferModal';
+import { OfferStatus } from '../domain/entities/Offer';
+import { container } from '../infrastructure/di/ServiceContainer';
 import './Offers.css';
 
 const Offers = () => {
@@ -9,6 +12,8 @@ const Offers = () => {
   const [offers, setOffers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [editingOffer, setEditingOffer] = useState(null);
+  const [withdrawing, setWithdrawing] = useState(false);
 
   useEffect(() => {
     fetchBuilderOffers();
@@ -43,13 +48,52 @@ const Offers = () => {
 
   const getOfferStatusBadge = (status) => {
     const statusMap = {
-      'NEW': { className: 'pending', label: t('offers.statusPending') },
-      'ACCEPTED': { className: 'accepted', label: t('offers.statusAccepted') },
-      'REJECTED': { className: 'rejected', label: t('offers.statusRejected') },
+      [OfferStatus.PENDING]: { className: 'pending', label: t('offers.statusPending') },
+      [OfferStatus.ACCEPTED]: { className: 'accepted', label: t('offers.statusAccepted') },
+      [OfferStatus.REJECTED]: { className: 'rejected', label: t('offers.statusRejected') },
+      [OfferStatus.WITHDRAWN]: { className: 'withdrawn', label: t('offers.statusWithdrawn') },
+      'NEW': { className: 'pending', label: t('offers.statusPending') }, // Legacy support
     };
 
-    const statusConfig = statusMap[status] || statusMap['NEW'];
+    const statusConfig = statusMap[status] || statusMap[OfferStatus.PENDING];
     return <span className={`status-badge ${statusConfig.className}`}>{statusConfig.label}</span>;
+  };
+
+  const handleEditOffer = (offer, order) => {
+    setEditingOffer({ ...offer, order });
+  };
+
+  const handleWithdrawOffer = async (offerId) => {
+    if (!window.confirm(t('offers.withdrawConfirm'))) {
+      return;
+    }
+
+    setWithdrawing(true);
+    try {
+      const withdrawOfferUseCase = container.getWithdrawOfferUseCase();
+      const result = await withdrawOfferUseCase.execute(offerId);
+
+      if (result.success) {
+        alert(t('offers.offerWithdrawn'));
+        fetchBuilderOffers(); // Refresh the list
+      } else {
+        alert(result.errors?.submit || t('common.error'));
+      }
+    } catch (error) {
+      console.error('Error withdrawing offer:', error);
+      alert(error.response?.data?.message || 'Failed to withdraw offer');
+    } finally {
+      setWithdrawing(false);
+    }
+  };
+
+  const handleOfferUpdated = () => {
+    setEditingOffer(null);
+    fetchBuilderOffers(); // Refresh the list
+  };
+
+  const canEditOffer = (status) => {
+    return status === OfferStatus.PENDING || status === 'NEW';
   };
 
   if (loading) {
@@ -156,11 +200,39 @@ const Offers = () => {
                     </>
                   )}
                 </div>
+
+                {/* Offer Actions */}
+                {canEditOffer(item.offer?.status) && (
+                  <div className="offer-actions">
+                    <button
+                      className="btn btn-secondary"
+                      onClick={() => handleEditOffer(item.offer, item.order)}
+                    >
+                      {t('offers.editOffer')}
+                    </button>
+                    <button
+                      className="btn btn-danger"
+                      onClick={() => handleWithdrawOffer(item.offer?.publicId)}
+                      disabled={withdrawing}
+                    >
+                      {withdrawing ? t('common.loading') : t('offers.withdrawOffer')}
+                    </button>
+                  </div>
+                )}
               </Card>
             ))}
           </div>
         )}
       </div>
+
+      {/* Edit Offer Modal */}
+      {editingOffer && (
+        <EditOfferModal
+          offer={editingOffer}
+          onClose={() => setEditingOffer(null)}
+          onSuccess={handleOfferUpdated}
+        />
+      )}
     </div>
   );
 };

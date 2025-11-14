@@ -501,6 +501,131 @@
   font-weight: 500;
 }
 
+/* Offer Header with Status Badge */
+.offer-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--spacing-2);
+}
+
+/* Status Badges */
+.status-badge {
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-badge.pending {
+  background-color: #f57c00;
+  color: white;
+}
+
+.status-badge.accepted {
+  background-color: var(--color-success);
+  color: white;
+}
+
+.status-badge.rejected {
+  background-color: var(--color-error);
+  color: white;
+}
+
+.status-badge.withdrawn {
+  background-color: var(--color-neutral-400);
+  color: white;
+}
+
+/* Offer Actions */
+.offer-item .offer-actions {
+  display: flex;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-3);
+  padding-top: var(--spacing-3);
+  border-top: 1px solid var(--color-neutral-200);
+}
+
+.offer-item .offer-actions .btn {
+  flex: 1;
+  padding: var(--spacing-2) var(--spacing-3);
+  font-size: var(--font-size-sm);
+}
+
+.btn-success {
+  background-color: var(--color-success);
+  color: white;
+}
+
+.btn-success:hover:not(:disabled) {
+  background-color: #388e3c;
+}
+
+/* Deal Context in Modal */
+.deal-context {
+  background-color: var(--color-neutral-50);
+  padding: var(--spacing-4);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-4);
+}
+
+.deal-context h3 {
+  margin-top: 0;
+  margin-bottom: var(--spacing-2);
+  color: var(--color-text-primary);
+}
+
+.deal-offer-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.deal-offer-info p {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+}
+
+/* Action Selection */
+.action-selection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  margin: var(--spacing-4) 0;
+  padding: var(--spacing-4);
+  background-color: var(--color-neutral-50);
+  border-radius: var(--radius-md);
+}
+
+.action-option {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3);
+  background-color: white;
+  border: 2px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.action-option:hover {
+  border-color: var(--color-primary);
+}
+
+.action-option input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.action-option span {
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
 @media (max-width: 768px) {
   .customer-orders-page {
     padding: var(--spacing-4) 0;

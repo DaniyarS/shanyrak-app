@@ -1,4 +1,18 @@
 /**
+ * Offer Status Enum
+ * PENDING - Offer sent, awaiting review
+ * ACCEPTED - Accepted by customer
+ * REJECTED - Rejected by customer or system
+ * WITHDRAWN - Builder withdrew the offer
+ */
+export const OfferStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  WITHDRAWN: 'WITHDRAWN',
+};
+
+/**
  * Offer Entity - Domain Model
  * Represents a service provider's offer on an order
  */
@@ -10,6 +24,7 @@ export class Offer {
     unit,
     daysEstimate,
     message,
+    status,
     createdAt,
     updatedAt,
     builder,
@@ -20,6 +35,7 @@ export class Offer {
     this.unit = unit;
     this.daysEstimate = daysEstimate;
     this.message = message;
+    this.status = status || OfferStatus.PENDING;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.builder = builder; // Builder object with phone, fullName, ratingAvg, etc.

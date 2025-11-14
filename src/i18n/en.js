@@ -20,6 +20,8 @@ export const en = {
     viewOffers: 'View Offers',
     makeOffer: 'Make Offer',
     alreadyResponded: 'You responded',
+    createdAt: 'Created',
+    error: 'Error',
   },
 
   // Navbar
@@ -30,6 +32,7 @@ export const en = {
     myOrders: 'My Orders',
     myProperties: 'My Properties',
     myOffers: 'My Offers',
+    contracts: 'My Contracts',
     signIn: 'Sign In',
     register: 'Register',
     logout: 'Logout',
@@ -326,6 +329,20 @@ export const en = {
     priceRequired: 'Price must be greater than 0',
     daysRequired: 'Days estimate must be greater than 0',
     messageRequired: 'Message is required',
+    // Order statuses
+    statusOpen: 'Open',
+    statusInProgress: 'In Progress',
+    statusCompleted: 'Completed',
+    statusCancelled: 'Cancelled',
+    // Order actions
+    requestPhone: 'Request Phone',
+    confirmDeal: 'Confirm Deal',
+    rejectDeal: 'Reject Deal',
+    phoneRequested: 'Phone number requested successfully',
+    dealConfirmed: 'Deal confirmed successfully',
+    dealRejected: 'Deal rejected',
+    startDateRequired: 'Start date is required',
+    endDateRequired: 'End date is required',
   },
 
   // Offers
@@ -359,9 +376,67 @@ export const en = {
     offerSubmitted: 'Offer submitted successfully!',
     contractCreated: 'Contract created successfully!',
     submittedOn: 'Submitted on',
+    // Offer statuses
     statusPending: 'Pending',
     statusAccepted: 'Accepted',
     statusRejected: 'Rejected',
+    statusWithdrawn: 'Withdrawn',
+    // Offer actions
+    editOffer: 'Edit Offer',
+    withdrawOffer: 'Withdraw Offer',
+    viewBuilder: 'View Builder',
+    offerUpdated: 'Offer updated successfully',
+    offerWithdrawn: 'Offer withdrawn',
+    withdrawConfirm: 'Are you sure you want to withdraw this offer?',
+    cannotEditAccepted: 'Cannot edit accepted offer',
+    cannotEditRejected: 'Cannot edit rejected offer',
+    cannotEditWithdrawn: 'Cannot edit withdrawn offer',
+  },
+
+  // Contracts
+  contracts: {
+    title: 'Contracts',
+    myContracts: 'My Contracts',
+    contractDetails: 'Contract Details',
+    startDate: 'Start Date',
+    endDate: 'End Date',
+    noContracts: 'No contracts yet',
+    noContractsDescription: 'Contracts will appear here when you confirm a deal with a builder.',
+    // Contract statuses
+    statusActive: 'Active',
+    statusCompleted: 'Completed',
+    statusCancelled: 'Cancelled',
+    statusPendingCompletion: 'Pending Completion',
+    // Contract actions
+    confirmCompletion: 'Confirm Completion',
+    workCompleted: 'Work is completed',
+    waitingForOtherParty: 'Waiting for other party to confirm',
+    bothPartiesConfirmed: 'Both parties confirmed completion',
+    completionConfirmed: 'Completion confirmed successfully',
+    completionFailed: 'Failed to confirm completion',
+  },
+
+  // Reviews
+  reviews: {
+    title: 'Reviews',
+    myReviews: 'My Reviews',
+    builderReviews: 'Builder Reviews',
+    leaveReview: 'Leave a Review',
+    writeReview: 'Write Review',
+    rating: 'Rating',
+    yourRating: 'Your Rating',
+    reviewMessage: 'Review Message',
+    reviewPlaceholder: 'Share your experience with this builder...',
+    submitReview: 'Submit Review',
+    noReviews: 'No reviews yet',
+    noReviewsDescription: 'Be the first to leave a review!',
+    reviewSubmitted: 'Review submitted successfully!',
+    reviewFailed: 'Failed to submit review',
+    ratingRequired: 'Rating is required',
+    messageRequired: 'Review message is required',
+    messageTooShort: 'Review message must be at least 10 characters',
+    stars: 'stars',
+    reviewBy: 'Review by',
   },
 
   // Services

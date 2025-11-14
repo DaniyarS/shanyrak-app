@@ -41,4 +41,31 @@ export class ApiOfferRepository extends IOfferRepository {
     const response = await api.get(`/api/v1/offers/${id}`);
     return OfferMapper.toDomain(response.data);
   }
+
+  /**
+   * Update existing offer (builder can edit if status is PENDING)
+   * PUT /api/v1/offers/{publicId}
+   */
+  async update(offerId, offer) {
+    const dto = OfferMapper.toUpdateDTO(offer);
+    const response = await api.put(`/api/v1/offers/${offerId}`, dto);
+    return OfferMapper.toDomain(response.data);
+  }
+
+  /**
+   * Withdraw offer (sets status to WITHDRAWN)
+   * DELETE /api/v1/offers/{publicId}
+   */
+  async withdraw(offerId) {
+    await api.delete(`/api/v1/offers/${offerId}`);
+  }
+
+  /**
+   * Get builder information by offer ID
+   * GET /api/v1/offers/{publicId}/builder
+   */
+  async getBuilderByOfferId(offerId) {
+    const response = await api.get(`/api/v1/offers/${offerId}/builder`);
+    return response.data;
+  }
 }

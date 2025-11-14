@@ -11,6 +11,8 @@ import { ApiCategoryRepository } from '../api/repositories/ApiCategoryRepository
 import { ApiOfferRepository } from '../api/repositories/ApiOfferRepository';
 import { ApiBuilderRepository } from '../api/repositories/ApiBuilderRepository';
 import { ApiFileRepository } from '../api/repositories/ApiFileRepository';
+import { ApiContractRepository } from '../api/repositories/ApiContractRepository';
+import { ApiReviewRepository } from '../api/repositories/ApiReviewRepository';
 
 // Use Cases - Orders
 import { CreateOrder } from '../../application/use-cases/orders/CreateOrder';
@@ -19,12 +21,26 @@ import { DeleteOrder } from '../../application/use-cases/orders/DeleteOrder';
 import { SearchOrders } from '../../application/use-cases/orders/SearchOrders';
 import { GetOrderOffers } from '../../application/use-cases/orders/GetOrderOffers';
 import { GetCustomerOrders } from '../../application/use-cases/orders/GetCustomerOrders';
+import { RequestBuilderPhone } from '../../application/use-cases/orders/RequestBuilderPhone';
+import { ConfirmDeal } from '../../application/use-cases/orders/ConfirmDeal';
 
 // Use Cases - Estates
 import { ManageEstates } from '../../application/use-cases/estates/ManageEstates';
 
 // Use Cases - Offers
 import { CreateOffer } from '../../application/use-cases/offers/CreateOffer';
+import { UpdateOffer } from '../../application/use-cases/offers/UpdateOffer';
+import { WithdrawOffer } from '../../application/use-cases/offers/WithdrawOffer';
+import { GetBuilderByOffer } from '../../application/use-cases/offers/GetBuilderByOffer';
+
+// Use Cases - Contracts
+import { CompleteContract } from '../../application/use-cases/contracts/CompleteContract';
+import { GetUserContracts } from '../../application/use-cases/contracts/GetUserContracts';
+
+// Use Cases - Reviews
+import { CreateReview } from '../../application/use-cases/reviews/CreateReview';
+import { GetBuilderReviews } from '../../application/use-cases/reviews/GetBuilderReviews';
+import { GetReview } from '../../application/use-cases/reviews/GetReview';
 
 // Use Cases - Builders
 import { SearchBuilders } from '../../application/use-cases/builders/SearchBuilders';
@@ -59,23 +75,44 @@ class ServiceContainer {
     this.repositories.offer = new ApiOfferRepository();
     this.repositories.builder = new ApiBuilderRepository();
     this.repositories.file = new ApiFileRepository();
+    this.repositories.contract = new ApiContractRepository();
+    this.repositories.review = new ApiReviewRepository();
 
     // Initialize use cases with their dependencies
+    // Orders
     this.useCases.createOrder = new CreateOrder(this.repositories.order);
     this.useCases.updateOrder = new UpdateOrder(this.repositories.order);
     this.useCases.deleteOrder = new DeleteOrder(this.repositories.order);
     this.useCases.searchOrders = new SearchOrders(this.repositories.order);
     this.useCases.getCustomerOrders = new GetCustomerOrders(this.repositories.order);
     this.useCases.getOrderOffers = new GetOrderOffers(this.repositories.offer);
+    this.useCases.requestBuilderPhone = new RequestBuilderPhone(this.repositories.order);
+    this.useCases.confirmDeal = new ConfirmDeal(this.repositories.order);
 
+    // Estates
     this.useCases.manageEstates = new ManageEstates(this.repositories.estate);
 
+    // Offers
     this.useCases.createOffer = new CreateOffer(this.repositories.offer);
+    this.useCases.updateOffer = new UpdateOffer(this.repositories.offer);
+    this.useCases.withdrawOffer = new WithdrawOffer(this.repositories.offer);
+    this.useCases.getBuilderByOffer = new GetBuilderByOffer(this.repositories.offer);
 
+    // Contracts
+    this.useCases.completeContract = new CompleteContract(this.repositories.contract);
+    this.useCases.getUserContracts = new GetUserContracts(this.repositories.contract);
+
+    // Reviews
+    this.useCases.createReview = new CreateReview(this.repositories.review);
+    this.useCases.getBuilderReviews = new GetBuilderReviews(this.repositories.review);
+    this.useCases.getReview = new GetReview(this.repositories.review);
+
+    // Builders
     this.useCases.searchBuilders = new SearchBuilders(this.repositories.builder);
     this.useCases.getBuilder = new GetBuilder(this.repositories.builder);
     this.useCases.updateBuilder = new UpdateBuilder(this.repositories.builder);
 
+    // Files
     this.useCases.uploadAvatar = new UploadAvatar(this.repositories.file);
     this.useCases.getAvatar = new GetAvatar(this.repositories.file);
     this.useCases.uploadPortfolioPhoto = new UploadPortfolioPhoto(this.repositories.file);
@@ -107,6 +144,14 @@ class ServiceContainer {
     return this.repositories.builder;
   }
 
+  getContractRepository() {
+    return this.repositories.contract;
+  }
+
+  getReviewRepository() {
+    return this.repositories.review;
+  }
+
   // Getters for use cases - Orders
   getCreateOrderUseCase() {
     return this.useCases.createOrder;
@@ -132,6 +177,14 @@ class ServiceContainer {
     return this.useCases.getCustomerOrders;
   }
 
+  getRequestBuilderPhoneUseCase() {
+    return this.useCases.requestBuilderPhone;
+  }
+
+  getConfirmDealUseCase() {
+    return this.useCases.confirmDeal;
+  }
+
   // Getters for use cases - Estates
   getManageEstatesUseCase() {
     return this.useCases.manageEstates;
@@ -140,6 +193,40 @@ class ServiceContainer {
   // Getters for use cases - Offers
   getCreateOfferUseCase() {
     return this.useCases.createOffer;
+  }
+
+  getUpdateOfferUseCase() {
+    return this.useCases.updateOffer;
+  }
+
+  getWithdrawOfferUseCase() {
+    return this.useCases.withdrawOffer;
+  }
+
+  getBuilderByOfferUseCase() {
+    return this.useCases.getBuilderByOffer;
+  }
+
+  // Getters for use cases - Contracts
+  getCompleteContractUseCase() {
+    return this.useCases.completeContract;
+  }
+
+  getGetUserContractsUseCase() {
+    return this.useCases.getUserContracts;
+  }
+
+  // Getters for use cases - Reviews
+  getCreateReviewUseCase() {
+    return this.useCases.createReview;
+  }
+
+  getBuilderReviewsUseCase() {
+    return this.useCases.getBuilderReviews;
+  }
+
+  getGetReviewUseCase() {
+    return this.useCases.getReview;
   }
 
   // Getters for use cases - Builders
