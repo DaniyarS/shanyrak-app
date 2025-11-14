@@ -5,6 +5,8 @@ import { container } from '../infrastructure/di/ServiceContainer';
 import Button from '../components/Button';
 import Card from '../components/Card';
 import Input from '../components/Input';
+import Select from '../components/Select';
+import OrderPhotoGallery from '../components/OrderPhotoGallery';
 import './CustomerOrders.css';
 
 const CustomerOrders = () => {
@@ -30,10 +32,29 @@ const CustomerOrders = () => {
     budgetMax: '',
   });
   const [errors, setErrors] = useState({});
+  const [pendingPhotos, setPendingPhotos] = useState([]); // Photos to upload after order creation
+  const [uploadingPhotos, setUploadingPhotos] = useState(false);
+  const [showEstateForm, setShowEstateForm] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [estateFormData, setEstateFormData] = useState({
+    kind: '',
+    addressLine: '',
+    city: '',
+    district: '',
+    areaM2: '',
+    floor: '',
+  });
 
   useEffect(() => {
     fetchInitialData();
   }, []);
+
+  // Automatically select property if there's only one
+  useEffect(() => {
+    if (estates.length === 1 && showForm && !editingOrder && !formData.estateId) {
+      setFormData((prev) => ({ ...prev, estateId: estates[0].id }));
+    }
+  }, [estates, showForm, editingOrder, formData.estateId]);
 
   const fetchInitialData = async () => {
     try {
@@ -105,12 +126,6 @@ const CustomerOrders = () => {
   };
 
   const handleCreateOrderClick = () => {
-    if (estates.length === 0) {
-      if (window.confirm(t('orders.needPropertyFirst'))) {
-        navigate('/estates');
-      }
-      return;
-    }
     setShowForm(true);
   };
 
@@ -122,11 +137,22 @@ const CustomerOrders = () => {
     }
   };
 
+  const handleEstateChange = (e) => {
+    const { name, value } = e.target;
+    setEstateFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: '' }));
+    }
+  };
+
   const validateForm = () => {
     const newErrors = {};
 
     if (!formData.categoryId) newErrors.categoryId = 'Category is required';
-    if (!formData.estateId) newErrors.estateId = 'Property is required';
+    // Only require estateId if user has existing estates
+    if (estates.length > 0 && !formData.estateId) {
+      newErrors.estateId = 'Property is required';
+    }
     if (!formData.title) newErrors.title = 'Title is required';
     if (!formData.description) newErrors.description = 'Description is required';
     if (!formData.budgetMin) newErrors.budgetMin = 'Minimum budget is required';
@@ -140,6 +166,17 @@ const CustomerOrders = () => {
 
     if (!validateForm()) return;
 
+    // If user has no estates and not editing, show estate form with animation
+    if (estates.length === 0 && !editingOrder) {
+      setIsAnimating(true);
+      // Wait for animation to complete before hiding order form
+      setTimeout(() => {
+        setShowEstateForm(true);
+        setIsAnimating(false);
+      }, 400); // Match CSS transition duration
+      return;
+    }
+
     try {
       const orderData = {
         title: formData.title,
@@ -151,7 +188,12 @@ const CustomerOrders = () => {
       let result;
       if (editingOrder) {
         const updateOrderUseCase = container.getUpdateOrderUseCase();
-        result = await updateOrderUseCase.execute(editingOrder.id, orderData);
+        result = await updateOrderUseCase.execute(
+          editingOrder.id,
+          orderData,
+          formData.categoryId,
+          formData.estateId
+        );
       } else {
         const createOrderUseCase = container.getCreateOrderUseCase();
         result = await createOrderUseCase.execute(
@@ -159,6 +201,13 @@ const CustomerOrders = () => {
           formData.categoryId,
           formData.estateId
         );
+
+        // Upload photos after order creation
+        if (result.success && pendingPhotos.length > 0) {
+          setUploadingPhotos(true);
+          await uploadOrderPhotos(result.order.id, pendingPhotos);
+          setUploadingPhotos(false);
+        }
       }
 
       if (result.success) {
@@ -169,10 +218,164 @@ const CustomerOrders = () => {
       }
     } catch (error) {
       setErrors({ submit: error.response?.data?.message || 'Operation failed' });
+      setUploadingPhotos(false);
     }
   };
 
-  const handleEdit = (order) => {
+  const uploadOrderPhotos = async (orderPublicId, photos) => {
+    const uploadOrderPhotoUseCase = container.getUploadOrderPhotoUseCase();
+    const uploadPromises = photos.map((photo, index) =>
+      uploadOrderPhotoUseCase.execute(photo.file, orderPublicId, index)
+    );
+
+    try {
+      const results = await Promise.all(uploadPromises);
+      const failedUploads = results.filter((r) => !r.success);
+
+      if (failedUploads.length > 0) {
+        console.error('Some photos failed to upload:', failedUploads);
+        setErrors((prev) => ({
+          ...prev,
+          photos: `${failedUploads.length} photo(s) failed to upload`,
+        }));
+      }
+    } catch (error) {
+      console.error('Error uploading photos:', error);
+      setErrors((prev) => ({
+        ...prev,
+        photos: 'Failed to upload photos',
+      }));
+    }
+  };
+
+  const handlePhotoAdded = async (file) => {
+    // For new orders, store photos locally until order is created
+    if (!editingOrder) {
+      const photoUrl = URL.createObjectURL(file);
+      const newPhoto = {
+        id: `temp-${Date.now()}`,
+        file,
+        url: photoUrl,
+      };
+      setPendingPhotos((prev) => [...prev, newPhoto]);
+      return;
+    }
+
+    // For existing orders, upload immediately
+    try {
+      const uploadOrderPhotoUseCase = container.getUploadOrderPhotoUseCase();
+      const result = await uploadOrderPhotoUseCase.execute(
+        file,
+        editingOrder.id,
+        pendingPhotos.length
+      );
+
+      if (result.success) {
+        setPendingPhotos((prev) => [...prev, result.file]);
+      } else {
+        throw new Error(result.errors?.upload || 'Upload failed');
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const handlePhotoDeleted = async (photoId) => {
+    // For temporary photos (new order), just remove from state
+    if (photoId.startsWith('temp-')) {
+      setPendingPhotos((prev) => {
+        const photo = prev.find((p) => p.id === photoId);
+        if (photo?.url) {
+          URL.revokeObjectURL(photo.url);
+        }
+        return prev.filter((p) => p.id !== photoId);
+      });
+      return;
+    }
+
+    // For uploaded photos, delete from server
+    try {
+      const deleteOrderPhotoUseCase = container.getDeleteOrderPhotoUseCase();
+      const result = await deleteOrderPhotoUseCase.execute(photoId);
+
+      if (result.success) {
+        setPendingPhotos((prev) => prev.filter((p) => p.id !== photoId));
+      } else {
+        throw new Error(result.errors?.delete || 'Delete failed');
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const handleBackToOrderForm = () => {
+    setIsAnimating(true);
+    setErrors({});
+    // Wait for animation to start before switching forms
+    setTimeout(() => {
+      setShowEstateForm(false);
+      setIsAnimating(false);
+    }, 400); // Match CSS transition duration
+  };
+
+  const handleEstateSubmit = async (e) => {
+    e.preventDefault();
+    setErrors({});
+
+    try {
+      // Create the estate first
+      const estateUseCase = container.getManageEstatesUseCase();
+      const estateData = {
+        kind: estateFormData.kind,
+        addressLine: estateFormData.addressLine,
+        city: estateFormData.city,
+        district: estateFormData.district,
+        areaM2: parseFloat(estateFormData.areaM2),
+        floor: estateFormData.floor ? parseInt(estateFormData.floor) : null,
+      };
+
+      const estateResult = await estateUseCase.create(estateData);
+
+      if (!estateResult.success) {
+        setErrors(estateResult.errors || { submit: 'Failed to create property' });
+        return;
+      }
+
+      // Now create the order with the new estate
+      const orderData = {
+        title: formData.title,
+        description: formData.description,
+        budgetMin: parseInt(formData.budgetMin),
+        budgetMax: formData.budgetMax ? parseInt(formData.budgetMax) : 0,
+      };
+
+      const createOrderUseCase = container.getCreateOrderUseCase();
+      const result = await createOrderUseCase.execute(
+        orderData,
+        formData.categoryId,
+        estateResult.estate.id
+      );
+
+      // Upload photos after order creation
+      if (result.success && pendingPhotos.length > 0) {
+        setUploadingPhotos(true);
+        await uploadOrderPhotos(result.order.id, pendingPhotos);
+        setUploadingPhotos(false);
+      }
+
+      if (result.success) {
+        fetchInitialData();
+        resetForm();
+      } else {
+        setErrors(result.errors || { submit: 'Operation failed' });
+      }
+    } catch (error) {
+      setErrors({ submit: error.response?.data?.message || 'Operation failed' });
+      setUploadingPhotos(false);
+    }
+  };
+
+  const handleEdit = async (order) => {
     setEditingOrder(order);
     setFormData({
       categoryId: order.category?.id || '',
@@ -183,6 +386,26 @@ const CustomerOrders = () => {
       budgetMax: order.budgetMax?.toString() || '',
     });
     setShowForm(true);
+
+    // Fetch existing photos for this order
+    try {
+      const getOrderPhotosUseCase = container.getGetOrderPhotosUseCase();
+      const result = await getOrderPhotosUseCase.execute(order.id);
+
+      console.log('Fetched order photos result:', result);
+      console.log('Photos array:', result.photos);
+
+      if (result.success && result.photos && result.photos.length > 0) {
+        console.log('Setting pending photos:', result.photos);
+        setPendingPhotos(result.photos);
+      } else {
+        console.log('No photos found or fetch failed');
+        setPendingPhotos([]);
+      }
+    } catch (error) {
+      console.error('Error fetching order photos:', error);
+      setPendingPhotos([]);
+    }
   };
 
   const handleDelete = async (orderId) => {
@@ -244,9 +467,28 @@ const CustomerOrders = () => {
       budgetMin: '',
       budgetMax: '',
     });
+    setEstateFormData({
+      kind: '',
+      addressLine: '',
+      city: '',
+      district: '',
+      areaM2: '',
+      floor: '',
+    });
     setEditingOrder(null);
     setShowForm(false);
+    setShowEstateForm(false);
+    setIsAnimating(false);
     setErrors({});
+
+    // Clean up temporary photo URLs
+    pendingPhotos.forEach((photo) => {
+      if (photo.url && photo.id.startsWith('temp-')) {
+        URL.revokeObjectURL(photo.url);
+      }
+    });
+    setPendingPhotos([]);
+    setUploadingPhotos(false);
   };
 
   if (loading && !showForm) {
@@ -272,51 +514,41 @@ const CustomerOrders = () => {
         {/* Create/Edit Order Form */}
         {showForm && (
           <Card className="order-form-card">
-            <h2>{editingOrder ? t('orders.editOrder') : t('orders.createNewOrder')}</h2>
-            <form onSubmit={handleSubmit} className="order-form">
-              <div className="input-wrapper">
-                <label className="input-label">
-                  {t('orders.category')} <span className="input-required">*</span>
-                </label>
-                <select
-                  name="categoryId"
-                  value={formData.categoryId}
-                  onChange={handleChange}
-                  className={`input ${errors.categoryId ? 'input-error' : ''}`}
-                >
-                  <option value="">{t('orders.selectCategory')}</option>
-                  {categories.map((cat) => (
-                    <option key={cat.id} value={cat.id}>
-                      {cat.name}
-                    </option>
-                  ))}
-                </select>
-                {errors.categoryId && (
-                  <span className="input-error-message">{errors.categoryId}</span>
-                )}
-              </div>
+            <div className="form-container">
+              {/* Order Form */}
+              <div className={`form-slide ${showEstateForm ? 'slide-left-out' : 'slide-left-in'} ${showEstateForm && !isAnimating ? 'hidden' : ''}`}>
+                <h2>{editingOrder ? t('orders.editOrder') : t('orders.createNewOrder')}</h2>
+                <form onSubmit={handleSubmit} className="order-form">
+              <Select
+                label={t('orders.category')}
+                name="categoryId"
+                value={formData.categoryId}
+                onChange={handleChange}
+                options={categories.map((cat) => ({
+                  value: cat.id,
+                  label: cat.name,
+                }))}
+                placeholder={t('orders.selectCategory')}
+                error={errors.categoryId}
+                required
+              />
 
-              <div className="input-wrapper">
-                <label className="input-label">
-                  {t('orders.property')} <span className="input-required">*</span>
-                </label>
-                <select
+              {/* Only show property select if user has estates OR is editing */}
+              {(estates.length > 0 || editingOrder) && (
+                <Select
+                  label={t('orders.property')}
                   name="estateId"
                   value={formData.estateId}
                   onChange={handleChange}
-                  className={`input ${errors.estateId ? 'input-error' : ''}`}
-                >
-                  <option value="">{t('orders.selectProperty')}</option>
-                  {estates.map((estate) => (
-                    <option key={estate.id} value={estate.id}>
-                      {estate.kind} - {estate.addressLine}, {estate.city}
-                    </option>
-                  ))}
-                </select>
-                {errors.estateId && (
-                  <span className="input-error-message">{errors.estateId}</span>
-                )}
-              </div>
+                  options={estates.map((estate) => ({
+                    value: estate.id,
+                    label: `${estate.kind} - ${estate.addressLine}, ${estate.city}`,
+                  }))}
+                  placeholder={t('orders.selectProperty')}
+                  error={errors.estateId}
+                  required
+                />
+              )}
 
               <Input
                 label={t('orders.orderTitle')}
@@ -366,19 +598,137 @@ const CustomerOrders = () => {
                 />
               </div>
 
+              {/* Order Photos */}
+              <div className="form-section">
+                <label className="section-label">{t('orders.orderPhotos')} (Optional)</label>
+                <OrderPhotoGallery
+                  photos={pendingPhotos}
+                  onPhotoAdded={handlePhotoAdded}
+                  onPhotoDeleted={handlePhotoDeleted}
+                  canEdit={true}
+                />
+              </div>
+
+              {errors.submit && (
+                <div className="error-message">{errors.submit}</div>
+              )}
+              {errors.photos && (
+                <div className="error-message">{errors.photos}</div>
+              )}
+
+                  <div className="form-actions">
+                    <Button type="submit" variant="primary" disabled={uploadingPhotos}>
+                      {uploadingPhotos
+                        ? 'Uploading photos...'
+                        : editingOrder
+                        ? t('orders.updateOrder')
+                        : estates.length === 0
+                        ? t('common.continue')
+                        : t('orders.createOrder')}
+                    </Button>
+                    <Button type="button" variant="ghost" onClick={resetForm} disabled={uploadingPhotos}>
+                      {t('common.cancel')}
+                    </Button>
+                  </div>
+                </form>
+              </div>
+
+              {/* Estate Creation Form */}
+              <div className={`form-slide ${!showEstateForm ? 'slide-right-out' : 'slide-right-in'} ${!showEstateForm && !isAnimating ? 'hidden' : ''}`}>
+                <h2>{t('orders.providePropertyInfo')}</h2>
+                <p className="estate-form-description">{t('orders.propertyInfoDescription')}</p>
+                <form onSubmit={handleEstateSubmit} className="order-form">
+              <Select
+                label={t('estates.propertyType')}
+                name="kind"
+                value={estateFormData.kind}
+                onChange={handleEstateChange}
+                options={[
+                  { value: 'APARTMENT', label: t('estates.apartment') },
+                  { value: 'HOUSE', label: t('estates.house') },
+                  { value: 'OFFICE', label: t('estates.office') },
+                  { value: 'COMMERCIAL', label: t('estates.commercial') },
+                ]}
+                placeholder={t('estates.selectPropertyType')}
+                error={errors.kind}
+                required
+              />
+
+              <Input
+                label={t('estates.address')}
+                name="addressLine"
+                value={estateFormData.addressLine}
+                onChange={handleEstateChange}
+                placeholder={t('estates.addressPlaceholder')}
+                error={errors.addressLine}
+                required
+              />
+
+              <div className="form-row">
+                <Input
+                  label={t('estates.city')}
+                  name="city"
+                  value={estateFormData.city}
+                  onChange={handleEstateChange}
+                  placeholder={t('estates.cityPlaceholder')}
+                  error={errors.city}
+                  required
+                />
+                <Input
+                  label={t('estates.district')}
+                  name="district"
+                  value={estateFormData.district}
+                  onChange={handleEstateChange}
+                  placeholder={t('estates.districtPlaceholder')}
+                  error={errors.district}
+                  required
+                />
+              </div>
+
+              <div className="form-row">
+                <Input
+                  label={t('estates.area')}
+                  name="areaM2"
+                  type="number"
+                  value={estateFormData.areaM2}
+                  onChange={handleEstateChange}
+                  placeholder="100"
+                  error={errors.areaM2}
+                  required
+                />
+                <Input
+                  label={t('estates.floor')}
+                  name="floor"
+                  type="number"
+                  value={estateFormData.floor}
+                  onChange={handleEstateChange}
+                  placeholder={t('estates.floorPlaceholder')}
+                  error={errors.floor}
+                />
+              </div>
+
               {errors.submit && (
                 <div className="error-message">{errors.submit}</div>
               )}
 
-              <div className="form-actions">
-                <Button type="submit" variant="primary">
-                  {editingOrder ? t('orders.updateOrder') : t('orders.createOrder')}
-                </Button>
-                <Button type="button" variant="ghost" onClick={resetForm}>
-                  {t('common.cancel')}
-                </Button>
+                  <div className="form-actions">
+                    <Button type="submit" variant="primary" disabled={uploadingPhotos}>
+                      {uploadingPhotos
+                        ? t('common.creating')
+                        : t('orders.createPropertyAndOrder')}
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={handleBackToOrderForm}
+                      disabled={uploadingPhotos}
+                    >
+                      {t('common.back')}
+                    </Button>
+                  </div>
+                </form>
               </div>
-            </form>
+            </div>
           </Card>
         )}
 

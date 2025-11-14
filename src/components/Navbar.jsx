@@ -117,7 +117,9 @@ const Navbar = () => {
                       className={`navbar-user-name clickable ${isActive('/profile') ? 'active' : ''}`}
                       onClick={(e) => handleNavClick(e, '/profile')}
                     >
-                      {user?.fullName}
+                      {user?.firstName && user?.lastName
+                        ? `${user.firstName} ${user.lastName}`
+                        : user?.fullName || user?.phone}
                     </Link>
                   </div>
 

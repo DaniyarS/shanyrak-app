@@ -39,56 +39,20 @@
       }
     },
     {
-      "name": "login",
+      "name": "1. send-otp",
       "method": "POST",
-      "path": "/api/v1/auth/login",
+      "path": "/api/v1/auth/send-otp",
       "description": "",
-      "headers": [],
-      "queryParams": [],
-      "body": {
-        "mode": "urlencoded",
-        "urlencoded": [
-          {
-            "key": "phone",
-            "value": "87020000796",
-            "type": "text"
-          },
-          {
-            "key": "password",
-            "value": "Beknur123!",
-            "type": "text"
-          }
-        ]
-      },
-      "examples": {
-        "request": {
-          "mode": "urlencoded",
-          "urlencoded": [
-            {
-              "key": "phone",
-              "value": "87020000796",
-              "type": "text"
-            },
-            {
-              "key": "password",
-              "value": "Beknur123!",
-              "type": "text"
-            }
-          ]
-        },
-        "response": null
-      }
-    },
-    {
-      "name": "register",
-      "method": "POST",
-      "path": "/api/v1/auth/register",
-      "description": "",
-      "headers": [],
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        }
+      ],
       "queryParams": [],
       "body": {
         "mode": "raw",
-        "raw": "{\n    \"fullName\": \"Beknur Slamkul\",\n    \"phone\" : \"87020000796\",\n    \"role\" : \"CUSTOMER\",\n    \"password\" : \"Beknur123!\"\n}",
+        "raw": "{\n    \"phone\": \"77076770099\"\n}",
         "options": {
           "raw": {
             "language": "json"
@@ -98,7 +62,143 @@
       "examples": {
         "request": {
           "mode": "raw",
-          "raw": "{\n    \"fullName\": \"Beknur Slamkul\",\n    \"phone\" : \"87020000796\",\n    \"role\" : \"CUSTOMER\",\n    \"password\" : \"Beknur123!\"\n}",
+          "raw": "{\n    \"phone\": \"77076770099\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "2. register",
+      "method": "POST",
+      "path": "/api/v1/auth/register",
+      "description": "",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "{\n      \"phone\": \"77076770099\",\n      \"password\": \"qwerty123\",\n      \"role\": \"BUILDER\",\n      \"firstName\": \"Daniyar\",\n      \"lastName\": \"Slamkul\",\n      \"otpCode\": \"9459\"\n    }",
+        "options": {
+          "raw": {
+            "language": "json"
+          }
+        }
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "{\n      \"phone\": \"77076770099\",\n      \"password\": \"qwerty123\",\n      \"role\": \"BUILDER\",\n      \"firstName\": \"Daniyar\",\n      \"lastName\": \"Slamkul\",\n      \"otpCode\": \"9459\"\n    }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "3. login",
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "description": "",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "{\n      \"login\": \"77076770099\",\n      \"password\": \"qwerty123\"\n    }",
+        "options": {
+          "raw": {
+            "language": "json"
+          }
+        }
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "{\n      \"login\": \"77076770099\",\n      \"password\": \"qwerty123\"\n    }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "4. refresh-token",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "description": "",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "{\n      \"refreshToken\": \"989029d5-f242-4c69-bfc3-203711f099ca\"\n    }",
+        "options": {
+          "raw": {
+            "language": "json"
+          }
+        }
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "{\n      \"refreshToken\": \"989029d5-f242-4c69-bfc3-203711f099ca\"\n    }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "5. reset-password",
+      "method": "POST",
+      "path": "/api/v1/auth/reset-password",
+      "description": "",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "{\n      \"phone\": \"77076770099\",\n      \"otpCode\": \"5555\",\n      \"newPassword\": \"qwerty111\"\n    }",
+        "options": {
+          "raw": {
+            "language": "json"
+          }
+        }
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "{\n      \"phone\": \"77076770099\",\n      \"otpCode\": \"5555\",\n      \"newPassword\": \"qwerty111\"\n    }",
           "options": {
             "raw": {
               "language": "json"
@@ -374,6 +474,35 @@
       }
     },
     {
+      "name": "requestPhone new",
+      "method": "POST",
+      "path": "/api/v1/orders/9aa84dd2-0fb5-4c9b-b4cf-cb0b1b5304f1/request-phone",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "{\n    \"offerPublicId\" : \"378af8ca-a9ca-4c36-b996-f15bd127d971\"\n}",
+        "options": {
+          "raw": {
+            "language": "json"
+          }
+        }
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "{\n    \"offerPublicId\" : \"378af8ca-a9ca-4c36-b996-f15bd127d971\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "response": null
+      }
+    },
+    {
       "name": "send",
       "method": "POST",
       "path": "/api/v1/offers",
@@ -462,15 +591,27 @@
       }
     },
     {
-      "name": "confrim",
-      "method": "POST",
-      "path": "/api/v1/contracts",
+      "name": "getOfferBuilder new",
+      "method": "GET",
+      "path": "/api/v1/offers/378af8ca-a9ca-4c36-b996-f15bd127d971/builder",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "update new",
+      "method": "PUT",
+      "path": "/api/v1/offers/378af8ca-a9ca-4c36-b996-f15bd127d971",
       "description": "",
       "headers": [],
       "queryParams": [],
       "body": {
         "mode": "raw",
-        "raw": "{\n    \"offer\" : {\n        \"publicId\" : \"963c906b-a174-4ed0-b64b-90a7bbb37d61\"\n    },\n    \"contract\" : {\n        \"totalPrice\" : 500000,\n        \"startDate\" : \"2025-11-20\",\n        \"endDate\" : \"2025-11-25\"\n    }\n}",
+        "raw": "{   \n    \"price\": 1200,\n    \"unit\": \"m3\",\n    \"daysEstimate\": 3,\n    \"message\": \"Братан за 1200 никто не предложит\"\n}\n\n//Можно только если статус = PENDING",
         "options": {
           "raw": {
             "language": "json"
@@ -480,12 +621,31 @@
       "examples": {
         "request": {
           "mode": "raw",
-          "raw": "{\n    \"offer\" : {\n        \"publicId\" : \"963c906b-a174-4ed0-b64b-90a7bbb37d61\"\n    },\n    \"contract\" : {\n        \"totalPrice\" : 500000,\n        \"startDate\" : \"2025-11-20\",\n        \"endDate\" : \"2025-11-25\"\n    }\n}",
+          "raw": "{   \n    \"price\": 1200,\n    \"unit\": \"m3\",\n    \"daysEstimate\": 3,\n    \"message\": \"Братан за 1200 никто не предложит\"\n}\n\n//Можно только если статус = PENDING",
           "options": {
             "raw": {
               "language": "json"
             }
           }
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "delete new",
+      "method": "DELETE",
+      "path": "/api/v1/offers/378af8ca-a9ca-4c36-b996-f15bd127d971",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "{   \n    \"price\": 1200,\n    \"unit\": \"m3\",\n    \"daysEstimate\": 3,\n    \"message\": \"Братан за 1200 никто не предложит\"\n}\n\n//Можно только если статус = PENDING"
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "{   \n    \"price\": 1200,\n    \"unit\": \"m3\",\n    \"daysEstimate\": 3,\n    \"message\": \"Братан за 1200 никто не предложит\"\n}\n\n//Можно только если статус = PENDING"
         },
         "response": null
       }
@@ -516,6 +676,64 @@
       "queryParams": [],
       "body": null,
       "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "confirm-deal new",
+      "method": "POST",
+      "path": "/api/v1/orders/9aa84dd2-0fb5-4c9b-b4cf-cb0b1b5304f1/confirm-deal",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "  {\n    \"offerPublicId\": \"378af8ca-a9ca-4c36-b996-f15bd127d971\",\n    \"agreed\": true,\n    \"startDate\": \"2025-01-15\",\n    \"endDate\": \"2025-02-15\"\n  }\n\n/*  Если agreed = true:\n  - Создается ContractEntity (статус ACTIVE)\n  - Оффер → ACCEPTED\n  - Все остальные офферы → REJECTED\n\n  Если agreed = false:\n  - Оффер → REJECTED\n  - Заказ → обратно в OPEN\n*/",
+        "options": {
+          "raw": {
+            "language": "json"
+          }
+        }
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "  {\n    \"offerPublicId\": \"378af8ca-a9ca-4c36-b996-f15bd127d971\",\n    \"agreed\": true,\n    \"startDate\": \"2025-01-15\",\n    \"endDate\": \"2025-02-15\"\n  }\n\n/*  Если agreed = true:\n  - Создается ContractEntity (статус ACTIVE)\n  - Оффер → ACCEPTED\n  - Все остальные офферы → REJECTED\n\n  Если agreed = false:\n  - Оффер → REJECTED\n  - Заказ → обратно в OPEN\n*/",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "complete new",
+      "method": "POST",
+      "path": "/api/v1/contracts/059a3686-771a-4f52-ab52-46e559a2d86a/complete",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "{\n    \"completed\" : true\n}\n\n/*Завершение контракта (двустороннее) ✅\n Логика:\n  - Определяется роль пользователя (customer/builder)\n  - Устанавливается флаг customerConfirmedComplete или builderConfirmedComplete\n  - Если ОБЕ стороны подтвердили → Контракт COMPLETED, Order COMPLETED\n  - Если только одна → статус PENDING_COMPLETION\n  - Автоматически увеличивается jobsDone у строителя\n\n\n\n*/",
+        "options": {
+          "raw": {
+            "language": "json"
+          }
+        }
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "{\n    \"completed\" : true\n}\n\n/*Завершение контракта (двустороннее) ✅\n Логика:\n  - Определяется роль пользователя (customer/builder)\n  - Устанавливается флаг customerConfirmedComplete или builderConfirmedComplete\n  - Если ОБЕ стороны подтвердили → Контракт COMPLETED, Order COMPLETED\n  - Если только одна → статус PENDING_COMPLETION\n  - Автоматически увеличивается jobsDone у строителя\n\n\n\n*/",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
         "response": null
       }
     },
@@ -945,6 +1163,72 @@
       "name": "delete",
       "method": "DELETE",
       "path": "/api/v1/files/1df07d31-bf1e-44b0-ad76-8ed67c53e2cf",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "review new",
+      "method": "POST",
+      "path": "/api/v1/reviews",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "  {\n    \"contractPublicId\": \"059a3686-771a-4f52-ab52-46e559a2d86a\",\n    \"rating\": 5,\n    \"message\": \"Отличная работа!\"\n  }\n/*\n  Логика:\n  - Только для завершенных контрактов (COMPLETED)\n  - Заказчик оценивает строителя → обновляется builder.ratingAvg\n  - Строитель оценивает заказчика\n  - Один отзыв от каждой стороны\n*/",
+        "options": {
+          "raw": {
+            "language": "json"
+          }
+        }
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "  {\n    \"contractPublicId\": \"059a3686-771a-4f52-ab52-46e559a2d86a\",\n    \"rating\": 5,\n    \"message\": \"Отличная работа!\"\n  }\n/*\n  Логика:\n  - Только для завершенных контрактов (COMPLETED)\n  - Заказчик оценивает строителя → обновляется builder.ratingAvg\n  - Строитель оценивает заказчика\n  - Один отзыв от каждой стороны\n*/",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "getBuilderReviews new",
+      "method": "GET",
+      "path": "/api/v1/reviews/builder/{builderPublicId}",
+      "description": "",
+      "headers": [],
+      "queryParams": [
+        {
+          "key": "page",
+          "value": "0"
+        },
+        {
+          "key": "size",
+          "value": "10"
+        },
+        {
+          "key": "sort",
+          "value": null
+        }
+      ],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "review new",
+      "method": "GET",
+      "path": "/api/v1/reviews/{reviewPublicId}",
       "description": "",
       "headers": [],
       "queryParams": [],

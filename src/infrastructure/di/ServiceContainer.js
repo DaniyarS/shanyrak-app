@@ -10,6 +10,7 @@ import { ApiEstateRepository } from '../api/repositories/ApiEstateRepository';
 import { ApiCategoryRepository } from '../api/repositories/ApiCategoryRepository';
 import { ApiOfferRepository } from '../api/repositories/ApiOfferRepository';
 import { ApiBuilderRepository } from '../api/repositories/ApiBuilderRepository';
+import { ApiFileRepository } from '../api/repositories/ApiFileRepository';
 
 // Use Cases - Orders
 import { CreateOrder } from '../../application/use-cases/orders/CreateOrder';
@@ -30,6 +31,16 @@ import { SearchBuilders } from '../../application/use-cases/builders/SearchBuild
 import { GetBuilder } from '../../application/use-cases/builders/GetBuilder';
 import { UpdateBuilder } from '../../application/use-cases/builders/UpdateBuilder';
 
+// Use Cases - Files
+import { UploadAvatar } from '../../application/use-cases/files/UploadAvatar';
+import { GetAvatar } from '../../application/use-cases/files/GetAvatar';
+import { UploadPortfolioPhoto } from '../../application/use-cases/files/UploadPortfolioPhoto';
+import { GetPortfolioPhotos } from '../../application/use-cases/files/GetPortfolioPhotos';
+import { DeletePortfolioPhoto } from '../../application/use-cases/files/DeletePortfolioPhoto';
+import { UploadOrderPhoto } from '../../application/use-cases/files/UploadOrderPhoto';
+import { GetOrderPhotos } from '../../application/use-cases/files/GetOrderPhotos';
+import { DeleteOrderPhoto } from '../../application/use-cases/files/DeleteOrderPhoto';
+
 /**
  * ServiceContainer - Singleton pattern for dependency injection
  */
@@ -47,6 +58,7 @@ class ServiceContainer {
     this.repositories.category = new ApiCategoryRepository();
     this.repositories.offer = new ApiOfferRepository();
     this.repositories.builder = new ApiBuilderRepository();
+    this.repositories.file = new ApiFileRepository();
 
     // Initialize use cases with their dependencies
     this.useCases.createOrder = new CreateOrder(this.repositories.order);
@@ -63,6 +75,15 @@ class ServiceContainer {
     this.useCases.searchBuilders = new SearchBuilders(this.repositories.builder);
     this.useCases.getBuilder = new GetBuilder(this.repositories.builder);
     this.useCases.updateBuilder = new UpdateBuilder(this.repositories.builder);
+
+    this.useCases.uploadAvatar = new UploadAvatar(this.repositories.file);
+    this.useCases.getAvatar = new GetAvatar(this.repositories.file);
+    this.useCases.uploadPortfolioPhoto = new UploadPortfolioPhoto(this.repositories.file);
+    this.useCases.getPortfolioPhotos = new GetPortfolioPhotos(this.repositories.file);
+    this.useCases.deletePortfolioPhoto = new DeletePortfolioPhoto(this.repositories.file);
+    this.useCases.uploadOrderPhoto = new UploadOrderPhoto(this.repositories.file);
+    this.useCases.getOrderPhotos = new GetOrderPhotos(this.repositories.file);
+    this.useCases.deleteOrderPhoto = new DeleteOrderPhoto(this.repositories.file);
   }
 
   // Getters for repositories
@@ -132,6 +153,39 @@ class ServiceContainer {
 
   getUpdateBuilderUseCase() {
     return this.useCases.updateBuilder;
+  }
+
+  // Getters for use cases - Files
+  getUploadAvatarUseCase() {
+    return this.useCases.uploadAvatar;
+  }
+
+  getGetAvatarUseCase() {
+    return this.useCases.getAvatar;
+  }
+
+  getUploadPortfolioPhotoUseCase() {
+    return this.useCases.uploadPortfolioPhoto;
+  }
+
+  getGetPortfolioPhotosUseCase() {
+    return this.useCases.getPortfolioPhotos;
+  }
+
+  getDeletePortfolioPhotoUseCase() {
+    return this.useCases.deletePortfolioPhoto;
+  }
+
+  getUploadOrderPhotoUseCase() {
+    return this.useCases.uploadOrderPhoto;
+  }
+
+  getGetOrderPhotosUseCase() {
+    return this.useCases.getOrderPhotos;
+  }
+
+  getDeleteOrderPhotoUseCase() {
+    return this.useCases.deleteOrderPhoto;
   }
 }
 

@@ -4,6 +4,7 @@ import estateService from '../services/estateService';
 import Button from '../components/Button';
 import Card from '../components/Card';
 import Input from '../components/Input';
+import Select from '../components/Select';
 import './Estates.css';
 
 const Estates = () => {
@@ -14,12 +15,9 @@ const Estates = () => {
   const [editingEstate, setEditingEstate] = useState(null);
   const [formData, setFormData] = useState({
     kind: '',
-    email: '',
     addressLine: '',
     city: '',
     district: '',
-    lat: '',
-    lon: '',
     areaM2: '',
     floor: '',
   });
@@ -57,13 +55,9 @@ const Estates = () => {
     const newErrors = {};
 
     if (!formData.kind) newErrors.kind = t('estates.propertyTypeRequired');
-    if (!formData.email) newErrors.email = t('estates.emailRequired');
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = t('estates.emailInvalid');
     if (!formData.addressLine) newErrors.addressLine = t('estates.addressRequired');
     if (!formData.city) newErrors.city = t('estates.cityRequired');
     if (!formData.district) newErrors.district = t('estates.districtRequired');
-    if (!formData.lat) newErrors.lat = t('estates.latitudeRequired');
-    if (!formData.lon) newErrors.lon = t('estates.longitudeRequired');
     if (!formData.areaM2) newErrors.areaM2 = t('estates.areaRequired');
     if (!formData.floor) newErrors.floor = t('estates.floorRequired');
 
@@ -81,8 +75,6 @@ const Estates = () => {
         await estateService.updateEstate({
           publicId: editingEstate.publicId,
           ...formData,
-          lat: parseFloat(formData.lat),
-          lon: parseFloat(formData.lon),
           areaM2: parseFloat(formData.areaM2),
           floor: parseInt(formData.floor),
         });
@@ -101,12 +93,9 @@ const Estates = () => {
     setEditingEstate(estate);
     setFormData({
       kind: estate.kind || '',
-      email: estate.email || '',
       addressLine: estate.addressLine || '',
       city: estate.city || '',
       district: estate.district || '',
-      lat: estate.lat?.toString() || '',
-      lon: estate.lon?.toString() || '',
       areaM2: estate.areaM2?.toString() || '',
       floor: estate.floor?.toString() || '',
     });
@@ -127,12 +116,9 @@ const Estates = () => {
   const resetForm = () => {
     setFormData({
       kind: '',
-      email: '',
       addressLine: '',
       city: '',
       district: '',
-      lat: '',
-      lon: '',
       areaM2: '',
       floor: '',
     });
@@ -165,27 +151,21 @@ const Estates = () => {
           <Card className="estate-form-card">
             <h2>{editingEstate ? t('estates.editProperty') : t('estates.addNewProperty')}</h2>
             <form onSubmit={handleSubmit} className="estate-form">
-              <div className="form-row">
-                <Input
-                  label={t('estates.propertyType')}
-                  name="kind"
-                  value={formData.kind}
-                  onChange={handleChange}
-                  placeholder={t('estates.propertyTypePlaceholder')}
-                  error={errors.kind}
-                  required
-                />
-                <Input
-                  label={t('estates.email')}
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder={t('estates.emailPlaceholder')}
-                  error={errors.email}
-                  required
-                />
-              </div>
+              <Select
+                label={t('estates.propertyType')}
+                name="kind"
+                value={formData.kind}
+                onChange={handleChange}
+                options={[
+                  { value: 'APARTMENT', label: t('estates.apartment') },
+                  { value: 'HOUSE', label: t('estates.house') },
+                  { value: 'OFFICE', label: t('estates.office') },
+                  { value: 'COMMERCIAL', label: t('estates.commercial') },
+                ]}
+                placeholder={t('estates.propertyTypePlaceholder')}
+                error={errors.kind}
+                required
+              />
 
               <Input
                 label={t('estates.address')}
@@ -214,31 +194,6 @@ const Estates = () => {
                   onChange={handleChange}
                   placeholder={t('estates.districtPlaceholder')}
                   error={errors.district}
-                  required
-                />
-              </div>
-
-              <div className="form-row">
-                <Input
-                  label={t('estates.latitude')}
-                  name="lat"
-                  type="number"
-                  step="any"
-                  value={formData.lat}
-                  onChange={handleChange}
-                  placeholder="51.1694"
-                  error={errors.lat}
-                  required
-                />
-                <Input
-                  label={t('estates.longitude')}
-                  name="lon"
-                  type="number"
-                  step="any"
-                  value={formData.lon}
-                  onChange={handleChange}
-                  placeholder="71.4491"
-                  error={errors.lon}
                   required
                 />
               </div>
@@ -306,12 +261,6 @@ const Estates = () => {
                   </p>
                   <p>
                     <strong>{t('estates.floor')}:</strong> {estate.floor}
-                  </p>
-                  <p>
-                    <strong>{t('estates.contact')}:</strong> {estate.email}
-                  </p>
-                  <p className="estate-coords">
-                    <strong>{t('estates.coordinates')}:</strong> {estate.lat}, {estate.lon}
                   </p>
                 </div>
                 <div className="estate-actions">

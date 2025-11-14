@@ -4,7 +4,7 @@
 		"name": "SHANYRAK",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "38819219",
-		"_collection_link": "https://dark-escape-208538.postman.co/workspace/SHANYRAK~dbf86f24-c81e-4972-af5c-55f1ffd232f4/collection/20577508-4868c1d2-e39b-45d4-9e20-a19d1a31cef8?action=share&source=collection_link&creator=38819219"
+		"_collection_link": "https://web.postman.co/workspace/SHANYRAK~dbf86f24-c81e-4972-af5c-55f1ffd232f4/collection/20577508-4868c1d2-e39b-45d4-9e20-a19d1a31cef8?action=share&source=collection_link&creator=38819219"
 	},
 	"item": [
 		{
@@ -14,14 +14,7 @@
 					"name": "all",
 					"request": {
 						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "GET",
 						"header": [],
@@ -43,14 +36,7 @@
 					"name": "category",
 					"request": {
 						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "GET",
 						"header": [],
@@ -73,14 +59,7 @@
 					"name": "children",
 					"request": {
 						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "GET",
 						"header": [],
@@ -106,41 +85,26 @@
 			"name": "auth",
 			"item": [
 				{
-					"name": "login",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"var jsonData = JSON.parse(responseBody);",
-									"postman.setEnvironmentVariable(\"accessToken\", jsonData.token);"
-								],
-								"type": "text/javascript",
-								"packages": {},
-								"requests": {}
-							}
-						}
-					],
+					"name": "1. send-otp",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
 						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "phone",
-									"value": "87020000796",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "Beknur123!",
-									"type": "text"
+							"mode": "raw",
+							"raw": "{\n    \"phone\": \"77076770099\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
-							]
+							}
 						},
 						"url": {
-							"raw": "{{shanyrak_url}}/api/v1/auth/login",
+							"raw": "{{shanyrak_url}}/api/v1/auth/send-otp",
 							"host": [
 								"{{shanyrak_url}}"
 							],
@@ -148,34 +112,28 @@
 								"api",
 								"v1",
 								"auth",
-								"login"
+								"send-otp"
 							]
 						}
 					},
-					"response": []
+					"response": {
+						"message": "Не удалось отправить SMS. Попробуйте позже",
+						"success": false
+					}
 				},
 				{
-					"name": "register",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"var jsonData = JSON.parse(responseBody);",
-									"postman.setEnvironmentVariable(\"accessToken\", jsonData.token);"
-								],
-								"type": "text/javascript",
-								"packages": {},
-								"requests": {}
-							}
-						}
-					],
+					"name": "2. register",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"fullName\": \"Beknur Slamkul\",\n    \"phone\" : \"87020000796\",\n    \"role\" : \"CUSTOMER\",\n    \"password\" : \"Beknur123!\"\n}",
+							"raw": "{\n      \"phone\": \"77076770099\",\n      \"password\": \"qwerty123\",\n      \"role\": \"BUILDER\",\n      \"firstName\": \"Daniyar\",\n      \"lastName\": \"Slamkul\",\n      \"otpCode\": \"9459\"\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -195,7 +153,190 @@
 							]
 						}
 					},
-					"response": []
+					"response": {
+						"user": {
+							"publicId": "9063cf0d-253d-42c6-a104-76bd6c68f4f4",
+							"firstName": "Daniyar",
+							"lastName": "Slamkul",
+							"password": null,
+							"fullName": null,
+							"email": null,
+							"phone": "77076770099",
+							"avatarLink": null,
+							"role": "BUILDER",
+							"token": null,
+							"login": null,
+							"ratingAvg": 0,
+							"aboutMe": null,
+							"experienceYears": 0,
+							"city": null,
+							"district": null,
+							"jobsDone": 0,
+							"available": true,
+							"priceList": null
+						},
+						"accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3NzA3Njc3MDA5OSIsImlkIjoxMCwicm9sZSI6IkJVSUxERVIiLCJ2ZXJpZmllZCI6dHJ1ZSwiaWF0IjoxNzYzMDY2NDc5LCJleHAiOjE3NjMwNjY2NTl9.hO6QanfZB-JEe0vaAFU5FG8BZCGNsxL0NQCjPt4hhM8",
+						"refreshToken": "505104c5-46d8-40dd-8f7b-5f224f1f0197",
+						"verificationRequired": false,
+						"verificationType": "phone"
+					}
+				},
+				{
+					"name": "3. login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n      \"login\": \"77076770099\",\n      \"password\": \"qwerty123\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/auth/login",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": {
+						"user": {
+							"publicId": "9063cf0d-253d-42c6-a104-76bd6c68f4f4",
+							"firstName": "Daniyar",
+							"lastName": "Slamkul",
+							"password": null,
+							"fullName": null,
+							"email": null,
+							"phone": "77076770099",
+							"avatarLink": null,
+							"role": "BUILDER",
+							"token": null,
+							"login": null,
+							"ratingAvg": 0,
+							"aboutMe": null,
+							"experienceYears": 0,
+							"city": null,
+							"district": null,
+							"jobsDone": 0,
+							"available": true,
+							"priceList": null
+						},
+						"accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3NzA3Njc3MDA5OSIsImlkIjoxMCwicm9sZSI6IkJVSUxERVIiLCJ2ZXJpZmllZCI6dHJ1ZSwiaWF0IjoxNzYzMDY2NTQ1LCJleHAiOjE3NjMwNjY3MjV9.QiVMNtIhR0JQjDluhJlTTJSUvInK_xoRKbjB0Lz1HDY",
+						"refreshToken": "989029d5-f242-4c69-bfc3-203711f099ca",
+						"verificationRequired": false,
+						"verificationType": "none"
+					}
+				},
+				{
+					"name": "4. refresh-token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n      \"refreshToken\": \"989029d5-f242-4c69-bfc3-203711f099ca\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/auth/refresh",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"refresh"
+							]
+						}
+					},
+					"response": {
+						"user": {
+							"publicId": "9063cf0d-253d-42c6-a104-76bd6c68f4f4",
+							"firstName": "Daniyar",
+							"lastName": "Slamkul",
+							"password": null,
+							"fullName": null,
+							"email": null,
+							"phone": "77076770099",
+							"avatarLink": null,
+							"role": "BUILDER",
+							"token": null,
+							"login": null,
+							"ratingAvg": 0,
+							"aboutMe": null,
+							"experienceYears": 0,
+							"city": null,
+							"district": null,
+							"jobsDone": 0,
+							"available": true,
+							"priceList": null
+						},
+						"accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3NzA3Njc3MDA5OSIsImlkIjoxMCwicm9sZSI6IkJVSUxERVIiLCJ2ZXJpZmllZCI6dHJ1ZSwiaWF0IjoxNzYzMDY2NTY4LCJleHAiOjE3NjMwNjY3NDh9.Jj_KUdH2bpT9-mr3XLsrUzgobTEKN9Vo-R2KAD39AmE",
+						"refreshToken": "989029d5-f242-4c69-bfc3-203711f099ca",
+						"verificationRequired": false,
+						"verificationType": "none"
+					}
+				},
+				{
+					"name": "5. reset-password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n      \"phone\": \"77076770099\",\n      \"otpCode\": \"5555\",\n      \"newPassword\": \"qwerty111\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/auth/reset-password",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"reset-password"
+							]
+						}
+					},
+					"response": {
+						"message": "Пароль успешно изменен",
+						"success": true
+					}
 				}
 			]
 		},
@@ -586,6 +727,46 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "requestPhone new",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"offerPublicId\" : \"378af8ca-a9ca-4c36-b996-f15bd127d971\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/orders/9aa84dd2-0fb5-4c9b-b4cf-cb0b1b5304f1/request-phone",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"9aa84dd2-0fb5-4c9b-b4cf-cb0b1b5304f1",
+								"request-phone"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -725,14 +906,9 @@
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "contracts",
-			"item": [
+				},
 				{
-					"name": "confrim",
+					"name": "getOfferBuilder new",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -744,11 +920,42 @@
 								}
 							]
 						},
-						"method": "POST",
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/offers/378af8ca-a9ca-4c36-b996-f15bd127d971/builder",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"offers",
+								"378af8ca-a9ca-4c36-b996-f15bd127d971",
+								"builder"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update new",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"offer\" : {\n        \"publicId\" : \"963c906b-a174-4ed0-b64b-90a7bbb37d61\"\n    },\n    \"contract\" : {\n        \"totalPrice\" : 500000,\n        \"startDate\" : \"2025-11-20\",\n        \"endDate\" : \"2025-11-25\"\n    }\n}",
+							"raw": "{   \n    \"price\": 1200,\n    \"unit\": \"m3\",\n    \"daysEstimate\": 3,\n    \"message\": \"Братан за 1200 никто не предложит\"\n}\n\n//Можно только если статус = PENDING",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -756,19 +963,59 @@
 							}
 						},
 						"url": {
-							"raw": "{{shanyrak_url}}/api/v1/contracts",
+							"raw": "{{shanyrak_url}}/api/v1/offers/378af8ca-a9ca-4c36-b996-f15bd127d971",
 							"host": [
 								"{{shanyrak_url}}"
 							],
 							"path": [
 								"api",
 								"v1",
-								"contracts"
+								"offers",
+								"378af8ca-a9ca-4c36-b996-f15bd127d971"
 							]
 						}
 					},
 					"response": []
 				},
+				{
+					"name": "delete new",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{   \n    \"price\": 1200,\n    \"unit\": \"m3\",\n    \"daysEstimate\": 3,\n    \"message\": \"Братан за 1200 никто не предложит\"\n}\n\n//Можно только если статус = PENDING"
+						},
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/offers/378af8ca-a9ca-4c36-b996-f15bd127d971",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"offers",
+								"378af8ca-a9ca-4c36-b996-f15bd127d971"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "contracts",
+			"item": [
 				{
 					"name": "byOrder",
 					"request": {
@@ -830,6 +1077,86 @@
 								"v1",
 								"contracts",
 								"9582eaba-baf5-4c26-af0e-b05528a3031c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "confirm-deal new",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\n    \"offerPublicId\": \"378af8ca-a9ca-4c36-b996-f15bd127d971\",\n    \"agreed\": true,\n    \"startDate\": \"2025-01-15\",\n    \"endDate\": \"2025-02-15\"\n  }\n\n/*  Если agreed = true:\n  - Создается ContractEntity (статус ACTIVE)\n  - Оффер → ACCEPTED\n  - Все остальные офферы → REJECTED\n\n  Если agreed = false:\n  - Оффер → REJECTED\n  - Заказ → обратно в OPEN\n*/",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/orders/9aa84dd2-0fb5-4c9b-b4cf-cb0b1b5304f1/confirm-deal",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"9aa84dd2-0fb5-4c9b-b4cf-cb0b1b5304f1",
+								"confirm-deal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "complete new",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"completed\" : true\n}\n\n/*Завершение контракта (двустороннее) ✅\n Логика:\n  - Определяется роль пользователя (customer/builder)\n  - Устанавливается флаг customerConfirmedComplete или builderConfirmedComplete\n  - Если ОБЕ стороны подтвердили → Контракт COMPLETED, Order COMPLETED\n  - Если только одна → статус PENDING_COMPLETION\n  - Автоматически увеличивается jobsDone у строителя\n\n\n\n*/",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/contracts/059a3686-771a-4f52-ab52-46e559a2d86a/complete",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"contracts",
+								"059a3686-771a-4f52-ab52-46e559a2d86a",
+								"complete"
 							]
 						}
 					},
@@ -1182,18 +1509,7 @@
 							]
 						}
 					},
-					"response": {
-						"publicId": "c08eb992-12e3-46a4-98ed-f2f838c5d312",
-						"bucket": "shanyrak-files",
-						"objectKey": "avatars/5e30514d-f0a6-46a7-9133-5eb38850755f.png",
-						"contentType": "image/png",
-						"sizeBytes": 59998,
-						"url": "http://185.197.194.111:9000/shanyrak-files/avatars/5e30514d-f0a6-46a7-9133-5eb38850755f.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=shanyrak%2F20251113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20251113T075312Z&X-Amz-Expires=900&X-Amz-SignedHeaders=host&X-Amz-Signature=23c9399767ed6de1d6194607b10636a1cb7ff5db17dfbbc97f1531fe16cb8365",
-						"linkType": null,
-						"linkPublicId": null,
-						"sortOrder": null,
-						"role": null
-					}
+					"response": []
 				},
 				{
 					"name": "uploadOrderPhoto",
@@ -1248,18 +1564,7 @@
 							]
 						}
 					},
-					"response": {
-						"publicId": "d885ceb9-781a-4500-af33-28663bf311e3",
-						"bucket": "shanyrak-files",
-						"objectKey": "orders/44ec23c7-41a2-498f-a004-dae651a89a21.png",
-						"contentType": "image/png",
-						"sizeBytes": 54315,
-						"url": "http://185.197.194.111:9000/shanyrak-files/orders/44ec23c7-41a2-498f-a004-dae651a89a21.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=shanyrak%2F20251113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20251113T075507Z&X-Amz-Expires=900&X-Amz-SignedHeaders=host&X-Amz-Signature=6278f7953d72228216ae2d77e7afa725005176f081a517cd99f55013323b1112",
-						"linkType": null,
-						"linkPublicId": null,
-						"sortOrder": null,
-						"role": null
-					}
+					"response": []
 				},
 				{
 					"name": "uploadBuilderPortfolio",
@@ -1314,18 +1619,7 @@
 							]
 						}
 					},
-					"response": {
-						"publicId": "466e06e5-94c9-4a08-8926-e73af81d613b",
-						"bucket": "shanyrak-files",
-						"objectKey": "portfolio/65725e32-d3de-4a8a-ac72-58b8a1c24926.png",
-						"contentType": "image/png",
-						"sizeBytes": 15604,
-						"url": "http://185.197.194.111:9000/shanyrak-files/portfolio/65725e32-d3de-4a8a-ac72-58b8a1c24926.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=shanyrak%2F20251113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20251113T075741Z&X-Amz-Expires=900&X-Amz-SignedHeaders=host&X-Amz-Signature=15b439a5c20b8eabddc30c2e15e44c5816cb3c289cbb2fed13b11f30af52fd50",
-						"linkType": null,
-						"linkPublicId": null,
-						"sortOrder": null,
-						"role": null
-					}
+					"response": []
 				},
 				{
 					"name": "getBuildersPortfolioPhotos",
@@ -1365,32 +1659,7 @@
 							]
 						}
 					},
-					"response": [
-						{
-							"publicId": "466e06e5-94c9-4a08-8926-e73af81d613b",
-							"bucket": "shanyrak-files",
-							"objectKey": "portfolio/65725e32-d3de-4a8a-ac72-58b8a1c24926.png",
-							"contentType": "image/png",
-							"sizeBytes": 15604,
-							"url": "http://185.197.194.111:9000/shanyrak-files/portfolio/65725e32-d3de-4a8a-ac72-58b8a1c24926.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=shanyrak%2F20251113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20251113T080211Z&X-Amz-Expires=900&X-Amz-SignedHeaders=host&X-Amz-Signature=9d19570c4165ecdea8f397d7593b43a7a28afc881f78beb54a7814f1b3d99ba6",
-							"linkType": "BUILDER_PORTFOLIO",
-							"linkPublicId": "2ad93af8-75d4-4936-b98d-4c5d66458805",
-							"sortOrder": 0,
-							"role": null
-						},
-						{
-							"publicId": "3cf21f40-2251-4ff4-af92-422cd8bcba10",
-							"bucket": "shanyrak-files",
-							"objectKey": "portfolio/bcb6dbaf-de5b-47ef-be6a-45f7353653c7.png",
-							"contentType": "image/png",
-							"sizeBytes": 15604,
-							"url": "http://185.197.194.111:9000/shanyrak-files/portfolio/bcb6dbaf-de5b-47ef-be6a-45f7353653c7.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=shanyrak%2F20251113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20251113T080211Z&X-Amz-Expires=900&X-Amz-SignedHeaders=host&X-Amz-Signature=8601b2faa2dd691e73e05f863d881a1a564a79214a4541ca55fc7a8916ddc80d",
-							"linkType": "BUILDER_PORTFOLIO",
-							"linkPublicId": "2ad93af8-75d4-4936-b98d-4c5d66458805",
-							"sortOrder": 0,
-							"role": null
-						}
-					]
+					"response": []
 				},
 				{
 					"name": "getOrderPhotos",
@@ -1430,44 +1699,7 @@
 							]
 						}
 					},
-					"response": [
-						{
-							"publicId": "270ca0d8-b926-4e89-863d-84c957d3f7a4",
-							"bucket": "shanyrak-files",
-							"objectKey": "orders/9a49ef4d-3f78-4d54-a835-4839505deebd.png",
-							"contentType": "image/png",
-							"sizeBytes": 145109,
-							"url": "http://185.197.194.111:9000/shanyrak-files/orders/9a49ef4d-3f78-4d54-a835-4839505deebd.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=shanyrak%2F20251113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20251113T080330Z&X-Amz-Expires=900&X-Amz-SignedHeaders=host&X-Amz-Signature=c465dd077d98f30a9048526b659835315a8b029cda14110051d1913177226a52",
-							"linkType": "ORDER_PHOTO",
-							"linkPublicId": "9aa84dd2-0fb5-4c9b-b4cf-cb0b1b5304f1",
-							"sortOrder": 0,
-							"role": null
-						},
-						{
-							"publicId": "d885ceb9-781a-4500-af33-28663bf311e3",
-							"bucket": "shanyrak-files",
-							"objectKey": "orders/44ec23c7-41a2-498f-a004-dae651a89a21.png",
-							"contentType": "image/png",
-							"sizeBytes": 54315,
-							"url": "http://185.197.194.111:9000/shanyrak-files/orders/44ec23c7-41a2-498f-a004-dae651a89a21.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=shanyrak%2F20251113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20251113T080330Z&X-Amz-Expires=900&X-Amz-SignedHeaders=host&X-Amz-Signature=4ff312bd972e1fae9e5de6eab645fe58a342da4cf67695eef825cb54f4228e69",
-							"linkType": "ORDER_PHOTO",
-							"linkPublicId": "9aa84dd2-0fb5-4c9b-b4cf-cb0b1b5304f1",
-							"sortOrder": 0,
-							"role": null
-						},
-						{
-							"publicId": "49a4801d-0a40-43bb-a731-7fa5467a55f5",
-							"bucket": "shanyrak-files",
-							"objectKey": "orders/c017aa4b-3b48-4ba4-be61-0709a5572ff3.png",
-							"contentType": "image/png",
-							"sizeBytes": 54315,
-							"url": "http://185.197.194.111:9000/shanyrak-files/orders/c017aa4b-3b48-4ba4-be61-0709a5572ff3.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=shanyrak%2F20251113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20251113T080330Z&X-Amz-Expires=900&X-Amz-SignedHeaders=host&X-Amz-Signature=3f999512bd9694ecebfc0031e6fc8640c882d84f05b12f6ebfb8439dbf64e166",
-							"linkType": "ORDER_PHOTO",
-							"linkPublicId": "9aa84dd2-0fb5-4c9b-b4cf-cb0b1b5304f1",
-							"sortOrder": 0,
-							"role": null
-						}
-					]
+					"response": []
 				},
 				{
 					"name": "getAvatarPhoto",
@@ -1507,20 +1739,7 @@
 							]
 						}
 					},
-					"response": [
-						{
-							"publicId": "c08eb992-12e3-46a4-98ed-f2f838c5d312",
-							"bucket": "shanyrak-files",
-							"objectKey": "avatars/5e30514d-f0a6-46a7-9133-5eb38850755f.png",
-							"contentType": "image/png",
-							"sizeBytes": 59998,
-							"url": "http://185.197.194.111:9000/shanyrak-files/avatars/5e30514d-f0a6-46a7-9133-5eb38850755f.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=shanyrak%2F20251113%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20251113T080545Z&X-Amz-Expires=900&X-Amz-SignedHeaders=host&X-Amz-Signature=67341150da4a39066d33ef8fe836b084d8f52e6d6f183b29bca8ac1b9f366c37",
-							"linkType": "USER_AVATAR",
-							"linkPublicId": "2ad93af8-75d4-4936-b98d-4c5d66458805",
-							"sortOrder": 0,
-							"role": null
-						}
-					]
+					"response": []
 				},
 				{
 					"name": "delete",
@@ -1547,6 +1766,124 @@
 								"v1",
 								"files",
 								"1df07d31-bf1e-44b0-ad76-8ed67c53e2cf"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "reviews",
+			"item": [
+				{
+					"name": "review new",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\n    \"contractPublicId\": \"059a3686-771a-4f52-ab52-46e559a2d86a\",\n    \"rating\": 5,\n    \"message\": \"Отличная работа!\"\n  }\n/*\n  Логика:\n  - Только для завершенных контрактов (COMPLETED)\n  - Заказчик оценивает строителя → обновляется builder.ratingAvg\n  - Строитель оценивает заказчика\n  - Один отзыв от каждой стороны\n*/",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/reviews",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"reviews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getBuilderReviews new",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/reviews/builder/{builderPublicId}?page=0&size=10&sort",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								"builder",
+								"{builderPublicId}"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "sort",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "review new",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{shanyrak_url}}/api/v1/reviews/{reviewPublicId}",
+							"host": [
+								"{{shanyrak_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								"{reviewPublicId}"
 							]
 						}
 					},

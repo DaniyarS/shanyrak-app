@@ -15,7 +15,6 @@ export class EstateMapper {
     return new Estate({
       id: apiData.publicId || apiData.uuid || apiData.id,
       kind: apiData.kind,
-      email: apiData.email,
       addressLine: apiData.addressLine,
       city: apiData.city,
       district: apiData.district,
@@ -43,7 +42,6 @@ export class EstateMapper {
   static toDTO(estate) {
     return {
       kind: estate.kind,
-      email: estate.email,
       addressLine: estate.addressLine,
       city: estate.city,
       district: estate.district,

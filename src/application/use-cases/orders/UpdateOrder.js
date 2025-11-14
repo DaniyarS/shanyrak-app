@@ -11,7 +11,7 @@ export class UpdateOrder {
   /**
    * Execute the use case
    */
-  async execute(orderId, orderData) {
+  async execute(orderId, orderData, categoryId, estateId) {
     // Validate input
     const validation = Order.validate({
       ...orderData,
@@ -36,7 +36,7 @@ export class UpdateOrder {
       });
 
       // Update through repository
-      const updatedOrder = await this.orderRepository.update(order);
+      const updatedOrder = await this.orderRepository.update(order, categoryId, estateId);
 
       return {
         success: true,

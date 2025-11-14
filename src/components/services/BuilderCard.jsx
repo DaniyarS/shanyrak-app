@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import './BuilderCard.css';
 
 const BuilderCard = ({ builder, onClick }) => {
   const { t } = useLanguage();
+  const [avatarLoading, setAvatarLoading] = useState(true);
 
   const renderStars = (rating) => {
     const stars = [];
@@ -42,7 +44,16 @@ const BuilderCard = ({ builder, onClick }) => {
       <div className="builder-card-header">
         <div className="builder-avatar">
           {builder.avatarLink ? (
-            <img src={builder.avatarLink} alt={builder.getDisplayName()} />
+            <>
+              {avatarLoading && <div className="builder-avatar-shimmer"></div>}
+              <img
+                src={builder.avatarLink}
+                alt={builder.getDisplayName()}
+                className={avatarLoading ? 'loading' : 'loaded'}
+                onLoad={() => setAvatarLoading(false)}
+                onError={() => setAvatarLoading(false)}
+              />
+            </>
           ) : (
             <div className="avatar-placeholder">
               {builder.getDisplayName().charAt(0).toUpperCase()}

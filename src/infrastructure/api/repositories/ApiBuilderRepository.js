@@ -25,13 +25,23 @@ export class ApiBuilderRepository extends IBuilderRepository {
       if (filters.size !== undefined) params.append('size', filters.size);
       if (filters.sort) params.append('sort', filters.sort);
 
+      console.log('Searching builders with URL:', `/api/v1/builders/search?${params.toString()}`);
       const response = await api.get(`/api/v1/builders/search?${params.toString()}`);
+
+      console.log('Builder search API response:', response.data);
 
       // Handle paginated response
       const data = response.data;
       const builders = Array.isArray(data) ? data : data?.content || [];
 
-      return BuilderMapper.toDomainList(builders);
+      console.log('Raw builders data from API:', builders);
+      console.log('Sample builder with avatar info:', builders[0]);
+
+      const domainBuilders = BuilderMapper.toDomainList(builders);
+      console.log('Mapped domain builders:', domainBuilders);
+      console.log('Sample mapped builder:', domainBuilders[0]);
+
+      return domainBuilders;
     } catch (error) {
       console.error('Error searching builders:', error);
       throw error;

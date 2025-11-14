@@ -3,6 +3,13 @@
   min-height: calc(100vh - 80px);
 }
 
+.profile-avatar-section {
+  display: flex;
+  justify-content: flex-start;
+  padding: 0;
+  margin-bottom: var(--spacing-6);
+}
+
 .profile-header {
   margin-bottom: var(--spacing-6);
 }

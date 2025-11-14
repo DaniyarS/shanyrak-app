@@ -48,8 +48,8 @@ export class ApiOrderRepository extends IOrderRepository {
   /**
    * Update existing order
    */
-  async update(order) {
-    const dto = OrderMapper.toUpdateDTO(order);
+  async update(order, categoryId, estateId) {
+    const dto = OrderMapper.toUpdateDTO(order, categoryId, estateId);
     const response = await api.put('/api/v1/orders', dto);
     return OrderMapper.toDomain(response.data);
   }

@@ -65,13 +65,23 @@ export class OrderMapper {
   /**
    * Map Order entity to API update request DTO
    */
-  static toUpdateDTO(order) {
-    return {
+  static toUpdateDTO(order, categoryId, estateId) {
+    const dto = {
       uuid: order.id,
       title: order.title,
       description: order.description,
       budgetMin: order.budgetMin,
       budgetMax: order.budgetMax || 0,
     };
+
+    // Include category and realEstate if provided
+    if (categoryId) {
+      dto.category = { publicId: categoryId };
+    }
+    if (estateId) {
+      dto.realEstate = { publicId: estateId };
+    }
+
+    return dto;
   }
 }

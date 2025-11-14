@@ -24,44 +24,99 @@ API Documentation
 
 ---
 
-## login
+## 1. send-otp
 
-**POST** `/api/v1/auth/login`
+**POST** `/api/v1/auth/send-otp`
+
+### Headers
+
+- `Content-Type`: application/json
 
 ### Request Body
 
 ```json
 {
-  "mode": "urlencoded",
-  "urlencoded": [
-    {
-      "key": "phone",
-      "value": "87020000796",
-      "type": "text"
-    },
-    {
-      "key": "password",
-      "value": "Beknur123!",
-      "type": "text"
-    }
-  ]
+  "phone": "77076770099"
 }
 ```
 
 ---
 
-## register
+## 2. register
 
 **POST** `/api/v1/auth/register`
+
+### Headers
+
+- `Content-Type`: application/json
 
 ### Request Body
 
 ```json
 {
-  "fullName": "Beknur Slamkul",
-  "phone": "87020000796",
-  "role": "CUSTOMER",
-  "password": "Beknur123!"
+  "phone": "77076770099",
+  "password": "qwerty123",
+  "role": "BUILDER",
+  "firstName": "Daniyar",
+  "lastName": "Slamkul",
+  "otpCode": "9459"
+}
+```
+
+---
+
+## 3. login
+
+**POST** `/api/v1/auth/login`
+
+### Headers
+
+- `Content-Type`: application/json
+
+### Request Body
+
+```json
+{
+  "login": "77076770099",
+  "password": "qwerty123"
+}
+```
+
+---
+
+## 4. refresh-token
+
+**POST** `/api/v1/auth/refresh`
+
+### Headers
+
+- `Content-Type`: application/json
+
+### Request Body
+
+```json
+{
+  "refreshToken": "989029d5-f242-4c69-bfc3-203711f099ca"
+}
+```
+
+---
+
+## 5. reset-password
+
+**POST** `/api/v1/auth/reset-password`
+
+### Headers
+
+- `Content-Type`: application/json
+
+### Request Body
+
+```json
+{
+  "phone": "77076770099",
+  "otpCode": "5555",
+  "newPassword": "qwerty111"
 }
 ```
 
@@ -256,6 +311,20 @@ API Documentation
 
 ---
 
+## requestPhone new
+
+**POST** `/api/v1/orders/9aa84dd2-0fb5-4c9b-b4cf-cb0b1b5304f1/request-phone`
+
+### Request Body
+
+```json
+{
+  "offerPublicId": "378af8ca-a9ca-4c36-b996-f15bd127d971"
+}
+```
+
+---
+
 ## send
 
 **POST** `/api/v1/offers`
@@ -304,23 +373,46 @@ API Documentation
 
 ---
 
-## confrim
+## getOfferBuilder new
 
-**POST** `/api/v1/contracts`
+**GET** `/api/v1/offers/378af8ca-a9ca-4c36-b996-f15bd127d971/builder`
+
+---
+
+## update new
+
+**PUT** `/api/v1/offers/378af8ca-a9ca-4c36-b996-f15bd127d971`
 
 ### Request Body
 
-```json
-{
-  "offer": {
-    "publicId": "963c906b-a174-4ed0-b64b-90a7bbb37d61"
-  },
-  "contract": {
-    "totalPrice": 500000,
-    "startDate": "2025-11-20",
-    "endDate": "2025-11-25"
-  }
+```
+{   
+    "price": 1200,
+    "unit": "m3",
+    "daysEstimate": 3,
+    "message": "Братан за 1200 никто не предложит"
 }
+
+//Можно только если статус = PENDING
+```
+
+---
+
+## delete new
+
+**DELETE** `/api/v1/offers/378af8ca-a9ca-4c36-b996-f15bd127d971`
+
+### Request Body
+
+```
+{   
+    "price": 1200,
+    "unit": "m3",
+    "daysEstimate": 3,
+    "message": "Братан за 1200 никто не предложит"
+}
+
+//Можно только если статус = PENDING
 ```
 
 ---
@@ -338,6 +430,59 @@ API Documentation
 ## byId
 
 **GET** `/api/v1/contracts/9582eaba-baf5-4c26-af0e-b05528a3031c`
+
+---
+
+## confirm-deal new
+
+**POST** `/api/v1/orders/9aa84dd2-0fb5-4c9b-b4cf-cb0b1b5304f1/confirm-deal`
+
+### Request Body
+
+```
+  {
+    "offerPublicId": "378af8ca-a9ca-4c36-b996-f15bd127d971",
+    "agreed": true,
+    "startDate": "2025-01-15",
+    "endDate": "2025-02-15"
+  }
+
+/*  Если agreed = true:
+  - Создается ContractEntity (статус ACTIVE)
+  - Оффер → ACCEPTED
+  - Все остальные офферы → REJECTED
+
+  Если agreed = false:
+  - Оффер → REJECTED
+  - Заказ → обратно в OPEN
+*/
+```
+
+---
+
+## complete new
+
+**POST** `/api/v1/contracts/059a3686-771a-4f52-ab52-46e559a2d86a/complete`
+
+### Request Body
+
+```
+{
+    "completed" : true
+}
+
+/*Завершение контракта (двустороннее) ✅
+ Логика:
+  - Определяется роль пользователя (customer/builder)
+  - Устанавливается флаг customerConfirmedComplete или builderConfirmedComplete
+  - Если ОБЕ стороны подтвердили → Контракт COMPLETED, Order COMPLETED
+  - Если только одна → статус PENDING_COMPLETION
+  - Автоматически увеличивается jobsDone у строителя
+
+
+
+*/
+```
 
 ---
 
@@ -579,6 +724,47 @@ API Documentation
 ## delete
 
 **DELETE** `/api/v1/files/1df07d31-bf1e-44b0-ad76-8ed67c53e2cf`
+
+---
+
+## review new
+
+**POST** `/api/v1/reviews`
+
+### Request Body
+
+```
+  {
+    "contractPublicId": "059a3686-771a-4f52-ab52-46e559a2d86a",
+    "rating": 5,
+    "message": "Отличная работа!"
+  }
+/*
+  Логика:
+  - Только для завершенных контрактов (COMPLETED)
+  - Заказчик оценивает строителя → обновляется builder.ratingAvg
+  - Строитель оценивает заказчика
+  - Один отзыв от каждой стороны
+*/
+```
+
+---
+
+## getBuilderReviews new
+
+**GET** `/api/v1/reviews/builder/{builderPublicId}`
+
+### Query Parameters
+
+- `page`
+- `size`
+- `sort`
+
+---
+
+## review new
+
+**GET** `/api/v1/reviews/{reviewPublicId}`
 
 ---
 

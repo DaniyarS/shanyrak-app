@@ -26,6 +26,9 @@
 
 .builder-avatar {
   flex-shrink: 0;
+  position: relative;
+  width: 64px;
+  height: 64px;
 }
 
 .builder-avatar img {
@@ -34,6 +37,39 @@
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid var(--color-primary-light);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.builder-avatar img.loaded {
+  opacity: 1;
+}
+
+.builder-avatar-shimmer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(
+    90deg,
+    var(--color-background-secondary) 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    var(--color-background-secondary) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border: 2px solid var(--color-primary-light);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 .avatar-placeholder {
@@ -168,7 +204,13 @@
     padding: var(--spacing-4);
   }
 
+  .builder-avatar {
+    width: 56px;
+    height: 56px;
+  }
+
   .builder-avatar img,
+  .builder-avatar-shimmer,
   .avatar-placeholder {
     width: 56px;
     height: 56px;

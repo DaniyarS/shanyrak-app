@@ -22,7 +22,7 @@ export const LanguageProvider = ({ children }) => {
     localStorage.setItem('language', language);
   }, [language]);
 
-  const t = (key) => {
+  const t = (key, replacements = {}) => {
     const keys = key.split('.');
     let value = translations[language];
 
@@ -30,7 +30,16 @@ export const LanguageProvider = ({ children }) => {
       value = value?.[k];
     }
 
-    return value || key;
+    if (!value) return key;
+
+    // Replace template variables like {{variable}} with actual values
+    let result = value;
+    Object.keys(replacements).forEach((replaceKey) => {
+      const regex = new RegExp(`{{\\s*${replaceKey}\\s*}}`, 'g');
+      result = result.replace(regex, replacements[replaceKey]);
+    });
+
+    return result;
   };
 
   const changeLanguage = (lang) => {

@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
+import { container } from '../infrastructure/di/ServiceContainer';
 import Button from '../components/Button';
 import Card from '../components/Card';
 import Input from '../components/Input';
+import AvatarUpload from '../components/AvatarUpload';
 import './CustomerProfile.css';
 
 const CustomerProfile = () => {
@@ -12,6 +14,7 @@ const CustomerProfile = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [editing, setEditing] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState('');
   const [formData, setFormData] = useState({
     fullName: '',
     phone: '',
@@ -20,13 +23,35 @@ const CustomerProfile = () => {
 
   useEffect(() => {
     if (user) {
+      const fullName = user.firstName && user.lastName
+        ? `${user.firstName} ${user.lastName}`
+        : user.phone || '';
+
       setFormData({
-        fullName: user.fullName || '',
+        fullName: fullName,
         phone: user.phone || '',
         email: user.email || '',
       });
     }
+    fetchAvatar();
   }, [user]);
+
+  const fetchAvatar = async () => {
+    try {
+      const getAvatarUseCase = container.getGetAvatarUseCase();
+      const result = await getAvatarUseCase.execute();
+
+      if (result.success && result.file) {
+        setAvatarUrl(result.file.url);
+      }
+    } catch (error) {
+      console.error('Error fetching avatar:', error);
+    }
+  };
+
+  const handleAvatarUpdate = (newAvatarUrl) => {
+    setAvatarUrl(newAvatarUrl);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -56,6 +81,13 @@ const CustomerProfile = () => {
         </div>
 
         <Card className="profile-card">
+          <div className="profile-avatar-section">
+            <AvatarUpload
+              currentAvatarUrl={avatarUrl}
+              onAvatarUpdate={handleAvatarUpdate}
+            />
+          </div>
+
           {editing ? (
             <form onSubmit={handleSubmit} className="profile-form">
               <h2>{t('profile.editProfile')}</h2>
@@ -110,7 +142,11 @@ const CustomerProfile = () => {
                 <div className="profile-details">
                   <div className="detail-row">
                     <span className="detail-label">{t('profile.fullName')}:</span>
-                    <span className="detail-value">{user?.fullName}</span>
+                    <span className="detail-value">
+                      {user?.firstName && user?.lastName
+                        ? `${user.firstName} ${user.lastName}`
+                        : user?.phone || 'N/A'}
+                    </span>
                   </div>
                   <div className="detail-row">
                     <span className="detail-label">{t('profile.phone')}:</span>

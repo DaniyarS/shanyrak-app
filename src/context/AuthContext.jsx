@@ -20,8 +20,16 @@ export const AuthProvider = ({ children }) => {
     const currentUser = authService.getCurrentUser();
     if (currentUser) {
       setUser(currentUser);
+
+      // Setup proactive token refresh if user is authenticated
+      authService.setupTokenRefresh(14); // Refresh every 14 minutes
     }
     setLoading(false);
+
+    // Cleanup on unmount
+    return () => {
+      authService.clearTokenRefresh();
+    };
   }, []);
 
   const login = async (phone, password) => {
@@ -32,6 +40,9 @@ export const AuthProvider = ({ children }) => {
       const currentUser = authService.getCurrentUser();
       console.log('Setting user in context:', currentUser);
       setUser(currentUser);
+
+      // Setup proactive token refresh after successful login
+      authService.setupTokenRefresh(14); // Refresh every 14 minutes
 
       return { success: true, data };
     } catch (error) {
@@ -51,6 +62,9 @@ export const AuthProvider = ({ children }) => {
       const currentUser = authService.getCurrentUser();
       console.log('Setting user in context after registration:', currentUser);
       setUser(currentUser);
+
+      // Setup proactive token refresh after successful registration
+      authService.setupTokenRefresh(14); // Refresh every 14 minutes
 
       return { success: true, data };
     } catch (error) {

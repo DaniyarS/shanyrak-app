@@ -16,10 +16,52 @@
 
 .order-form-card {
   margin-bottom: var(--spacing-8);
+  overflow: hidden;
 }
 
 .order-form-card h2 {
   margin-bottom: var(--spacing-6);
+}
+
+.estate-form-description {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  margin-bottom: var(--spacing-6);
+  line-height: 1.5;
+}
+
+.form-container {
+  position: relative;
+  width: 100%;
+}
+
+.form-slide {
+  width: 100%;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+}
+
+.form-slide.slide-left-out {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.form-slide.slide-right-in {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.form-slide.slide-right-out {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.form-slide.slide-left-in {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.form-slide.hidden {
+  display: none;
 }
 
 .order-form {
@@ -32,6 +74,18 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--spacing-4);
+}
+
+.form-section {
+  margin-top: var(--spacing-lg);
+}
+
+.section-label {
+  display: block;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: 20px;
 }
 
 .form-actions {

@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import './BuilderDetailDialog.css';
 
 const BuilderDetailDialog = ({ builder, onClose }) => {
   const { t } = useLanguage();
+  const [avatarLoading, setAvatarLoading] = useState(true);
 
   const renderStars = (rating) => {
     const stars = [];
@@ -53,7 +55,16 @@ const BuilderDetailDialog = ({ builder, onClose }) => {
         <div className="dialog-header">
           <div className="builder-avatar-large">
             {builder.avatarLink ? (
-              <img src={builder.avatarLink} alt={builder.getDisplayName()} />
+              <>
+                {avatarLoading && <div className="builder-avatar-large-shimmer"></div>}
+                <img
+                  src={builder.avatarLink}
+                  alt={builder.getDisplayName()}
+                  className={avatarLoading ? 'loading' : 'loaded'}
+                  onLoad={() => setAvatarLoading(false)}
+                  onError={() => setAvatarLoading(false)}
+                />
+              </>
             ) : (
               <div className="avatar-placeholder-large">
                 {builder.getDisplayName().charAt(0).toUpperCase()}

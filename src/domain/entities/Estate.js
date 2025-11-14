@@ -6,7 +6,6 @@ export class Estate {
   constructor({
     id,
     kind,
-    email,
     addressLine,
     city,
     district,
@@ -19,7 +18,6 @@ export class Estate {
   }) {
     this.id = id;
     this.kind = kind;
-    this.email = email;
     this.addressLine = addressLine;
     this.city = city;
     this.district = district;
@@ -57,10 +55,6 @@ export class Estate {
       errors.kind = 'Property type is required';
     }
 
-    if (!data.email || !this.isValidEmail(data.email)) {
-      errors.email = 'Valid email is required';
-    }
-
     if (!data.addressLine || data.addressLine.trim().length === 0) {
       errors.addressLine = 'Address is required';
     }
@@ -77,22 +71,9 @@ export class Estate {
       errors.areaM2 = 'Area must be greater than 0';
     }
 
-    if (data.latitude && (data.latitude < -90 || data.latitude > 90)) {
-      errors.latitude = 'Latitude must be between -90 and 90';
-    }
-
-    if (data.longitude && (data.longitude < -180 || data.longitude > 180)) {
-      errors.longitude = 'Longitude must be between -180 and 180';
-    }
-
     return {
       isValid: Object.keys(errors).length === 0,
       errors,
     };
-  }
-
-  static isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
   }
 }

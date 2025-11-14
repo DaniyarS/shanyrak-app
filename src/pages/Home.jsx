@@ -237,7 +237,12 @@ const Home = () => {
               </>
             ) : (
               <div className="hero-welcome">
-                <h2>{t('home.welcomeBack')}, {user?.fullName}!</h2>
+                <h2>
+                  {t('home.welcomeBack')},{' '}
+                  {user?.firstName && user?.lastName
+                    ? `${user.firstName} ${user.lastName}`
+                    : user?.phone}!
+                </h2>
               </div>
             )}
           </div>

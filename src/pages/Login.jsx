@@ -102,6 +102,12 @@ const Login = () => {
               <div className="error-message">{errors.submit}</div>
             )}
 
+            <div className="forgot-password-link-wrapper">
+              <Link to="/forgot-password" className="forgot-password-link">
+                {t('auth.forgotPassword')}?
+              </Link>
+            </div>
+
             <Button
               type="submit"
               variant="primary"

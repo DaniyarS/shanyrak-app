@@ -6,6 +6,8 @@ import { container } from '../infrastructure/di/ServiceContainer';
 import Button from '../components/Button';
 import Card from '../components/Card';
 import Input from '../components/Input';
+import AvatarUpload from '../components/AvatarUpload';
+import PortfolioGallery from '../components/PortfolioGallery';
 import './BuilderProfile.css';
 
 const BuilderProfile = () => {
@@ -15,6 +17,8 @@ const BuilderProfile = () => {
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [builderData, setBuilderData] = useState(null);
+  const [avatarUrl, setAvatarUrl] = useState('');
+  const [portfolioPhotos, setPortfolioPhotos] = useState([]);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -31,6 +35,7 @@ const BuilderProfile = () => {
 
   useEffect(() => {
     fetchBuilderProfile();
+    fetchAvatar();
   }, []);
 
   const fetchBuilderProfile = async () => {
@@ -53,12 +58,62 @@ const BuilderProfile = () => {
           jobsDone: result.builder.jobsDone?.toString() || '',
           available: result.builder.available !== undefined ? result.builder.available : true,
         });
+
+        // Fetch portfolio photos after we have the builder ID
+        if (result.builder?.id) {
+          fetchPortfolioPhotos(result.builder.id);
+        }
       }
     } catch (error) {
       console.error('Error fetching builder profile:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchAvatar = async () => {
+    try {
+      const getAvatarUseCase = container.getGetAvatarUseCase();
+      const result = await getAvatarUseCase.execute();
+
+      if (result.success && result.file) {
+        setAvatarUrl(result.file.url);
+      }
+    } catch (error) {
+      console.error('Error fetching avatar:', error);
+    }
+  };
+
+  const fetchPortfolioPhotos = async (builderId) => {
+    try {
+      const getPortfolioUseCase = container.getGetPortfolioPhotosUseCase();
+      // Pass builderId to get the builder's portfolio photos with linkPublicId parameter
+      const result = await getPortfolioUseCase.execute(builderId);
+
+      if (result.success) {
+        setPortfolioPhotos(result.files);
+      } else {
+        console.error('Error fetching portfolio photos:', result.errors);
+      }
+    } catch (error) {
+      console.error('Error fetching portfolio photos:', error);
+    }
+  };
+
+  const handleAvatarUpdate = (newAvatarUrl) => {
+    setAvatarUrl(newAvatarUrl);
+    // Optionally update the builder data with new avatar link
+    if (builderData) {
+      setBuilderData({ ...builderData, avatarLink: newAvatarUrl });
+    }
+  };
+
+  const handlePhotoAdded = (newPhoto) => {
+    setPortfolioPhotos([...portfolioPhotos, newPhoto]);
+  };
+
+  const handlePhotoDeleted = (photoId) => {
+    setPortfolioPhotos(portfolioPhotos.filter(photo => photo.id !== photoId));
   };
 
   const handleChange = (e) => {
@@ -145,6 +200,13 @@ const BuilderProfile = () => {
         </div>
 
         <Card className="profile-card">
+          <div className="profile-avatar-section">
+            <AvatarUpload
+              currentAvatarUrl={avatarUrl}
+              onAvatarUpdate={handleAvatarUpdate}
+            />
+          </div>
+
           {editing ? (
             <form onSubmit={handleSubmit} className="profile-form">
               <h2>{t('profile.editProfile')}</h2>
@@ -333,6 +395,19 @@ const BuilderProfile = () => {
                     </span>
                   </div>
                 </div>
+              </div>
+
+              {/* Portfolio Section */}
+              <div className="profile-section">
+                <h3>{t('profile.portfolio')}</h3>
+                <PortfolioGallery
+                  photos={portfolioPhotos}
+                  onPhotoAdded={handlePhotoAdded}
+                  onPhotoDeleted={handlePhotoDeleted}
+                  canEdit={true}
+                  showAll={false}
+                  builderId={builderData?.id}
+                />
               </div>
             </div>
           )}
