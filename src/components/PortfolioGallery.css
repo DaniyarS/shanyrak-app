@@ -1,0 +1,325 @@
+.portfolio-gallery {
+  width: 100%;
+}
+
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.portfolio-item {
+  position: relative;
+  aspect-ratio: 1;
+}
+
+.portfolio-image-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 3px solid var(--color-border);
+  background-color: var(--color-background-secondary);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1), 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.portfolio-image-container:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.portfolio-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.portfolio-image.loaded {
+  opacity: 1;
+}
+
+.portfolio-image-shimmer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    var(--color-background-secondary) 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    var(--color-background-secondary) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  z-index: 1;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.portfolio-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.portfolio-image-container:hover .portfolio-overlay {
+  opacity: 1;
+}
+
+.portfolio-view-icon {
+  width: 40px;
+  height: 40px;
+  color: white;
+  stroke-width: 2;
+}
+
+.portfolio-delete-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: all 0.3s ease;
+  padding: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  opacity: 0.3;
+}
+
+.portfolio-item:hover .portfolio-delete-btn {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.portfolio-delete-btn:hover {
+  background-color: rgba(0, 0, 0, 0.85);
+  transform: scale(1.1);
+}
+
+.portfolio-delete-btn svg {
+  width: 12px;
+  height: 12px;
+  stroke-width: 2.5;
+}
+
+.portfolio-upload-item,
+.portfolio-more-item {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 3px dashed var(--color-border);
+  background-color: var(--color-background-secondary);
+}
+
+.portfolio-upload-btn,
+.portfolio-more-btn {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  transition: all 0.3s ease;
+  padding: 16px;
+  font-family: inherit;
+}
+
+.portfolio-upload-btn:hover,
+.portfolio-more-btn:hover {
+  background-color: var(--color-background);
+  color: var(--color-primary);
+}
+
+.portfolio-upload-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.portfolio-upload-icon {
+  width: 32px;
+  height: 32px;
+  stroke-width: 2;
+}
+
+.portfolio-upload-text {
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+}
+
+.portfolio-upload-count {
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+}
+
+.portfolio-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.portfolio-more-btn {
+  border: 3px solid var(--color-border);
+  background: linear-gradient(135deg, var(--color-background) 0%, var(--color-background-secondary) 100%);
+}
+
+.portfolio-more-btn:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.portfolio-more-count {
+  font-size: 32px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.portfolio-more-text {
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+}
+
+.portfolio-error {
+  margin-top: 12px;
+  color: var(--color-error);
+  font-size: var(--font-size-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: rgba(220, 38, 38, 0.1);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--color-error);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .portfolio-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+
+  .portfolio-image-container {
+    border-radius: 10px;
+  }
+
+  .portfolio-view-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .portfolio-delete-btn {
+    width: 22px;
+    height: 22px;
+    top: 5px;
+    right: 5px;
+  }
+
+  .portfolio-delete-btn svg {
+    width: 11px;
+    height: 11px;
+  }
+
+  .portfolio-upload-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .portfolio-upload-text {
+    font-size: 13px;
+  }
+
+  .portfolio-more-count {
+    font-size: 28px;
+  }
+
+  .portfolio-more-text {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .portfolio-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+  }
+
+  .portfolio-image-container {
+    border-radius: 8px;
+  }
+
+  .portfolio-view-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .portfolio-delete-btn {
+    width: 20px;
+    height: 20px;
+    top: 4px;
+    right: 4px;
+  }
+
+  .portfolio-delete-btn svg {
+    width: 10px;
+    height: 10px;
+  }
+
+  .portfolio-upload-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .portfolio-upload-text {
+    font-size: 12px;
+  }
+
+  .portfolio-upload-count {
+    font-size: 11px;
+  }
+
+  .portfolio-more-count {
+    font-size: 24px;
+  }
+
+  .portfolio-more-text {
+    font-size: 12px;
+  }
+}

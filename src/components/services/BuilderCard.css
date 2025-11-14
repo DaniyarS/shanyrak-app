@@ -1,0 +1,226 @@
+.builder-card {
+  background: var(--color-bg-default);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-6);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-md);
+}
+
+.builder-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+/* Header */
+.builder-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-4);
+  padding-bottom: var(--spacing-4);
+  border-bottom: 1px solid var(--color-neutral-200);
+}
+
+.builder-avatar {
+  flex-shrink: 0;
+  position: relative;
+  width: 64px;
+  height: 64px;
+}
+
+.builder-avatar img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--color-primary-light);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.builder-avatar img.loaded {
+  opacity: 1;
+}
+
+.builder-avatar-shimmer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(
+    90deg,
+    var(--color-background-secondary) 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    var(--color-background-secondary) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border: 2px solid var(--color-primary-light);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.avatar-placeholder {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-2xl);
+  font-weight: 600;
+  border: 2px solid var(--color-primary-light);
+}
+
+.builder-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.builder-name-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-1);
+}
+
+.builder-name {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.status-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-indicator.online {
+  background-color: #4caf50;
+  box-shadow: 0 0 4px rgba(76, 175, 80, 0.5);
+}
+
+.status-indicator.offline {
+  background-color: #f44336;
+  box-shadow: 0 0 4px rgba(244, 67, 54, 0.5);
+}
+
+.builder-rating {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+
+.star {
+  color: var(--color-warning);
+  font-size: var(--font-size-base);
+}
+
+.star.filled {
+  color: var(--color-warning);
+}
+
+.star.half {
+  color: var(--color-warning);
+  opacity: 0.6;
+}
+
+.star.empty {
+  color: var(--color-neutral-300);
+}
+
+.rating-value {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-left: var(--spacing-1);
+}
+
+/* Body */
+.builder-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.builder-about {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.builder-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-size-sm);
+}
+
+.detail-label {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.detail-value {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .builder-card {
+    padding: var(--spacing-4);
+  }
+
+  .builder-avatar {
+    width: 56px;
+    height: 56px;
+  }
+
+  .builder-avatar img,
+  .builder-avatar-shimmer,
+  .avatar-placeholder {
+    width: 56px;
+    height: 56px;
+  }
+
+  .avatar-placeholder {
+    font-size: var(--font-size-xl);
+  }
+
+  .builder-name {
+    font-size: var(--font-size-base);
+  }
+}
