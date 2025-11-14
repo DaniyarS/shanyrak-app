@@ -1,4 +1,18 @@
 /**
+ * Order Status Enum
+ * OPEN - Order is open and accepting offers
+ * IN_PROGRESS - Customer contacted a builder
+ * COMPLETED - Work is completed
+ * CANCELLED - Order cancelled
+ */
+export const OrderStatus = {
+  OPEN: 'OPEN',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+};
+
+/**
  * Order Entity - Domain Model
  * Pure business object representing a service order
  * Independent of frameworks and infrastructure
@@ -12,6 +26,7 @@ export class Order {
     budgetMax,
     category,
     realEstate,
+    status,
     createdAt,
     updatedAt,
     offersCount,
@@ -23,6 +38,7 @@ export class Order {
     this.budgetMax = budgetMax;
     this.category = category; // Category entity
     this.realEstate = realEstate; // Estate entity
+    this.status = status || OrderStatus.OPEN;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.offersCount = offersCount || 0;

@@ -20,6 +20,8 @@ export const ru = {
     viewOffers: 'Посмотреть предложения',
     makeOffer: 'Сделать предложение',
     alreadyResponded: 'Вы откликнулись',
+    createdAt: 'Создано',
+    error: 'Ошибка',
   },
 
   // Navbar
@@ -30,6 +32,7 @@ export const ru = {
     myOrders: 'Мои заказы',
     myProperties: 'Мои объекты',
     myOffers: 'Мои предложения',
+    contracts: 'Мои контракты',
     signIn: 'Войти',
     register: 'Регистрация',
     logout: 'Выйти',
@@ -326,6 +329,20 @@ export const ru = {
     priceRequired: 'Цена должна быть больше 0',
     daysRequired: 'Количество дней должно быть больше 0',
     messageRequired: 'Сообщение обязательно',
+    // Order statuses
+    statusOpen: 'Открыт',
+    statusInProgress: 'В работе',
+    statusCompleted: 'Завершен',
+    statusCancelled: 'Отменен',
+    // Order actions
+    requestPhone: 'Запросить телефон',
+    confirmDeal: 'Подтвердить сделку',
+    rejectDeal: 'Отклонить сделку',
+    phoneRequested: 'Номер телефона успешно запрошен',
+    dealConfirmed: 'Сделка успешно подтверждена',
+    dealRejected: 'Сделка отклонена',
+    startDateRequired: 'Дата начала обязательна',
+    endDateRequired: 'Дата окончания обязательна',
   },
 
   // Offers
@@ -359,9 +376,67 @@ export const ru = {
     offerSubmitted: 'Предложение успешно отправлено!',
     contractCreated: 'Договор успешно создан!',
     submittedOn: 'Отправлено',
+    // Offer statuses
     statusPending: 'В ожидании',
     statusAccepted: 'Принято',
     statusRejected: 'Отклонено',
+    statusWithdrawn: 'Отозвано',
+    // Offer actions
+    editOffer: 'Редактировать предложение',
+    withdrawOffer: 'Отозвать предложение',
+    viewBuilder: 'Посмотреть строителя',
+    offerUpdated: 'Предложение успешно обновлено',
+    offerWithdrawn: 'Предложение отозвано',
+    withdrawConfirm: 'Вы уверены, что хотите отозвать это предложение?',
+    cannotEditAccepted: 'Невозможно редактировать принятое предложение',
+    cannotEditRejected: 'Невозможно редактировать отклоненное предложение',
+    cannotEditWithdrawn: 'Невозможно редактировать отозванное предложение',
+  },
+
+  // Contracts
+  contracts: {
+    title: 'Договоры',
+    myContracts: 'Мои договоры',
+    contractDetails: 'Детали договора',
+    startDate: 'Дата начала',
+    endDate: 'Дата окончания',
+    noContracts: 'Пока нет договоров',
+    noContractsDescription: 'Договоры появятся здесь, когда вы подтвердите сделку со строителем.',
+    // Contract statuses
+    statusActive: 'Активный',
+    statusCompleted: 'Завершен',
+    statusCancelled: 'Отменен',
+    statusPendingCompletion: 'Ожидает подтверждения',
+    // Contract actions
+    confirmCompletion: 'Подтвердить завершение',
+    workCompleted: 'Работа завершена',
+    waitingForOtherParty: 'Ожидание подтверждения от другой стороны',
+    bothPartiesConfirmed: 'Обе стороны подтвердили завершение',
+    completionConfirmed: 'Завершение успешно подтверждено',
+    completionFailed: 'Не удалось подтвердить завершение',
+  },
+
+  // Reviews
+  reviews: {
+    title: 'Отзывы',
+    myReviews: 'Мои отзывы',
+    builderReviews: 'Отзывы о строителе',
+    leaveReview: 'Оставить отзыв',
+    writeReview: 'Написать отзыв',
+    rating: 'Рейтинг',
+    yourRating: 'Ваш рейтинг',
+    reviewMessage: 'Текст отзыва',
+    reviewPlaceholder: 'Поделитесь своим опытом работы с этим строителем...',
+    submitReview: 'Отправить отзыв',
+    noReviews: 'Пока нет отзывов',
+    noReviewsDescription: 'Будьте первым, кто оставит отзыв!',
+    reviewSubmitted: 'Отзыв успешно отправлен!',
+    reviewFailed: 'Не удалось отправить отзыв',
+    ratingRequired: 'Рейтинг обязателен',
+    messageRequired: 'Текст отзыва обязателен',
+    messageTooShort: 'Текст отзыва должен содержать не менее 10 символов',
+    stars: 'звезд',
+    reviewBy: 'Отзыв от',
   },
 
   // Services

@@ -20,6 +20,8 @@ export const kk = {
     viewOffers: 'Ұсыныстарды көру',
     makeOffer: 'Ұсыныс жасау',
     alreadyResponded: 'Сіз жауап бердіңіз',
+    createdAt: 'Жасалды',
+    error: 'Қате',
   },
 
   // Navbar
@@ -30,6 +32,7 @@ export const kk = {
     myOrders: 'Менің тапсырыстарым',
     myProperties: 'Менің мүліктерім',
     myOffers: 'Менің ұсыныстарым',
+    contracts: 'Менің келісімшарттарым',
     signIn: 'Кіру',
     register: 'Тіркелу',
     logout: 'Шығу',
@@ -327,6 +330,20 @@ export const kk = {
     priceRequired: 'Баға 0-ден үлкен болуы керек',
     daysRequired: 'Күн саны 0-ден үлкен болуы керек',
     messageRequired: 'Хабарлама міндетті',
+    // Order statuses
+    statusOpen: 'Ашық',
+    statusInProgress: 'Орындалуда',
+    statusCompleted: 'Аяқталды',
+    statusCancelled: 'Болдырмаған',
+    // Order actions
+    requestPhone: 'Телефон сұрау',
+    confirmDeal: 'Келісімді растау',
+    rejectDeal: 'Келісімді қабылдамау',
+    phoneRequested: 'Телефон нөмірі сәтті сұралды',
+    dealConfirmed: 'Келісім сәтті расталды',
+    dealRejected: 'Келісім қабылданбады',
+    startDateRequired: 'Басталу күні міндетті',
+    endDateRequired: 'Аяқталу күні міндетті',
   },
 
   // Offers
@@ -360,9 +377,67 @@ export const kk = {
     offerSubmitted: 'Ұсыныс сәтті жіберілді!',
     contractCreated: 'Келісімшарт сәтті жасалды!',
     submittedOn: 'Жіберілді',
+    // Offer statuses
     statusPending: 'Күтілуде',
     statusAccepted: 'Қабылданды',
     statusRejected: 'Қабылданбады',
+    statusWithdrawn: 'Қайтарылды',
+    // Offer actions
+    editOffer: 'Ұсынысты өңдеу',
+    withdrawOffer: 'Ұсынысты қайтару',
+    viewBuilder: 'Құрылысшыны көру',
+    offerUpdated: 'Ұсыныс сәтті жаңартылды',
+    offerWithdrawn: 'Ұсыныс қайтарылды',
+    withdrawConfirm: 'Бұл ұсынысты қайтарғыңыз келетініне сенімдісіз бе?',
+    cannotEditAccepted: 'Қабылданған ұсынысты өңдеу мүмкін емес',
+    cannotEditRejected: 'Қабылданбаған ұсынысты өңдеу мүмкін емес',
+    cannotEditWithdrawn: 'Қайтарылған ұсынысты өңдеу мүмкін емес',
+  },
+
+  // Contracts
+  contracts: {
+    title: 'Келісімшарттар',
+    myContracts: 'Менің келісімшарттарым',
+    contractDetails: 'Келісімшарт мәліметтері',
+    startDate: 'Басталу күні',
+    endDate: 'Аяқталу күні',
+    noContracts: 'Әлі келісімшарттар жоқ',
+    noContractsDescription: 'Келісімшарттар құрылысшымен келісімді растағаннан кейін осында көрінеді.',
+    // Contract statuses
+    statusActive: 'Белсенді',
+    statusCompleted: 'Аяқталды',
+    statusCancelled: 'Болдырмаған',
+    statusPendingCompletion: 'Растауды күтуде',
+    // Contract actions
+    confirmCompletion: 'Аяқтауды растау',
+    workCompleted: 'Жұмыс аяқталды',
+    waitingForOtherParty: 'Екінші жақтың растауын күту',
+    bothPartiesConfirmed: 'Екі жақ та аяқтауды растады',
+    completionConfirmed: 'Аяқтау сәтті расталды',
+    completionFailed: 'Аяқтауды растау сәтсіз аяқталды',
+  },
+
+  // Reviews
+  reviews: {
+    title: 'Пікірлер',
+    myReviews: 'Менің пікірлерім',
+    builderReviews: 'Құрылысшы туралы пікірлер',
+    leaveReview: 'Пікір қалдыру',
+    writeReview: 'Пікір жазу',
+    rating: 'Рейтинг',
+    yourRating: 'Сіздің рейтингіңіз',
+    reviewMessage: 'Пікір мәтіні',
+    reviewPlaceholder: 'Бұл құрылысшымен жұмыс тәжірибеңізбен бөлісіңіз...',
+    submitReview: 'Пікірді жіберу',
+    noReviews: 'Әлі пікірлер жоқ',
+    noReviewsDescription: 'Пікір қалдырған бірінші адам болыңыз!',
+    reviewSubmitted: 'Пікір сәтті жіберілді!',
+    reviewFailed: 'Пікірді жіберу сәтсіз аяқталды',
+    ratingRequired: 'Рейтинг міндетті',
+    messageRequired: 'Пікір мәтіні міндетті',
+    messageTooShort: 'Пікір мәтіні кемінде 10 таңбадан тұруы керек',
+    stars: 'жұлдыз',
+    reviewBy: 'Пікір қалдырған',
   },
 
   // Services

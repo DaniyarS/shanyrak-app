@@ -30,4 +30,32 @@ export class IOfferRepository {
   async getById(id) {
     throw new Error('Method not implemented');
   }
+
+  /**
+   * Update existing offer (builder can edit if status is PENDING)
+   * @param {string} offerId - Offer ID
+   * @param {Offer} offer - Updated offer data
+   * @returns {Promise<Offer>}
+   */
+  async update(offerId, offer) {
+    throw new Error('Method not implemented');
+  }
+
+  /**
+   * Withdraw offer (sets status to WITHDRAWN)
+   * @param {string} offerId - Offer ID
+   * @returns {Promise<void>}
+   */
+  async withdraw(offerId) {
+    throw new Error('Method not implemented');
+  }
+
+  /**
+   * Get builder information by offer ID
+   * @param {string} offerId - Offer ID
+   * @returns {Promise<Object>} Builder information
+   */
+  async getBuilderByOfferId(offerId) {
+    throw new Error('Method not implemented');
+  }
 }

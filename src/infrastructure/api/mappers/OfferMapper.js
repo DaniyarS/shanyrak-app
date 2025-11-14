@@ -23,6 +23,7 @@ export class OfferMapper {
       unit: offerData.unit,
       daysEstimate: offerData.daysEstimate,
       message: offerData.message,
+      status: offerData.status,
       createdAt: offerData.createdAt ? new Date(offerData.createdAt) : null,
       updatedAt: offerData.updatedAt ? new Date(offerData.updatedAt) : null,
       builder: builderData ? BuilderMapper.toDomain(builderData) : null,
@@ -49,6 +50,18 @@ export class OfferMapper {
         unit: offer.unit,
         daysEstimate: offer.daysEstimate,
       },
+    };
+  }
+
+  /**
+   * Map Offer entity to API update request DTO
+   */
+  static toUpdateDTO(offer) {
+    return {
+      price: offer.price,
+      message: offer.message,
+      unit: offer.unit,
+      daysEstimate: offer.daysEstimate,
     };
   }
 }

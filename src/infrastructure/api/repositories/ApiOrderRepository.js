@@ -81,4 +81,24 @@ export class ApiOrderRepository extends IOrderRepository {
     const ordersList = Array.isArray(data) ? data : (data?.content || []);
     return OrderMapper.toDomainList(ordersList);
   }
+
+  /**
+   * Request builder's phone number
+   * POST /api/v1/orders/{orderPublicId}/request-phone
+   */
+  async requestBuilderPhone(orderId, offerId) {
+    const response = await api.post(`/api/v1/orders/${orderId}/request-phone`, {
+      offerPublicId: offerId,
+    });
+    return response.data;
+  }
+
+  /**
+   * Confirm deal with builder
+   * POST /api/v1/orders/{orderPublicId}/confirm-deal
+   */
+  async confirmDeal(orderId, dealData) {
+    const response = await api.post(`/api/v1/orders/${orderId}/confirm-deal`, dealData);
+    return response.data;
+  }
 }
