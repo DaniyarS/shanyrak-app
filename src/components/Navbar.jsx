@@ -38,6 +38,8 @@ const Navbar = () => {
     }
   };
 
+  const isDevelopment = import.meta.env.DEV;
+
   return (
     <nav className="navbar">
       <div className="container">
@@ -65,6 +67,15 @@ const Navbar = () => {
                   >
                     {t('navbar.home')}
                   </Link>
+                  {isDevelopment && (
+                    <Link
+                      to="/testing"
+                      className={`navbar-link navbar-link-testing ${isActive('/testing') ? 'active' : ''}`}
+                      onClick={(e) => handleNavClick(e, '/testing')}
+                    >
+                      🧪 Testing
+                    </Link>
+                  )}
                   {user?.role === 'CUSTOMER' && (
                     <>
                       <Link

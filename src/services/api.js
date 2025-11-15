@@ -1,4 +1,5 @@
 import axios from 'axios';
+import authLogger from '../utils/authLogger';
 
 // Base URL for API - can be configured via environment variable
 // In development, use empty string to leverage Vite proxy
@@ -11,6 +12,19 @@ const api = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+/**
+ * Create a separate axios instance for the refresh endpoint
+ * This instance has NO interceptors to avoid loops, but respects the same BASE_URL
+ */
+export const createRefreshAxios = () => {
+  return axios.create({
+    baseURL: BASE_URL,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+};
 
 // Token refresh state management
 let isRefreshing = false;
@@ -45,7 +59,12 @@ const refreshAccessToken = async () => {
   }
 
   try {
-    const response = await axios.post(`${BASE_URL}/api/v1/auth/refresh`, {
+    authLogger.info('Token Refresh', 'Attempting to refresh access token');
+
+    // Use a fresh axios instance without interceptors to avoid loops
+    // but still respects BASE_URL (for proxy in dev, direct URL in prod)
+    const refreshAxios = createRefreshAxios();
+    const response = await refreshAxios.post('/api/v1/auth/refresh', {
       refreshToken,
     });
 
@@ -54,13 +73,24 @@ const refreshAccessToken = async () => {
     // Update tokens in localStorage
     if (accessToken) {
       localStorage.setItem('authToken', accessToken);
+      authLogger.success('Token Refresh', 'Access token refreshed successfully');
     }
     if (newRefreshToken) {
       localStorage.setItem('refreshToken', newRefreshToken);
+      authLogger.success('Token Refresh', 'Refresh token updated');
     }
 
     return accessToken;
   } catch (error) {
+    authLogger.error('Token Refresh', 'Refresh failed', {
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      message: error.response?.data?.message || error.message,
+      hasRefreshToken: !!refreshToken,
+      endpoint: '/api/v1/auth/refresh',
+      baseURL: BASE_URL || '(using proxy)'
+    });
+
     // Clear all auth data if refresh fails
     localStorage.removeItem('authToken');
     localStorage.removeItem('refreshToken');
@@ -89,13 +119,25 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    // Don't intercept the refresh endpoint itself to prevent loops
+    if (originalRequest.url?.includes('/auth/refresh')) {
+      authLogger.info('Auth Interceptor', 'Skipping interceptor for refresh endpoint');
+      return Promise.reject(error);
+    }
+
     // Check if error is 401 and we haven't already tried to refresh
     if (error.response?.status === 401 && !originalRequest._retry) {
+      authLogger.warn('Auth Interceptor', '401 error detected', {
+        url: originalRequest.url,
+        method: originalRequest.method
+      });
+
       // Prevent infinite loops by marking this request as retried
       originalRequest._retry = true;
 
       if (isRefreshing) {
         // If already refreshing, queue this request
+        authLogger.info('Auth Interceptor', 'Token refresh in progress, queueing request');
         return new Promise((resolve, reject) => {
           failedRequestsQueue.push({ resolve, reject });
         })
@@ -109,6 +151,7 @@ api.interceptors.response.use(
       }
 
       isRefreshing = true;
+      authLogger.info('Auth Interceptor', 'Starting token refresh process');
 
       try {
         // Attempt to refresh the token
@@ -116,16 +159,38 @@ api.interceptors.response.use(
 
         // Process queued requests with new token
         processQueue(null, newAccessToken);
+        authLogger.success('Auth Interceptor', 'Token refresh successful, retrying original request');
 
         // Retry the original request with new token
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return api(originalRequest);
       } catch (refreshError) {
-        // Refresh failed - process queue with error and redirect to login
+        authLogger.error('Auth Interceptor', 'Token refresh failed - triggering logout', {
+          status: refreshError.response?.status,
+          message: refreshError.response?.data?.message || refreshError.message,
+          originalRequest: {
+            url: originalRequest.url,
+            method: originalRequest.method
+          }
+        });
+
+        // Refresh failed - process queue with error
         processQueue(refreshError, null);
 
-        // Redirect to login page
-        window.location.href = '/login';
+        // Emit custom event instead of hard redirect
+        // This allows React app to handle logout gracefully
+        const logoutEvent = new CustomEvent('auth:session-expired', {
+          detail: { reason: 'refresh_failed', error: refreshError }
+        });
+        window.dispatchEvent(logoutEvent);
+
+        // Fallback: If event is not handled in 100ms, do hard redirect
+        setTimeout(() => {
+          if (!window.location.pathname.includes('/login')) {
+            authLogger.warn('Auth Interceptor', 'Event not handled, forcing redirect to login');
+            window.location.href = '/login';
+          }
+        }, 100);
 
         return Promise.reject(refreshError);
       } finally {
