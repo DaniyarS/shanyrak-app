@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import Button from '../components/Button';
 import Input from '../components/Input';
+import PhoneInput from '../components/PhoneInput';
 import Card from '../components/Card';
 import OtpInput from '../components/OtpInput';
 import authService from '../services/authService';
@@ -50,7 +51,7 @@ const ForgotPassword = () => {
     const newErrors = {};
     if (!formData.phone) {
       newErrors.phone = t('validation.phoneRequired');
-    } else if (!/^[0-9]{11}$/.test(formData.phone)) {
+    } else if (!/^7\d{10}$/.test(formData.phone)) {
       newErrors.phone = t('validation.phoneInvalid');
     }
     setErrors(newErrors);
@@ -178,13 +179,10 @@ const ForgotPassword = () => {
 
           {step === 1 ? (
             <form onSubmit={handleSendOtp} className="forgot-password-form">
-              <Input
+              <PhoneInput
                 label={t('auth.phoneNumber')}
-                type="tel"
-                name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                placeholder="77020000796"
                 error={errors.phone}
                 required
               />
