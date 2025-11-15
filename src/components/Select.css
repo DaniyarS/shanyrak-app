@@ -1,7 +1,6 @@
 .select-wrapper {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-2);
   width: 100%;
   position: relative;
 }
@@ -10,6 +9,8 @@
   font-size: var(--font-size-sm);
   font-weight: 500;
   color: var(--color-text-primary);
+  margin: 0;
+  margin-bottom: 6px;
 }
 
 .select-required {
@@ -101,7 +102,7 @@
 .select-error-message {
   font-size: var(--font-size-sm);
   color: var(--color-error);
-  margin-top: calc(var(--spacing-1) * -1);
+  margin-top: 6px;
 }
 
 /* Dropdown menu */
