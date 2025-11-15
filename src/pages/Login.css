@@ -35,7 +35,7 @@
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-4);
+  gap: var(--spacing-1);
 }
 
 .error-message {
@@ -98,7 +98,7 @@
   }
 
   .login-form {
-    gap: var(--spacing-3);
+    gap: var(--spacing-1);
   }
 }
 

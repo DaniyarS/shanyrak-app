@@ -1,4 +1,5 @@
-import api from './api';
+import api, { createRefreshAxios } from './api';
+import authLogger from '../utils/authLogger';
 
 const authService = {
   // Send OTP code to phone number
@@ -101,7 +102,9 @@ const authService = {
       throw new Error('No refresh token available');
     }
 
-    const response = await api.post('/api/v1/auth/refresh', { refreshToken });
+    // Use createRefreshAxios to avoid interceptor loops while respecting proxy config
+    const refreshAxios = createRefreshAxios();
+    const response = await refreshAxios.post('/api/v1/auth/refresh', { refreshToken });
 
     if (response.data.accessToken) {
       localStorage.setItem('authToken', response.data.accessToken);
@@ -130,14 +133,40 @@ const authService = {
     authService._refreshInterval = setInterval(async () => {
       try {
         if (authService.isAuthenticated()) {
+          authLogger.info('Proactive Refresh', 'Attempting scheduled token refresh');
           await authService.refreshToken();
-          console.log('Token refreshed proactively');
+          authLogger.success('Proactive Refresh', 'Token refreshed successfully');
         } else {
-          // Clear interval if user is no longer authenticated
+          authLogger.info('Proactive Refresh', 'User no longer authenticated, clearing interval');
           clearInterval(authService._refreshInterval);
         }
       } catch (error) {
-        console.error('Proactive token refresh failed:', error);
+        authLogger.error('Proactive Refresh', 'Failed', {
+          status: error.response?.status,
+          statusText: error.response?.statusText,
+          message: error.response?.data?.message || error.message
+        });
+
+        // If refresh fails (e.g., refresh token expired), logout user
+        if (error.response?.status === 401) {
+          authLogger.warn('Proactive Refresh', 'Refresh token expired - triggering logout');
+          authService.logout();
+
+          // Emit custom event for graceful handling
+          const logoutEvent = new CustomEvent('auth:session-expired', {
+            detail: { reason: 'proactive_refresh_failed', error }
+          });
+          window.dispatchEvent(logoutEvent);
+
+          // Fallback redirect if event not handled
+          setTimeout(() => {
+            if (!window.location.pathname.includes('/login')) {
+              authLogger.warn('Proactive Refresh', 'Event not handled, forcing redirect to login');
+              window.location.href = '/login';
+            }
+          }, 100);
+        }
+
         // Clear interval on error
         clearInterval(authService._refreshInterval);
       }
