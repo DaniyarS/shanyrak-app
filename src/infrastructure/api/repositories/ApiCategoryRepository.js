@@ -35,4 +35,15 @@ export class ApiCategoryRepository extends ICategoryRepository {
     const categoriesList = Array.isArray(data) ? data : (data?.content || []);
     return CategoryMapper.toDomainList(categoriesList);
   }
+
+  /**
+   * Get category tree (hierarchical structure)
+   */
+  async getTree() {
+    const response = await api.get('/api/v1/categories/tree');
+    const data = response.data;
+
+    const categoriesList = Array.isArray(data) ? data : (data?.content || []);
+    return CategoryMapper.toDomainTreeList(categoriesList);
+  }
 }

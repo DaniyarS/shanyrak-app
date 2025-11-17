@@ -27,4 +27,12 @@ export class ICategoryRepository {
   async getChildren(id) {
     throw new Error('Method not implemented');
   }
+
+  /**
+   * Get category tree (hierarchical structure with nested children)
+   * @returns {Promise<Array<Category>>}
+   */
+  async getTree() {
+    throw new Error('Method not implemented');
+  }
 }
