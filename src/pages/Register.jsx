@@ -9,12 +9,9 @@ import Select from '../components/Select';
 import Card from '../components/Card';
 import OtpInput from '../components/OtpInput';
 import PhoneInput from '../components/PhoneInput';
-import AvatarUpload from '../components/AvatarUpload';
-import PortfolioUpload from '../components/PortfolioUpload';
+import CascadingCategorySelect from '../components/CascadingCategorySelect';
 import authService from '../services/authService';
 import estateService from '../services/estateService';
-import fileService from '../services/fileService';
-import categoryService from '../services/categoryService';
 import builderService from '../services/builderService';
 import './Register.css';
 
@@ -46,12 +43,8 @@ const Register = () => {
     available: true,
   });
 
-  // Avatar and portfolio files
-  const [avatarUrl, setAvatarUrl] = useState(null);
-  const [portfolioFiles, setPortfolioFiles] = useState([]);
-
   // Categories
-  const [availableCategories, setAvailableCategories] = useState([]);
+  const [categoryTree, setCategoryTree] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [newCategory, setNewCategory] = useState({
     categoryId: '',
@@ -69,6 +62,7 @@ const Register = () => {
     floor: '',
   });
 
+  const [cities, setCities] = useState([]);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
@@ -91,40 +85,41 @@ const Register = () => {
     }
   }, [otpSent, otpExpiresIn]);
 
-  // Load categories when builder form is shown
+  // Load categories and cities when builder form is shown
   useEffect(() => {
     if (step === 4 && formData.role === 'BUILDER') {
       loadCategories();
+      loadCities();
     }
   }, [step, formData.role]);
 
+  // Load cities when property form is shown
+  useEffect(() => {
+    if (step === 5) {
+      loadCities();
+    }
+  }, [step]);
+
   const loadCategories = async () => {
     try {
-      const allCategories = await categoryService.getAllCategories();
+      const getCategoryTreeUseCase = container.getGetCategoryTreeUseCase();
+      const result = await getCategoryTreeUseCase.execute(false);
 
-      // Filter to get only leaf categories (categories without children)
-      const leafCategories = [];
-
-      const checkIfLeaf = async (category) => {
-        try {
-          const children = await categoryService.getCategoryChildren(category.uuid || category.publicId);
-          return !children || children.length === 0;
-        } catch (error) {
-          // If fetching children fails, assume it's a leaf category
-          return true;
-        }
-      };
-
-      for (const category of allCategories) {
-        const isLeaf = await checkIfLeaf(category);
-        if (isLeaf) {
-          leafCategories.push(category);
-        }
+      if (result.success) {
+        setCategoryTree(result.categories);
       }
-
-      setAvailableCategories(leafCategories);
     } catch (error) {
       console.error('Failed to load categories:', error);
+    }
+  };
+
+  const loadCities = async () => {
+    try {
+      const getCitiesUseCase = container.getGetCitiesUseCase();
+      const citiesResult = await getCitiesUseCase.execute(false);
+      setCities(citiesResult.success ? citiesResult.cities : []);
+    } catch (error) {
+      console.error('Failed to load cities:', error);
     }
   };
 
@@ -164,41 +159,74 @@ const Register = () => {
     }
   };
 
-  // Avatar upload handler
-  const handleAvatarUpdate = (newAvatarUrl) => {
-    setAvatarUrl(newAvatarUrl);
-  };
-
-  // Portfolio photos handler
-  const handlePortfolioPhotosChange = (files) => {
-    setPortfolioFiles(files);
-  };
-
   // Category handlers
   const handleNewCategoryChange = (e) => {
     const { name, value } = e.target;
+    // Skip categoryId changes from other handlers
+    if (name === 'categoryId') return;
+
     setNewCategory((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
+  const handleCategorySelect = (categoryId) => {
+    console.log('Category selected:', categoryId);
+    setNewCategory((prev) => ({
+      ...prev,
+      categoryId: categoryId,
+    }));
+  };
+
   const handleAddCategory = () => {
-    if (!newCategory.categoryId || !newCategory.price) {
+    console.log('handleAddCategory called with newCategory:', newCategory);
+
+    // Extract categoryId properly (in case it's an event object)
+    let categoryId = newCategory.categoryId;
+    if (typeof categoryId === 'object' && categoryId?.target) {
+      categoryId = categoryId.target.value;
+      console.warn('CategoryId was an event object, extracted value:', categoryId);
+    }
+
+    if (!categoryId || !newCategory.price) {
       setErrors({ category: t('validation.required') });
       return;
     }
 
-    const category = availableCategories.find(
-      (cat) => cat.uuid === newCategory.categoryId || cat.publicId === newCategory.categoryId
-    );
+    // Find the category in the tree
+    const findCategory = (categories, targetId) => {
+      for (const cat of categories) {
+        if (cat.id === targetId) {
+          return cat;
+        }
+        if (cat.children && cat.children.length > 0) {
+          const found = findCategory(cat.children, targetId);
+          if (found) return found;
+        }
+      }
+      return null;
+    };
 
-    if (!category) return;
+    const category = findCategory(categoryTree, categoryId);
+
+    if (!category) {
+      console.error('Category not found in tree. CategoryId:', categoryId, 'Tree:', categoryTree);
+      setErrors({ category: t('validation.categoryNotFound') || 'Category not found' });
+      return;
+    }
+
+    console.log('Adding category to local state:', {
+      id: categoryId,
+      name: category.name,
+      price: newCategory.price,
+      description: newCategory.description,
+    });
 
     setSelectedCategories((prev) => [
       ...prev,
       {
-        id: newCategory.categoryId,
+        id: categoryId,
         name: category.name,
         price: newCategory.price,
         description: newCategory.description,
@@ -370,6 +398,8 @@ const Register = () => {
   const handleBuilderFormSubmit = async (e) => {
     e.preventDefault();
 
+    console.log('Builder form submit - selected categories:', selectedCategories);
+
     if (!validateBuilderForm()) return;
 
     setLoading(true);
@@ -385,20 +415,6 @@ const Register = () => {
       }
 
       const builderId = builderResult.builder.id;
-
-      // Note: Avatar is already uploaded via AvatarUpload component
-      // Portfolio photos will be uploaded after profile update
-
-      // Upload portfolio photos if selected
-      if (portfolioFiles.length > 0) {
-        try {
-          for (let i = 0; i < portfolioFiles.length; i++) {
-            await fileService.uploadBuilderPortfolio(portfolioFiles[i], i);
-          }
-        } catch (error) {
-          console.error('Portfolio upload failed:', error);
-        }
-      }
 
       // Update builder profile
       const updateData = {
@@ -429,16 +445,27 @@ const Register = () => {
 
       // Add categories if selected
       if (selectedCategories.length > 0) {
+        console.log('Adding categories to builder:', {
+          builderId,
+          categories: selectedCategories,
+        });
+
         try {
           for (const category of selectedCategories) {
-            await builderService.addCategory(builderId, {
+            const categoryPayload = {
               category: { publicId: category.id },
-              price: category.price,
-              description: category.description,
-            });
+              price: parseFloat(category.price),
+              description: category.description || '',
+            };
+            console.log('Adding category:', categoryPayload);
+
+            const result = await builderService.addCategory(builderId, categoryPayload);
+            console.log('Category added successfully:', result);
           }
         } catch (error) {
           console.error('Category add failed:', error);
+          console.error('Error details:', error.response?.data || error.message);
+          // Don't stop the flow, continue to navigation
         }
       }
 
@@ -769,16 +796,6 @@ const Register = () => {
               <form onSubmit={handleBuilderFormSubmit} className="register-form">
                 <h2>{t('registration.moreInfoNeeded')}</h2>
 
-                {/* Avatar Upload */}
-                <div className="input-wrapper">
-                  <label className="input-label">{t('registration.uploadAvatar')}</label>
-                  <p className="input-hint">{t('registration.uploadAvatarDesc')}</p>
-                  <AvatarUpload
-                    currentAvatarUrl={avatarUrl}
-                    onAvatarUpdate={handleAvatarUpdate}
-                  />
-                </div>
-
                 <div className="input-wrapper">
                   <label className="input-label">{t('services.aboutMe')}</label>
                   <textarea
@@ -812,11 +829,16 @@ const Register = () => {
                 </div>
 
                 <div className="form-row">
-                  <Input
+                  <Select
                     label={t('services.city')}
                     name="city"
                     value={builderFormData.city}
                     onChange={handleBuilderFormChange}
+                    options={cities.map((city) => ({
+                      value: city.getLocalizedName(language),
+                      label: city.getLocalizedName(language),
+                    }))}
+                    placeholder={t('estates.cityPlaceholder')}
                     error={errors.city}
                     required
                   />
@@ -831,31 +853,42 @@ const Register = () => {
                   />
                 </div>
 
-                {/* Portfolio Upload */}
-                <div className="input-wrapper">
-                  <label className="input-label">{t('registration.uploadPortfolio')}</label>
-                  <p className="input-hint">{t('registration.uploadPortfolioDesc')}</p>
-                  <PortfolioUpload
-                    onPhotosChange={handlePortfolioPhotosChange}
-                    maxPhotos={10}
-                  />
-                </div>
-
                 {/* Category Selection */}
                 <div className="input-wrapper">
                   <label className="input-label">{t('registration.addCategory')}</label>
                   <p className="input-hint">{t('registration.addCategoryDesc')}</p>
 
+                  {/* Selected Categories List - Show above form */}
+                  {selectedCategories.length > 0 && (
+                    <div className="selected-categories">
+                      <h3>{t('registration.yourCategories')}</h3>
+                      <div className="category-cards">
+                        {selectedCategories.map((category, index) => (
+                          <div key={index} className="category-card-item">
+                            <div className="category-card-content">
+                              <div className="category-card-name">{category.name}</div>
+                              <div className="category-card-price">{category.price} ₸</div>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveCategory(index)}
+                              className="category-card-remove"
+                              aria-label={t('registration.removeCategory')}
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   <div className="category-form">
-                    <Select
+                    <CascadingCategorySelect
                       label={t('registration.selectCategoryPlaceholder')}
-                      name="categoryId"
+                      categories={categoryTree}
                       value={newCategory.categoryId}
-                      onChange={handleNewCategoryChange}
-                      options={availableCategories.map((cat) => ({
-                        value: cat.uuid || cat.publicId,
-                        label: cat.name,
-                      }))}
+                      onChange={handleCategorySelect}
                       placeholder={t('registration.selectCategoryPlaceholder')}
                       error={errors.category}
                     />
@@ -889,31 +922,6 @@ const Register = () => {
                       {t('registration.addCategory')}
                     </Button>
                   </div>
-
-                  {/* Selected Categories List */}
-                  {selectedCategories.length > 0 && (
-                    <div className="selected-categories">
-                      <h3>{t('registration.yourCategories')}</h3>
-                      {selectedCategories.map((category, index) => (
-                        <div key={index} className="category-item">
-                          <div className="category-info">
-                            <strong>{category.name}</strong>
-                            <span className="category-price">{category.price}</span>
-                            {category.description && (
-                              <p className="category-desc">{category.description}</p>
-                            )}
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveCategory(index)}
-                            className="remove-category-btn"
-                          >
-                            {t('registration.removeCategory')}
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
                 </div>
 
                 <div className="input-wrapper">
@@ -987,11 +995,15 @@ const Register = () => {
               />
 
               <div className="form-row">
-                <Input
+                <Select
                   label={t('estates.city')}
                   name="city"
                   value={propertyFormData.city}
                   onChange={handlePropertyFormChange}
+                  options={cities.map((city) => ({
+                    value: city.getLocalizedName(language),
+                    label: city.getLocalizedName(language),
+                  }))}
                   placeholder={t('estates.cityPlaceholder')}
                   error={errors.city}
                   required
