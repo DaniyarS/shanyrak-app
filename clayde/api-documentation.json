@@ -17,7 +17,7 @@
     {
       "name": "category",
       "method": "GET",
-      "path": "/api/v1/categories/5414ea67-5f82-4514-82e9-61afe37234cf",
+      "path": "/api/v1/categories/0b2a1ef8-f4cf-466d-986d-5dfac862c95e",
       "description": "",
       "headers": [],
       "queryParams": [],
@@ -29,7 +29,19 @@
     {
       "name": "children",
       "method": "GET",
-      "path": "/api/v1/categories/f184baa9-543e-4eea-ae10-022c8fce5d1e/children",
+      "path": "/api/v1/categories/0b2a1ef8-f4cf-466d-986d-5dfac862c95e/children",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "tree",
+      "method": "GET",
+      "path": "/api/v1/categories/tree",
       "description": "",
       "headers": [],
       "queryParams": [],
@@ -86,7 +98,7 @@
       "queryParams": [],
       "body": {
         "mode": "raw",
-        "raw": "{\n      \"phone\": \"77076770099\",\n      \"password\": \"qwerty123\",\n      \"role\": \"BUILDER\",\n      \"firstName\": \"Daniyar\",\n      \"lastName\": \"Slamkul\",\n      \"otpCode\": \"9459\"\n    }",
+        "raw": "{\n      \"phone\": \"77076770099\",\n      \"password\": \"qwerty123\",\n      \"role\": \"CUSTOMER\",\n      \"firstName\": \"Daniyar\",\n      \"lastName\": \"Customer\",\n      \"otpCode\": \"8366\"\n    }",
         "options": {
           "raw": {
             "language": "json"
@@ -96,7 +108,7 @@
       "examples": {
         "request": {
           "mode": "raw",
-          "raw": "{\n      \"phone\": \"77076770099\",\n      \"password\": \"qwerty123\",\n      \"role\": \"BUILDER\",\n      \"firstName\": \"Daniyar\",\n      \"lastName\": \"Slamkul\",\n      \"otpCode\": \"9459\"\n    }",
+          "raw": "{\n      \"phone\": \"77076770099\",\n      \"password\": \"qwerty123\",\n      \"role\": \"CUSTOMER\",\n      \"firstName\": \"Daniyar\",\n      \"lastName\": \"Customer\",\n      \"otpCode\": \"8366\"\n    }",
           "options": {
             "raw": {
               "language": "json"
@@ -120,7 +132,7 @@
       "queryParams": [],
       "body": {
         "mode": "raw",
-        "raw": "{\n      \"login\": \"77076770099\",\n      \"password\": \"qwerty123\"\n    }",
+        "raw": "{\n    \"login\": \"77714451775\",\n    \"password\": \"qwerty111\"\n}\n\n// {\n//     \"login\": \"77076770099\",\n//     \"password\": \"qwerty123\"\n// }\n",
         "options": {
           "raw": {
             "language": "json"
@@ -130,7 +142,7 @@
       "examples": {
         "request": {
           "mode": "raw",
-          "raw": "{\n      \"login\": \"77076770099\",\n      \"password\": \"qwerty123\"\n    }",
+          "raw": "{\n    \"login\": \"77714451775\",\n    \"password\": \"qwerty111\"\n}\n\n// {\n//     \"login\": \"77076770099\",\n//     \"password\": \"qwerty123\"\n// }\n",
           "options": {
             "raw": {
               "language": "json"
@@ -154,7 +166,7 @@
       "queryParams": [],
       "body": {
         "mode": "raw",
-        "raw": "{\n      \"refreshToken\": \"989029d5-f242-4c69-bfc3-203711f099ca\"\n    }",
+        "raw": "{\n    \"refreshToken\": \"{{refreshToken}}\"\n}",
         "options": {
           "raw": {
             "language": "json"
@@ -164,7 +176,7 @@
       "examples": {
         "request": {
           "mode": "raw",
-          "raw": "{\n      \"refreshToken\": \"989029d5-f242-4c69-bfc3-203711f099ca\"\n    }",
+          "raw": "{\n    \"refreshToken\": \"{{refreshToken}}\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -209,6 +221,23 @@
       }
     },
     {
+      "name": "deleteAcc",
+      "method": "DELETE",
+      "path": "/api/v1/auth/account",
+      "description": "",
+      "headers": [
+        {
+          "key": "Authorization",
+          "value": "Bearer YOUR_JWT_TOKEN"
+        }
+      ],
+      "queryParams": [],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
       "name": "createEstate",
       "method": "POST",
       "path": "/api/v1/estates",
@@ -217,7 +246,7 @@
       "queryParams": [],
       "body": {
         "mode": "raw",
-        "raw": "{\n    \"kind\" : \"kindTest\",\n    \"email\" : \"emailTest\",\n    \"addressLine\" : \"addressLineTest\",\n    \"city\" : \"cityTest\",\n    \"district\" : \"districtTest\",\n    \"lat\" : \"1123\",\n    \"lon\" : \"1233\",\n    \"areaM2\" : \"49.9\",\n    \"floor\" : \"7\"\n}",
+        "raw": "{\n    \"kind\" : \"APARTMENT\", // enum: APARTMENT, PRIVATE HOUSE, OFFICE\n    \"addressLine\" : \"Наурызбай батыра 26\", // street name, hous number\n    \"city\" : \"Алматы\", // Get list from \"/api/v1/cities\"\n    \"areaM2\" : \"49.9\", // estate area\n    \"floor\" : \"7\"\n}",
         "options": {
           "raw": {
             "language": "json"
@@ -227,7 +256,7 @@
       "examples": {
         "request": {
           "mode": "raw",
-          "raw": "{\n    \"kind\" : \"kindTest\",\n    \"email\" : \"emailTest\",\n    \"addressLine\" : \"addressLineTest\",\n    \"city\" : \"cityTest\",\n    \"district\" : \"districtTest\",\n    \"lat\" : \"1123\",\n    \"lon\" : \"1233\",\n    \"areaM2\" : \"49.9\",\n    \"floor\" : \"7\"\n}",
+          "raw": "{\n    \"kind\" : \"APARTMENT\", // enum: APARTMENT, PRIVATE HOUSE, OFFICE\n    \"addressLine\" : \"Наурызбай батыра 26\", // street name, hous number\n    \"city\" : \"Алматы\", // Get list from \"/api/v1/cities\"\n    \"areaM2\" : \"49.9\", // estate area\n    \"floor\" : \"7\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -246,7 +275,7 @@
       "queryParams": [],
       "body": {
         "mode": "raw",
-        "raw": "{\n        \"publicId\": \"ebb078f0-d138-4878-8df0-0109218480ca\",\n        \"kind\": \"kindTest\",\n        \"email\": \"emailTest\",\n        \"addressLine\": \"addressLineTest\",\n        \"city\": \"cityTest\",\n        \"district\": \"hahaha\",\n        \"lat\": 1123.00,\n        \"lon\": 3221.00,\n        \"areaM2\": 49.90,\n        \"floor\": 7\n    }",
+        "raw": "{\n    \"publicId\": \"8cad34fc-f1f8-4d46-b5f0-28658b8b5788\",\n    \"kind\" : \"APARTMENT\", // enum: APARTMENT, PRIVATE HOUSE, OFFICE\n    \"addressLine\" : \"Наурызбай батыра 25\", // street name, hous number\n    \"city\" : \"Алматы\", // Get list from \"/api/v1/cities\"\n    \"areaM2\" : \"60\", // estate area\n    \"floor\" : \"7\"\n}",
         "options": {
           "raw": {
             "language": "json"
@@ -256,7 +285,7 @@
       "examples": {
         "request": {
           "mode": "raw",
-          "raw": "{\n        \"publicId\": \"ebb078f0-d138-4878-8df0-0109218480ca\",\n        \"kind\": \"kindTest\",\n        \"email\": \"emailTest\",\n        \"addressLine\": \"addressLineTest\",\n        \"city\": \"cityTest\",\n        \"district\": \"hahaha\",\n        \"lat\": 1123.00,\n        \"lon\": 3221.00,\n        \"areaM2\": 49.90,\n        \"floor\": 7\n    }",
+          "raw": "{\n    \"publicId\": \"8cad34fc-f1f8-4d46-b5f0-28658b8b5788\",\n    \"kind\" : \"APARTMENT\", // enum: APARTMENT, PRIVATE HOUSE, OFFICE\n    \"addressLine\" : \"Наурызбай батыра 25\", // street name, hous number\n    \"city\" : \"Алматы\", // Get list from \"/api/v1/cities\"\n    \"areaM2\" : \"60\", // estate area\n    \"floor\" : \"7\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -298,8 +327,8 @@
     {
       "name": "delete",
       "method": "DELETE",
-      "path": "/api/v1/estates/9a818ca4-48db-4eb0-951b-d6fb5e19c7e4",
-      "description": "",
+      "path": "/api/v1/estates/6ac5bb6d-357c-4cd5-862e-76472a2ad9a2",
+      "description": "/api/v1/estates/{estate's public id}",
       "headers": [],
       "queryParams": [],
       "body": {
@@ -323,7 +352,7 @@
       "queryParams": [],
       "body": {
         "mode": "raw",
-        "raw": "{\n    \"category\" : {\n        \"publicId\" : \"075110d6-2a72-48fc-b0cf-93df38b79c16\"\n    },\n    \"realEstate\" : {\n        \"publicId\" : \"552d936b-4c64-47a8-9d6a-d84a861ecd03\"\n    },\n    \"order\" : {\n        \"title\" : \"Натяжной потолок\",\n        \"description\" : \"Надо сделать за кв метр готов 2000тг\",\n        \"budjetMin\" : 1000,\n        \"budjetMax\" : 2000\n    }\n}",
+        "raw": "{\n    \"category\" : {\n        \"publicId\" : \"cb3c14da-bf53-4faa-8c43-e02c61525cca\"\n    },\n    \"realEstate\" : {\n        \"publicId\" : \"8cad34fc-f1f8-4d46-b5f0-28658b8b5788\"\n    },\n    \"order\" : {\n        \"description\" : \"Надо залить фундамент частного дома\",\n        \"priceType\" : \"FIXED\", // TWO types of price type \"FIXED\" and \"NEGOTIABLE\"\n        \"price\" : 9000,\n        \"unit\" : \"areaM2\"\n    }\n}",
         "options": {
           "raw": {
             "language": "json"
@@ -333,7 +362,7 @@
       "examples": {
         "request": {
           "mode": "raw",
-          "raw": "{\n    \"category\" : {\n        \"publicId\" : \"075110d6-2a72-48fc-b0cf-93df38b79c16\"\n    },\n    \"realEstate\" : {\n        \"publicId\" : \"552d936b-4c64-47a8-9d6a-d84a861ecd03\"\n    },\n    \"order\" : {\n        \"title\" : \"Натяжной потолок\",\n        \"description\" : \"Надо сделать за кв метр готов 2000тг\",\n        \"budjetMin\" : 1000,\n        \"budjetMax\" : 2000\n    }\n}",
+          "raw": "{\n    \"category\" : {\n        \"publicId\" : \"cb3c14da-bf53-4faa-8c43-e02c61525cca\"\n    },\n    \"realEstate\" : {\n        \"publicId\" : \"8cad34fc-f1f8-4d46-b5f0-28658b8b5788\"\n    },\n    \"order\" : {\n        \"description\" : \"Надо залить фундамент частного дома\",\n        \"priceType\" : \"FIXED\", // TWO types of price type \"FIXED\" and \"NEGOTIABLE\"\n        \"price\" : 9000,\n        \"unit\" : \"areaM2\"\n    }\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -352,7 +381,7 @@
       "queryParams": [],
       "body": {
         "mode": "raw",
-        "raw": "{\n    \"uuid\": \"ddabc63a-96d0-4956-aa23-19932dc08542\",\n    \"title\": \"Натяжной потолок\",\n    \"description\": \"Надо сделать за кв метр готов 3000тг\",\n    \"budgetMin\": 1000,\n    \"budgetMax\": 0,\n    \"unit\": \"areaM2\"\n}",
+        "raw": "{\n    \"uuid\": \"8cad34fc-f1f8-4d46-b5f0-28658b8b5788\",\n    \"description\": \"Надо залить фундамент частного дома\",\n    \"priceType\": \"NEGOTIABLE\",\n    \"unit\": \"areaM2\"\n}",
         "options": {
           "raw": {
             "language": "json"
@@ -362,7 +391,7 @@
       "examples": {
         "request": {
           "mode": "raw",
-          "raw": "{\n    \"uuid\": \"ddabc63a-96d0-4956-aa23-19932dc08542\",\n    \"title\": \"Натяжной потолок\",\n    \"description\": \"Надо сделать за кв метр готов 3000тг\",\n    \"budgetMin\": 1000,\n    \"budgetMax\": 0,\n    \"unit\": \"areaM2\"\n}",
+          "raw": "{\n    \"uuid\": \"8cad34fc-f1f8-4d46-b5f0-28658b8b5788\",\n    \"description\": \"Надо залить фундамент частного дома\",\n    \"priceType\": \"NEGOTIABLE\",\n    \"unit\": \"areaM2\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -375,18 +404,18 @@
     {
       "name": "delete",
       "method": "DELETE",
-      "path": "/api/v1/orders/ddabc63a-96d0-4956-aa23-19932dc08542",
-      "description": "",
+      "path": "/api/v1/orders/84962dfb-2ecc-4bda-b8ad-f3d6623e6627",
+      "description": "/api/v1/orders/{order's uuid}",
       "headers": [],
       "queryParams": [],
       "body": {
         "mode": "raw",
-        "raw": "{\n    \"category\" : {\n        \"publicId\" : \"075110d6-2a72-48fc-b0cf-93df38b79c16\"\n    },\n    \"realEstate\" : {\n        \"publicId\" : \"552d936b-4c64-47a8-9d6a-d84a861ecd03\"\n    },\n    \"order\" : {\n        \"title\" : \"Натяжной потолок\",\n        \"description\" : \"Надо сделать за кв метр готов 2000тг\",\n        \"budjetMin\" : 1000,\n        \"budjetMax\" : 2000\n    }\n}"
+        "raw": ""
       },
       "examples": {
         "request": {
           "mode": "raw",
-          "raw": "{\n    \"category\" : {\n        \"publicId\" : \"075110d6-2a72-48fc-b0cf-93df38b79c16\"\n    },\n    \"realEstate\" : {\n        \"publicId\" : \"552d936b-4c64-47a8-9d6a-d84a861ecd03\"\n    },\n    \"order\" : {\n        \"title\" : \"Натяжной потолок\",\n        \"description\" : \"Надо сделать за кв метр готов 2000тг\",\n        \"budjetMin\" : 1000,\n        \"budjetMax\" : 2000\n    }\n}"
+          "raw": ""
         },
         "response": null
       }
@@ -395,7 +424,7 @@
       "name": "search",
       "method": "GET",
       "path": "/api/v1/orders",
-      "description": "",
+      "description": "This endpoint is dedicated for builder, so by requesting this url, builder can get all available orders",
       "headers": [],
       "queryParams": [
         {
@@ -416,7 +445,7 @@
           "disabled": true
         },
         {
-          "key": "budgetMinFrom",
+          "key": "priceFrom",
           "value": "300000",
           "disabled": true
         },
@@ -432,15 +461,29 @@
         },
         {
           "key": "city",
-          "value": "cityTest"
+          "value": "cityTest",
+          "disabled": true
         },
         {
           "key": "areaFrom",
-          "value": "49"
+          "value": "49",
+          "disabled": true
         },
         {
           "key": "q",
-          "value": "Натяжной потолок"
+          "value": "Натяжной потолок",
+          "disabled": true
+        },
+        {
+          "key": "priceTo",
+          "value": "10000000",
+          "disabled": true
+        },
+        {
+          "key": "priceType",
+          "value": "FIXED",
+          "description": "FIXED/NEGOTIABLE",
+          "disabled": true
         }
       ],
       "body": null,
@@ -476,13 +519,13 @@
     {
       "name": "requestPhone new",
       "method": "POST",
-      "path": "/api/v1/orders/9aa84dd2-0fb5-4c9b-b4cf-cb0b1b5304f1/request-phone",
-      "description": "",
+      "path": "/api/v1/orders/e81629c0-dbb2-48e7-a82a-830f70c7a8a3/request-phone",
+      "description": "/api/v1/orders/{order's uuid}/request-phone",
       "headers": [],
       "queryParams": [],
       "body": {
         "mode": "raw",
-        "raw": "{\n    \"offerPublicId\" : \"378af8ca-a9ca-4c36-b996-f15bd127d971\"\n}",
+        "raw": "{\n    \"offerPublicId\" : \"a602c426-5edb-41fd-b6f2-5695c1e93b52\" // offer's public id\n}\n",
         "options": {
           "raw": {
             "language": "json"
@@ -492,7 +535,7 @@
       "examples": {
         "request": {
           "mode": "raw",
-          "raw": "{\n    \"offerPublicId\" : \"378af8ca-a9ca-4c36-b996-f15bd127d971\"\n}",
+          "raw": "{\n    \"offerPublicId\" : \"a602c426-5edb-41fd-b6f2-5695c1e93b52\" // offer's public id\n}\n",
           "options": {
             "raw": {
               "language": "json"
@@ -511,7 +554,7 @@
       "queryParams": [],
       "body": {
         "mode": "raw",
-        "raw": "{\n    \"order\" : {\n        \"uuid\" : \"1e1ecb87-c1a6-4770-9459-7bd393916cff\"\n    },\n    \"offer\" : {\n        \"price\" : 1200,\n        \"message\" : \"Братан за 1200 никто не предложит\",\n        \"unit\" : \"m2\",\n        \"daysEstimate\" : 3\n    }\n}",
+        "raw": "{\n    \"order\" : {\n        \"uuid\" : \"e81629c0-dbb2-48e7-a82a-830f70c7a8a3\"\n    },\n    \"offer\" : {\n        \"price\" : 1200,\n        \"priceType\": \"FIXED\",\n        \"message\" : \"Братан за 1200 никто не предложит\",\n        \"unit\" : \"m2\",\n        \"daysEstimate\" : 3\n    }\n}",
         "options": {
           "raw": {
             "language": "json"
@@ -521,7 +564,7 @@
       "examples": {
         "request": {
           "mode": "raw",
-          "raw": "{\n    \"order\" : {\n        \"uuid\" : \"1e1ecb87-c1a6-4770-9459-7bd393916cff\"\n    },\n    \"offer\" : {\n        \"price\" : 1200,\n        \"message\" : \"Братан за 1200 никто не предложит\",\n        \"unit\" : \"m2\",\n        \"daysEstimate\" : 3\n    }\n}",
+          "raw": "{\n    \"order\" : {\n        \"uuid\" : \"e81629c0-dbb2-48e7-a82a-830f70c7a8a3\"\n    },\n    \"offer\" : {\n        \"price\" : 1200,\n        \"priceType\": \"FIXED\",\n        \"message\" : \"Братан за 1200 никто не предложит\",\n        \"unit\" : \"m2\",\n        \"daysEstimate\" : 3\n    }\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -540,7 +583,7 @@
       "queryParams": [
         {
           "key": "orderId",
-          "value": "1e1ecb87-c1a6-4770-9459-7bd393916cff"
+          "value": "e81629c0-dbb2-48e7-a82a-830f70c7a8a3"
         },
         {
           "key": "sort",
@@ -591,27 +634,15 @@
       }
     },
     {
-      "name": "getOfferBuilder new",
-      "method": "GET",
-      "path": "/api/v1/offers/378af8ca-a9ca-4c36-b996-f15bd127d971/builder",
-      "description": "",
-      "headers": [],
-      "queryParams": [],
-      "body": null,
-      "examples": {
-        "response": null
-      }
-    },
-    {
-      "name": "update new",
+      "name": "updateOffer",
       "method": "PUT",
-      "path": "/api/v1/offers/378af8ca-a9ca-4c36-b996-f15bd127d971",
-      "description": "",
+      "path": "/api/v1/offers/a602c426-5edb-41fd-b6f2-5695c1e93b52",
+      "description": "/api/v1/offers/{offer's public id}",
       "headers": [],
       "queryParams": [],
       "body": {
         "mode": "raw",
-        "raw": "{   \n    \"price\": 1200,\n    \"unit\": \"m3\",\n    \"daysEstimate\": 3,\n    \"message\": \"Братан за 1200 никто не предложит\"\n}\n\n//Можно только если статус = PENDING",
+        "raw": "{   \n    \"price\": 1100,\n    \"unit\": \"m3\",\n    \"daysEstimate\": 3,\n    \"message\": \"Обновленное предложение\"\n}\n\n//Можно только если статус = PENDING",
         "options": {
           "raw": {
             "language": "json"
@@ -621,7 +652,7 @@
       "examples": {
         "request": {
           "mode": "raw",
-          "raw": "{   \n    \"price\": 1200,\n    \"unit\": \"m3\",\n    \"daysEstimate\": 3,\n    \"message\": \"Братан за 1200 никто не предложит\"\n}\n\n//Можно только если статус = PENDING",
+          "raw": "{   \n    \"price\": 1100,\n    \"unit\": \"m3\",\n    \"daysEstimate\": 3,\n    \"message\": \"Обновленное предложение\"\n}\n\n//Можно только если статус = PENDING",
           "options": {
             "raw": {
               "language": "json"
@@ -632,10 +663,10 @@
       }
     },
     {
-      "name": "delete new",
+      "name": "deleteOffer",
       "method": "DELETE",
-      "path": "/api/v1/offers/378af8ca-a9ca-4c36-b996-f15bd127d971",
-      "description": "",
+      "path": "/api/v1/offers/a602c426-5edb-41fd-b6f2-5695c1e93b52",
+      "description": "/api/v1/offers/{offer's public id}",
       "headers": [],
       "queryParams": [],
       "body": {
@@ -659,7 +690,7 @@
       "queryParams": [
         {
           "key": "orderId",
-          "value": "1e1ecb87-c1a6-4770-9459-7bd393916cff"
+          "value": "e81629c0-dbb2-48e7-a82a-830f70c7a8a3"
         }
       ],
       "body": null,
@@ -668,9 +699,9 @@
       }
     },
     {
-      "name": "byId",
+      "name": "getContractsById",
       "method": "GET",
-      "path": "/api/v1/contracts/9582eaba-baf5-4c26-af0e-b05528a3031c",
+      "path": "/api/v1/contracts/950ca334-887f-4cab-934f-05fe29e3974f",
       "description": "",
       "headers": [],
       "queryParams": [],
@@ -680,15 +711,15 @@
       }
     },
     {
-      "name": "confirm-deal new",
+      "name": "madeContractWithBuilder",
       "method": "POST",
-      "path": "/api/v1/orders/9aa84dd2-0fb5-4c9b-b4cf-cb0b1b5304f1/confirm-deal",
+      "path": "/api/v1/orders/e81629c0-dbb2-48e7-a82a-830f70c7a8a3/confirm-deal",
       "description": "",
       "headers": [],
       "queryParams": [],
       "body": {
         "mode": "raw",
-        "raw": "  {\n    \"offerPublicId\": \"378af8ca-a9ca-4c36-b996-f15bd127d971\",\n    \"agreed\": true,\n    \"startDate\": \"2025-01-15\",\n    \"endDate\": \"2025-02-15\"\n  }\n\n/*  Если agreed = true:\n  - Создается ContractEntity (статус ACTIVE)\n  - Оффер → ACCEPTED\n  - Все остальные офферы → REJECTED\n\n  Если agreed = false:\n  - Оффер → REJECTED\n  - Заказ → обратно в OPEN\n*/",
+        "raw": "  {\n    \"offerPublicId\": \"a602c426-5edb-41fd-b6f2-5695c1e93b52\", // offer's public id\n    \"agreed\": true,\n    \"startDate\": \"2025-01-15\",\n    \"endDate\": \"2025-02-15\"\n  }\n\n/*  Если agreed = true:\n  - Создается ContractEntity (статус ACTIVE)\n  - Оффер → ACCEPTED\n  - Все остальные офферы → REJECTED\n\n  Если agreed = false:\n  - Оффер → REJECTED\n  - Заказ → обратно в OPEN\n*/",
         "options": {
           "raw": {
             "language": "json"
@@ -698,7 +729,7 @@
       "examples": {
         "request": {
           "mode": "raw",
-          "raw": "  {\n    \"offerPublicId\": \"378af8ca-a9ca-4c36-b996-f15bd127d971\",\n    \"agreed\": true,\n    \"startDate\": \"2025-01-15\",\n    \"endDate\": \"2025-02-15\"\n  }\n\n/*  Если agreed = true:\n  - Создается ContractEntity (статус ACTIVE)\n  - Оффер → ACCEPTED\n  - Все остальные офферы → REJECTED\n\n  Если agreed = false:\n  - Оффер → REJECTED\n  - Заказ → обратно в OPEN\n*/",
+          "raw": "  {\n    \"offerPublicId\": \"a602c426-5edb-41fd-b6f2-5695c1e93b52\", // offer's public id\n    \"agreed\": true,\n    \"startDate\": \"2025-01-15\",\n    \"endDate\": \"2025-02-15\"\n  }\n\n/*  Если agreed = true:\n  - Создается ContractEntity (статус ACTIVE)\n  - Оффер → ACCEPTED\n  - Все остальные офферы → REJECTED\n\n  Если agreed = false:\n  - Оффер → REJECTED\n  - Заказ → обратно в OPEN\n*/",
           "options": {
             "raw": {
               "language": "json"
@@ -709,10 +740,10 @@
       }
     },
     {
-      "name": "complete new",
+      "name": "contractComplete",
       "method": "POST",
-      "path": "/api/v1/contracts/059a3686-771a-4f52-ab52-46e559a2d86a/complete",
-      "description": "",
+      "path": "/api/v1/contracts/950ca334-887f-4cab-934f-05fe29e3974f/complete",
+      "description": "/api/v1/contracts/{contract's public id}/complete\n\nAfter job completion CUSTOMER SHOULD post this request. So after calling, order will maked as COMPLETE",
       "headers": [],
       "queryParams": [],
       "body": {
@@ -746,18 +777,17 @@
       "queryParams": [
         {
           "key": "city",
-          "value": null,
+          "value": "",
           "disabled": true
         },
         {
           "key": "ratingFrom",
-          "value": null,
+          "value": "",
           "disabled": true
         },
         {
           "key": "categoryPublicId",
-          "value": null,
-          "disabled": true
+          "value": "f184baa9-543e-4eea-ae10-022c8fce5d1e"
         },
         {
           "key": "page",
@@ -773,22 +803,22 @@
         },
         {
           "key": "q",
-          "value": null,
+          "value": "",
           "disabled": true
         },
         {
           "key": "priceFrom",
-          "value": null,
+          "value": "",
           "disabled": true
         },
         {
           "key": "priceTo",
-          "value": null,
+          "value": "",
           "disabled": true
         },
         {
           "key": "availability",
-          "value": null,
+          "value": "",
           "disabled": true
         }
       ],
@@ -812,8 +842,8 @@
     {
       "name": "builder",
       "method": "GET",
-      "path": "/api/v1/builders/ceb3f0b3-3122-48d0-ba39-e256fe291d4b",
-      "description": "",
+      "path": "/api/v1/builders/9063cf0d-253d-42c6-a104-76bd6c68f4f6",
+      "description": "/api/v1/builders/{builder's public id}",
       "headers": [],
       "queryParams": [],
       "body": null,
@@ -822,15 +852,15 @@
       }
     },
     {
-      "name": "update",
+      "name": "updateBuilder",
       "method": "PUT",
-      "path": "/api/v1/builders/2ad93af8-75d4-4936-b98d-4c5d66458805",
-      "description": "",
+      "path": "/api/v1/builders/9063cf0d-253d-42c6-a104-76bd6c68f4f6",
+      "description": "/api/v1/builders/{builder's public id}",
       "headers": [],
       "queryParams": [],
       "body": {
         "mode": "raw",
-        "raw": "{\n    \"password\": null,\n    \"fullName\": \"Данияр строитель\",\n    \"email\": \"daniyarslamkul@gmail.com\",\n    \"phone\": \"87076770092\",\n    \"avatarLink\": \"\",\n    \"role\": \"BUILDER\",\n    \"token\": null,\n    \"login\": \"daniyars\",\n    \"ratingAvg\": 2.00,\n    \"aboutMe\": \"Опытный электрик\",\n    \"experienceYears\": 10,\n    \"city\": \"Алматы\",\n    \"district\": \"Besagash\",\n    \"jobsDone\": 15,\n    \"available\": true,\n    \"priceList\": null\n}",
+        "raw": "{\n    \"password\": null,\n    \"fullName\": \"Данияр строитель\",\n    \"email\": \"daniyarslamkul@gmail.com\",\n    \"phone\": \"77714451775\",\n    \"avatarLink\": \"\",\n    \"role\": \"BUILDER\",\n    \"token\": null,\n    \"login\": null,\n    \"ratingAvg\": 0.00,\n    \"aboutMe\": \"Опытный электрик\",\n    \"experienceYears\": 10,\n    \"city\": \"Алматы\",\n    \"district\": \"Besagash\",\n    \"jobsDone\": 15,\n    \"available\": true,\n    \"priceList\": null\n}",
         "options": {
           "raw": {
             "language": "json"
@@ -840,7 +870,7 @@
       "examples": {
         "request": {
           "mode": "raw",
-          "raw": "{\n    \"password\": null,\n    \"fullName\": \"Данияр строитель\",\n    \"email\": \"daniyarslamkul@gmail.com\",\n    \"phone\": \"87076770092\",\n    \"avatarLink\": \"\",\n    \"role\": \"BUILDER\",\n    \"token\": null,\n    \"login\": \"daniyars\",\n    \"ratingAvg\": 2.00,\n    \"aboutMe\": \"Опытный электрик\",\n    \"experienceYears\": 10,\n    \"city\": \"Алматы\",\n    \"district\": \"Besagash\",\n    \"jobsDone\": 15,\n    \"available\": true,\n    \"priceList\": null\n}",
+          "raw": "{\n    \"password\": null,\n    \"fullName\": \"Данияр строитель\",\n    \"email\": \"daniyarslamkul@gmail.com\",\n    \"phone\": \"77714451775\",\n    \"avatarLink\": \"\",\n    \"role\": \"BUILDER\",\n    \"token\": null,\n    \"login\": null,\n    \"ratingAvg\": 0.00,\n    \"aboutMe\": \"Опытный электрик\",\n    \"experienceYears\": 10,\n    \"city\": \"Алматы\",\n    \"district\": \"Besagash\",\n    \"jobsDone\": 15,\n    \"available\": true,\n    \"priceList\": null\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -853,13 +883,13 @@
     {
       "name": "addCategory",
       "method": "POST",
-      "path": "/api/v1/builders/2ad93af8-75d4-4936-b98d-4c5d66458805/category",
-      "description": "",
+      "path": "/api/v1/builders/9063cf0d-253d-42c6-a104-76bd6c68f4f6/category",
+      "description": "/api/v1/builders/{builder's public id}/category",
       "headers": [],
       "queryParams": [],
       "body": {
         "mode": "raw",
-        "raw": "{\n    \"category\" : {\n        \"publicId\" : \"f184baa9-543e-4eea-ae10-022c8fce5d1e\"\n    },\n    \"price\" : \"1200\",\n    \"description\" : \"1 кубын куямыз осы акшага\"\n}",
+        "raw": "{\n    \"category\" : {\n        \"publicId\" : \"9dfbe55a-96b7-4780-8810-a6b76508a59a\"\n    },\n    \"price\" : \"1200\",\n    \"description\" : \"1 кубын куямыз осы акшага\"\n}",
         "options": {
           "raw": {
             "language": "json"
@@ -869,7 +899,7 @@
       "examples": {
         "request": {
           "mode": "raw",
-          "raw": "{\n    \"category\" : {\n        \"publicId\" : \"f184baa9-543e-4eea-ae10-022c8fce5d1e\"\n    },\n    \"price\" : \"1200\",\n    \"description\" : \"1 кубын куямыз осы акшага\"\n}",
+          "raw": "{\n    \"category\" : {\n        \"publicId\" : \"9dfbe55a-96b7-4780-8810-a6b76508a59a\"\n    },\n    \"price\" : \"1200\",\n    \"description\" : \"1 кубын куямыз осы акшага\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -892,10 +922,10 @@
       }
     },
     {
-      "name": "update",
+      "name": "updateBuilderCategory",
       "method": "PUT",
       "path": "/api/v1/builders/category/2",
-      "description": "",
+      "description": "/api/v1/builders/category/{id from builder's price list}\n\nupdateBuilderCategory should be available from builder's profile page:\n\n{id from builder's price list} is here:\n\n{ \"publicId\": \"9063cf0d-253d-42c6-a104-76bd6c68f4f6\", \"firstName\": \"Daniyar\", \"lastName\": \"BUILDER\", \"password\": null, \"fullName\": \"Данияр строитель\", \"email\": \"daniyarslamkul@gmail.com\", \"phone\": \"77714451775\", \"avatarLink\": null, \"role\": \"BUILDER\", \"token\": null, \"login\": null, \"ratingAvg\": 0.00, \"aboutMe\": \"Опытный электрик\", \"experienceYears\": 10, \"city\": \"Алматы\", \"district\": \"Besagash\", \"jobsDone\": 15, \"available\": true, \"priceList\": \\[ { \"id\": \"4\", \"category\": { \"publicId\": \"9dfbe55a-96b7-4780-8810-a6b76508a59a\", \"slug\": \"foundation_strip\", \"name\": \"Ленточный фундамент\", \"nameKz\": \"Таспалы іргетас\", \"nameEng\": null, \"icon\": \"➰\", \"children\": null, \"parent\": { \"publicId\": \"64d265f4-89de-441c-b123-e1ebcdb999bd\", \"slug\": \"foundation\", \"name\": \"Фундамент\", \"nameKz\": \"Іргетас\", \"nameEng\": null, \"icon\": \"🏛️\", \"children\": null, \"parent\": { \"publicId\": \"0b2a1ef8-f4cf-466d-986d-5dfac862c95e\", \"slug\": \"construction\", \"name\": \"Строительные работы\", \"nameKz\": \"Құрылыс жұмыстары\", \"nameEng\": null, \"icon\": \"🏗️\", \"children\": null, \"parent\": null } } }, \"price\": 1200.00, \"description\": \"1 кубын куямыз осы акшага\" } \\]}",
       "headers": [],
       "queryParams": [],
       "body": {
@@ -933,7 +963,7 @@
           {
             "key": "file",
             "type": "file",
-            "src": "/Users/daniyars/Downloads/Gemini_Generated_Image_fribz7fribz7frib.png"
+            "src": "postman-cloud:///1f0c065c-a91f-4b80-9a67-de18761db959"
           },
           {
             "key": "scope",
@@ -954,7 +984,7 @@
             {
               "key": "file",
               "type": "file",
-              "src": "/Users/daniyars/Downloads/Gemini_Generated_Image_fribz7fribz7frib.png"
+              "src": "postman-cloud:///1f0c065c-a91f-4b80-9a67-de18761db959"
             },
             {
               "key": "scope",
@@ -984,7 +1014,10 @@
           {
             "key": "file",
             "type": "file",
-            "src": "/Users/kaspi/Documents/1111.jpg"
+            "src": [
+              "postman-cloud:///1f0c0660-f83d-42e0-a6e5-c9a389e74462",
+              "postman-cloud:///1f0c065f-ae9c-46a0-9583-c15457798312"
+            ]
           },
           {
             "key": "scope",
@@ -998,7 +1031,7 @@
           },
           {
             "key": "linkPublicId",
-            "value": "9aa84dd2-0fb5-4c9b-b4cf-cb0b1b5304f1",
+            "value": "e81629c0-dbb2-48e7-a82a-830f70c7a8a3",
             "type": "text"
           }
         ]
@@ -1010,7 +1043,10 @@
             {
               "key": "file",
               "type": "file",
-              "src": "/Users/kaspi/Documents/1111.jpg"
+              "src": [
+                "postman-cloud:///1f0c0660-f83d-42e0-a6e5-c9a389e74462",
+                "postman-cloud:///1f0c065f-ae9c-46a0-9583-c15457798312"
+              ]
             },
             {
               "key": "scope",
@@ -1024,7 +1060,7 @@
             },
             {
               "key": "linkPublicId",
-              "value": "9aa84dd2-0fb5-4c9b-b4cf-cb0b1b5304f1",
+              "value": "e81629c0-dbb2-48e7-a82a-830f70c7a8a3",
               "type": "text"
             }
           ]
@@ -1045,7 +1081,7 @@
           {
             "key": "file",
             "type": "file",
-            "src": "/Users/kaspi/Documents/1111.jpg"
+            "src": "postman-cloud:///1f0c0666-bdc6-4b10-8e74-207718896e1b"
           },
           {
             "key": "scope",
@@ -1071,7 +1107,7 @@
             {
               "key": "file",
               "type": "file",
-              "src": "/Users/kaspi/Documents/1111.jpg"
+              "src": "postman-cloud:///1f0c0666-bdc6-4b10-8e74-207718896e1b"
             },
             {
               "key": "scope",
@@ -1106,7 +1142,7 @@
         },
         {
           "key": "linkPublicId",
-          "value": "ceb3f0b3-3122-48d0-ba39-e256fe291d4b",
+          "value": "9063cf0d-253d-42c6-a104-76bd6c68f4f6",
           "description": "builder's public id"
         }
       ],
@@ -1128,7 +1164,7 @@
         },
         {
           "key": "linkPublicId",
-          "value": "ceb3f0b3-3122-48d0-ba39-e256fe291d4b",
+          "value": "e81629c0-dbb2-48e7-a82a-830f70c7a8a3",
           "description": "order's public"
         }
       ],
@@ -1150,8 +1186,9 @@
         },
         {
           "key": "linkPublicId",
-          "value": "ceb3f0b3-3122-48d0-ba39-e256fe291d4b",
-          "description": "Optional param, for user want's to get other user's avatar by using his publicId"
+          "value": "2ad93af8-75d4-4936-b98d-4c5d66458805",
+          "description": "Optional param, for user want's to get other user's avatar by using his publicId",
+          "disabled": true
         }
       ],
       "body": null,
@@ -1172,7 +1209,7 @@
       }
     },
     {
-      "name": "review new",
+      "name": "postReviewOnBuildersJob",
       "method": "POST",
       "path": "/api/v1/reviews",
       "description": "",
@@ -1180,7 +1217,7 @@
       "queryParams": [],
       "body": {
         "mode": "raw",
-        "raw": "  {\n    \"contractPublicId\": \"059a3686-771a-4f52-ab52-46e559a2d86a\",\n    \"rating\": 5,\n    \"message\": \"Отличная работа!\"\n  }\n/*\n  Логика:\n  - Только для завершенных контрактов (COMPLETED)\n  - Заказчик оценивает строителя → обновляется builder.ratingAvg\n  - Строитель оценивает заказчика\n  - Один отзыв от каждой стороны\n*/",
+        "raw": "  {\n    \"contractPublicId\": \"950ca334-887f-4cab-934f-05fe29e3974f\",\n    \"rating\": 5,\n    \"message\": \"Отличная работа!\"\n  }\n/*\n  Логика:\n  - Только для завершенных контрактов (COMPLETED)\n  - Заказчик оценивает строителя → обновляется builder.ratingAvg\n  - Строитель оценивает заказчика\n  - Один отзыв от каждой стороны\n*/",
         "options": {
           "raw": {
             "language": "json"
@@ -1190,7 +1227,7 @@
       "examples": {
         "request": {
           "mode": "raw",
-          "raw": "  {\n    \"contractPublicId\": \"059a3686-771a-4f52-ab52-46e559a2d86a\",\n    \"rating\": 5,\n    \"message\": \"Отличная работа!\"\n  }\n/*\n  Логика:\n  - Только для завершенных контрактов (COMPLETED)\n  - Заказчик оценивает строителя → обновляется builder.ratingAvg\n  - Строитель оценивает заказчика\n  - Один отзыв от каждой стороны\n*/",
+          "raw": "  {\n    \"contractPublicId\": \"950ca334-887f-4cab-934f-05fe29e3974f\",\n    \"rating\": 5,\n    \"message\": \"Отличная работа!\"\n  }\n/*\n  Логика:\n  - Только для завершенных контрактов (COMPLETED)\n  - Заказчик оценивает строителя → обновляется builder.ratingAvg\n  - Строитель оценивает заказчика\n  - Один отзыв от каждой стороны\n*/",
           "options": {
             "raw": {
               "language": "json"
@@ -1201,10 +1238,10 @@
       }
     },
     {
-      "name": "getBuilderReviews new",
+      "name": "getBuilderJobReviewList",
       "method": "GET",
-      "path": "/api/v1/reviews/builder/{builderPublicId}",
-      "description": "",
+      "path": "/api/v1/reviews/builder/9063cf0d-253d-42c6-a104-76bd6c68f4f6",
+      "description": "/api/v1/reviews/builder/{builder's public id}?page=0&size=10&sort\n\nCUSTOMER can see detailed rating info of builder",
       "headers": [],
       "queryParams": [
         {
@@ -1226,9 +1263,115 @@
       }
     },
     {
-      "name": "review new",
+      "name": "getBuilderJobReviewByReviewId",
       "method": "GET",
-      "path": "/api/v1/reviews/{reviewPublicId}",
+      "path": "/api/v1/reviews/51158ec4-f1db-4d46-ac4d-50db29404b18",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "getCities",
+      "method": "GET",
+      "path": "/api/v1/cities",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "major",
+      "method": "GET",
+      "path": "/api/v1/cities/major",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "city",
+      "method": "GET",
+      "path": "/api/v1/cities/2cab901a-53c6-4df1-bbb0-7bde057ab985",
+      "description": "{{shanyrak_url}}/api/v1/cities/{citiy's public id}",
+      "headers": [],
+      "queryParams": [],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "createForAdmins",
+      "method": "POST",
+      "path": "/api/v1/cities",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "{\n    \"name\": \"Город\",\n    \"nameKz\": \"Қала\",\n    \"code\": \"city_code\",\n    \"region\": \"Область\",\n    \"regionKz\": \"Облыс\",\n    \"isMajor\": false,\n    \"sortOrder\": 100\n}\n",
+        "options": {
+          "raw": {
+            "language": "json"
+          }
+        }
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Город\",\n    \"nameKz\": \"Қала\",\n    \"code\": \"city_code\",\n    \"region\": \"Область\",\n    \"regionKz\": \"Облыс\",\n    \"isMajor\": false,\n    \"sortOrder\": 100\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "updateForAdmin",
+      "method": "PUT",
+      "path": "/api/v1/cities/b86b4f63-75bd-44e4-8f30-2b323d67cf97",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "{\n    \"name\": \"Город\",\n    \"nameKz\": \"Қала\",\n    \"code\": \"city_code\",\n    \"region\": \"Область\",\n    \"regionKz\": \"Облыс\",\n    \"isMajor\": false,\n    \"sortOrder\": 100\n}\n",
+        "options": {
+          "raw": {
+            "language": "json"
+          }
+        }
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Город\",\n    \"nameKz\": \"Қала\",\n    \"code\": \"city_code\",\n    \"region\": \"Область\",\n    \"regionKz\": \"Облыс\",\n    \"isMajor\": false,\n    \"sortOrder\": 100\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "deleteForAdmin",
+      "method": "DELETE",
+      "path": "/api/v1/cities/b86b4f63-75bd-44e4-8f30-2b323d67cf97",
       "description": "",
       "headers": [],
       "queryParams": [],

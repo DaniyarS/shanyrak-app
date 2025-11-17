@@ -14,13 +14,19 @@ API Documentation
 
 ## category
 
-**GET** `/api/v1/categories/5414ea67-5f82-4514-82e9-61afe37234cf`
+**GET** `/api/v1/categories/0b2a1ef8-f4cf-466d-986d-5dfac862c95e`
 
 ---
 
 ## children
 
-**GET** `/api/v1/categories/f184baa9-543e-4eea-ae10-022c8fce5d1e/children`
+**GET** `/api/v1/categories/0b2a1ef8-f4cf-466d-986d-5dfac862c95e/children`
+
+---
+
+## tree
+
+**GET** `/api/v1/categories/tree`
 
 ---
 
@@ -56,10 +62,10 @@ API Documentation
 {
   "phone": "77076770099",
   "password": "qwerty123",
-  "role": "BUILDER",
+  "role": "CUSTOMER",
   "firstName": "Daniyar",
-  "lastName": "Slamkul",
-  "otpCode": "9459"
+  "lastName": "Customer",
+  "otpCode": "8366"
 }
 ```
 
@@ -75,11 +81,17 @@ API Documentation
 
 ### Request Body
 
-```json
+```
 {
-  "login": "77076770099",
-  "password": "qwerty123"
+    "login": "77714451775",
+    "password": "qwerty111"
 }
+
+// {
+//     "login": "77076770099",
+//     "password": "qwerty123"
+// }
+
 ```
 
 ---
@@ -96,7 +108,7 @@ API Documentation
 
 ```json
 {
-  "refreshToken": "989029d5-f242-4c69-bfc3-203711f099ca"
+  "refreshToken": "{{refreshToken}}"
 }
 ```
 
@@ -122,23 +134,29 @@ API Documentation
 
 ---
 
+## deleteAcc
+
+**DELETE** `/api/v1/auth/account`
+
+### Headers
+
+- `Authorization`: Bearer YOUR_JWT_TOKEN
+
+---
+
 ## createEstate
 
 **POST** `/api/v1/estates`
 
 ### Request Body
 
-```json
+```
 {
-  "kind": "kindTest",
-  "email": "emailTest",
-  "addressLine": "addressLineTest",
-  "city": "cityTest",
-  "district": "districtTest",
-  "lat": "1123",
-  "lon": "1233",
-  "areaM2": "49.9",
-  "floor": "7"
+    "kind" : "APARTMENT", // enum: APARTMENT, PRIVATE HOUSE, OFFICE
+    "addressLine" : "Наурызбай батыра 26", // street name, hous number
+    "city" : "Алматы", // Get list from "/api/v1/cities"
+    "areaM2" : "49.9", // estate area
+    "floor" : "7"
 }
 ```
 
@@ -150,18 +168,14 @@ API Documentation
 
 ### Request Body
 
-```json
+```
 {
-  "publicId": "ebb078f0-d138-4878-8df0-0109218480ca",
-  "kind": "kindTest",
-  "email": "emailTest",
-  "addressLine": "addressLineTest",
-  "city": "cityTest",
-  "district": "hahaha",
-  "lat": 1123,
-  "lon": 3221,
-  "areaM2": 49.9,
-  "floor": 7
+    "publicId": "8cad34fc-f1f8-4d46-b5f0-28658b8b5788",
+    "kind" : "APARTMENT", // enum: APARTMENT, PRIVATE HOUSE, OFFICE
+    "addressLine" : "Наурызбай батыра 25", // street name, hous number
+    "city" : "Алматы", // Get list from "/api/v1/cities"
+    "areaM2" : "60", // estate area
+    "floor" : "7"
 }
 ```
 
@@ -191,7 +205,9 @@ API Documentation
 
 ## delete
 
-**DELETE** `/api/v1/estates/9a818ca4-48db-4eb0-951b-d6fb5e19c7e4`
+**DELETE** `/api/v1/estates/6ac5bb6d-357c-4cd5-862e-76472a2ad9a2`
+
+/api/v1/estates/{estate's public id}
 
 ### Request Body
 
@@ -217,20 +233,20 @@ API Documentation
 
 ### Request Body
 
-```json
+```
 {
-  "category": {
-    "publicId": "075110d6-2a72-48fc-b0cf-93df38b79c16"
-  },
-  "realEstate": {
-    "publicId": "552d936b-4c64-47a8-9d6a-d84a861ecd03"
-  },
-  "order": {
-    "title": "Натяжной потолок",
-    "description": "Надо сделать за кв метр готов 2000тг",
-    "budjetMin": 1000,
-    "budjetMax": 2000
-  }
+    "category" : {
+        "publicId" : "cb3c14da-bf53-4faa-8c43-e02c61525cca"
+    },
+    "realEstate" : {
+        "publicId" : "8cad34fc-f1f8-4d46-b5f0-28658b8b5788"
+    },
+    "order" : {
+        "description" : "Надо залить фундамент частного дома",
+        "priceType" : "FIXED", // TWO types of price type "FIXED" and "NEGOTIABLE"
+        "price" : 9000,
+        "unit" : "areaM2"
+    }
 }
 ```
 
@@ -244,11 +260,9 @@ API Documentation
 
 ```json
 {
-  "uuid": "ddabc63a-96d0-4956-aa23-19932dc08542",
-  "title": "Натяжной потолок",
-  "description": "Надо сделать за кв метр готов 3000тг",
-  "budgetMin": 1000,
-  "budgetMax": 0,
+  "uuid": "8cad34fc-f1f8-4d46-b5f0-28658b8b5788",
+  "description": "Надо залить фундамент частного дома",
+  "priceType": "NEGOTIABLE",
   "unit": "areaM2"
 }
 ```
@@ -257,24 +271,16 @@ API Documentation
 
 ## delete
 
-**DELETE** `/api/v1/orders/ddabc63a-96d0-4956-aa23-19932dc08542`
+**DELETE** `/api/v1/orders/84962dfb-2ecc-4bda-b8ad-f3d6623e6627`
+
+/api/v1/orders/{order's uuid}
 
 ### Request Body
 
 ```json
 {
-  "category": {
-    "publicId": "075110d6-2a72-48fc-b0cf-93df38b79c16"
-  },
-  "realEstate": {
-    "publicId": "552d936b-4c64-47a8-9d6a-d84a861ecd03"
-  },
-  "order": {
-    "title": "Натяжной потолок",
-    "description": "Надо сделать за кв метр готов 2000тг",
-    "budjetMin": 1000,
-    "budjetMax": 2000
-  }
+  "mode": "raw",
+  "raw": ""
 }
 ```
 
@@ -284,18 +290,22 @@ API Documentation
 
 **GET** `/api/v1/orders`
 
+This endpoint is dedicated for builder, so by requesting this url, builder can get all available orders
+
 ### Query Parameters
 
 - `page`
 - `size`
 - `sort`
 - `categoryPublicId`
-- `budgetMinFrom`
+- `priceFrom`
 - `createdFrom`
 - `createdTo`
 - `city`
 - `areaFrom`
 - `q`
+- `priceTo`
+- `priceType` - FIXED/NEGOTIABLE
 
 ---
 
@@ -313,14 +323,17 @@ API Documentation
 
 ## requestPhone new
 
-**POST** `/api/v1/orders/9aa84dd2-0fb5-4c9b-b4cf-cb0b1b5304f1/request-phone`
+**POST** `/api/v1/orders/e81629c0-dbb2-48e7-a82a-830f70c7a8a3/request-phone`
+
+/api/v1/orders/{order's uuid}/request-phone
 
 ### Request Body
 
-```json
+```
 {
-  "offerPublicId": "378af8ca-a9ca-4c36-b996-f15bd127d971"
+    "offerPublicId" : "a602c426-5edb-41fd-b6f2-5695c1e93b52" // offer's public id
 }
+
 ```
 
 ---
@@ -334,10 +347,11 @@ API Documentation
 ```json
 {
   "order": {
-    "uuid": "1e1ecb87-c1a6-4770-9459-7bd393916cff"
+    "uuid": "e81629c0-dbb2-48e7-a82a-830f70c7a8a3"
   },
   "offer": {
     "price": 1200,
+    "priceType": "FIXED",
     "message": "Братан за 1200 никто не предложит",
     "unit": "m2",
     "daysEstimate": 3
@@ -373,24 +387,20 @@ API Documentation
 
 ---
 
-## getOfferBuilder new
+## updateOffer
 
-**GET** `/api/v1/offers/378af8ca-a9ca-4c36-b996-f15bd127d971/builder`
+**PUT** `/api/v1/offers/a602c426-5edb-41fd-b6f2-5695c1e93b52`
 
----
-
-## update new
-
-**PUT** `/api/v1/offers/378af8ca-a9ca-4c36-b996-f15bd127d971`
+/api/v1/offers/{offer's public id}
 
 ### Request Body
 
 ```
 {   
-    "price": 1200,
+    "price": 1100,
     "unit": "m3",
     "daysEstimate": 3,
-    "message": "Братан за 1200 никто не предложит"
+    "message": "Обновленное предложение"
 }
 
 //Можно только если статус = PENDING
@@ -398,9 +408,11 @@ API Documentation
 
 ---
 
-## delete new
+## deleteOffer
 
-**DELETE** `/api/v1/offers/378af8ca-a9ca-4c36-b996-f15bd127d971`
+**DELETE** `/api/v1/offers/a602c426-5edb-41fd-b6f2-5695c1e93b52`
+
+/api/v1/offers/{offer's public id}
 
 ### Request Body
 
@@ -427,21 +439,21 @@ API Documentation
 
 ---
 
-## byId
+## getContractsById
 
-**GET** `/api/v1/contracts/9582eaba-baf5-4c26-af0e-b05528a3031c`
+**GET** `/api/v1/contracts/950ca334-887f-4cab-934f-05fe29e3974f`
 
 ---
 
-## confirm-deal new
+## madeContractWithBuilder
 
-**POST** `/api/v1/orders/9aa84dd2-0fb5-4c9b-b4cf-cb0b1b5304f1/confirm-deal`
+**POST** `/api/v1/orders/e81629c0-dbb2-48e7-a82a-830f70c7a8a3/confirm-deal`
 
 ### Request Body
 
 ```
   {
-    "offerPublicId": "378af8ca-a9ca-4c36-b996-f15bd127d971",
+    "offerPublicId": "a602c426-5edb-41fd-b6f2-5695c1e93b52", // offer's public id
     "agreed": true,
     "startDate": "2025-01-15",
     "endDate": "2025-02-15"
@@ -460,9 +472,13 @@ API Documentation
 
 ---
 
-## complete new
+## contractComplete
 
-**POST** `/api/v1/contracts/059a3686-771a-4f52-ab52-46e559a2d86a/complete`
+**POST** `/api/v1/contracts/950ca334-887f-4cab-934f-05fe29e3974f/complete`
+
+/api/v1/contracts/{contract's public id}/complete
+
+After job completion CUSTOMER SHOULD post this request. So after calling, order will maked as COMPLETE
 
 ### Request Body
 
@@ -513,13 +529,17 @@ API Documentation
 
 ## builder
 
-**GET** `/api/v1/builders/ceb3f0b3-3122-48d0-ba39-e256fe291d4b`
+**GET** `/api/v1/builders/9063cf0d-253d-42c6-a104-76bd6c68f4f6`
+
+/api/v1/builders/{builder's public id}
 
 ---
 
-## update
+## updateBuilder
 
-**PUT** `/api/v1/builders/2ad93af8-75d4-4936-b98d-4c5d66458805`
+**PUT** `/api/v1/builders/9063cf0d-253d-42c6-a104-76bd6c68f4f6`
+
+/api/v1/builders/{builder's public id}
 
 ### Request Body
 
@@ -528,12 +548,12 @@ API Documentation
   "password": null,
   "fullName": "Данияр строитель",
   "email": "daniyarslamkul@gmail.com",
-  "phone": "87076770092",
+  "phone": "77714451775",
   "avatarLink": "",
   "role": "BUILDER",
   "token": null,
-  "login": "daniyars",
-  "ratingAvg": 2,
+  "login": null,
+  "ratingAvg": 0,
   "aboutMe": "Опытный электрик",
   "experienceYears": 10,
   "city": "Алматы",
@@ -548,14 +568,16 @@ API Documentation
 
 ## addCategory
 
-**POST** `/api/v1/builders/2ad93af8-75d4-4936-b98d-4c5d66458805/category`
+**POST** `/api/v1/builders/9063cf0d-253d-42c6-a104-76bd6c68f4f6/category`
+
+/api/v1/builders/{builder's public id}/category
 
 ### Request Body
 
 ```json
 {
   "category": {
-    "publicId": "f184baa9-543e-4eea-ae10-022c8fce5d1e"
+    "publicId": "9dfbe55a-96b7-4780-8810-a6b76508a59a"
   },
   "price": "1200",
   "description": "1 кубын куямыз осы акшага"
@@ -570,9 +592,17 @@ API Documentation
 
 ---
 
-## update
+## updateBuilderCategory
 
 **PUT** `/api/v1/builders/category/2`
+
+/api/v1/builders/category/{id from builder's price list}
+
+updateBuilderCategory should be available from builder's profile page:
+
+{id from builder's price list} is here:
+
+{ "publicId": "9063cf0d-253d-42c6-a104-76bd6c68f4f6", "firstName": "Daniyar", "lastName": "BUILDER", "password": null, "fullName": "Данияр строитель", "email": "daniyarslamkul@gmail.com", "phone": "77714451775", "avatarLink": null, "role": "BUILDER", "token": null, "login": null, "ratingAvg": 0.00, "aboutMe": "Опытный электрик", "experienceYears": 10, "city": "Алматы", "district": "Besagash", "jobsDone": 15, "available": true, "priceList": \[ { "id": "4", "category": { "publicId": "9dfbe55a-96b7-4780-8810-a6b76508a59a", "slug": "foundation_strip", "name": "Ленточный фундамент", "nameKz": "Таспалы іргетас", "nameEng": null, "icon": "➰", "children": null, "parent": { "publicId": "64d265f4-89de-441c-b123-e1ebcdb999bd", "slug": "foundation", "name": "Фундамент", "nameKz": "Іргетас", "nameEng": null, "icon": "🏛️", "children": null, "parent": { "publicId": "0b2a1ef8-f4cf-466d-986d-5dfac862c95e", "slug": "construction", "name": "Строительные работы", "nameKz": "Құрылыс жұмыстары", "nameEng": null, "icon": "🏗️", "children": null, "parent": null } } }, "price": 1200.00, "description": "1 кубын куямыз осы акшага" } \]}
 
 ### Request Body
 
@@ -598,7 +628,7 @@ API Documentation
     {
       "key": "file",
       "type": "file",
-      "src": "/Users/daniyars/Downloads/Gemini_Generated_Image_fribz7fribz7frib.png"
+      "src": "postman-cloud:///1f0c065c-a91f-4b80-9a67-de18761db959"
     },
     {
       "key": "scope",
@@ -629,7 +659,10 @@ API Documentation
     {
       "key": "file",
       "type": "file",
-      "src": "/Users/kaspi/Documents/1111.jpg"
+      "src": [
+        "postman-cloud:///1f0c0660-f83d-42e0-a6e5-c9a389e74462",
+        "postman-cloud:///1f0c065f-ae9c-46a0-9583-c15457798312"
+      ]
     },
     {
       "key": "scope",
@@ -643,7 +676,7 @@ API Documentation
     },
     {
       "key": "linkPublicId",
-      "value": "9aa84dd2-0fb5-4c9b-b4cf-cb0b1b5304f1",
+      "value": "e81629c0-dbb2-48e7-a82a-830f70c7a8a3",
       "type": "text"
     }
   ]
@@ -665,7 +698,7 @@ API Documentation
     {
       "key": "file",
       "type": "file",
-      "src": "/Users/kaspi/Documents/1111.jpg"
+      "src": "postman-cloud:///1f0c0666-bdc6-4b10-8e74-207718896e1b"
     },
     {
       "key": "scope",
@@ -727,7 +760,7 @@ API Documentation
 
 ---
 
-## review new
+## postReviewOnBuildersJob
 
 **POST** `/api/v1/reviews`
 
@@ -735,7 +768,7 @@ API Documentation
 
 ```
   {
-    "contractPublicId": "059a3686-771a-4f52-ab52-46e559a2d86a",
+    "contractPublicId": "950ca334-887f-4cab-934f-05fe29e3974f",
     "rating": 5,
     "message": "Отличная работа!"
   }
@@ -750,9 +783,13 @@ API Documentation
 
 ---
 
-## getBuilderReviews new
+## getBuilderJobReviewList
 
-**GET** `/api/v1/reviews/builder/{builderPublicId}`
+**GET** `/api/v1/reviews/builder/9063cf0d-253d-42c6-a104-76bd6c68f4f6`
+
+/api/v1/reviews/builder/{builder's public id}?page=0&size=10&sort
+
+CUSTOMER can see detailed rating info of builder
 
 ### Query Parameters
 
@@ -762,9 +799,75 @@ API Documentation
 
 ---
 
-## review new
+## getBuilderJobReviewByReviewId
 
-**GET** `/api/v1/reviews/{reviewPublicId}`
+**GET** `/api/v1/reviews/51158ec4-f1db-4d46-ac4d-50db29404b18`
+
+---
+
+## getCities
+
+**GET** `/api/v1/cities`
+
+---
+
+## major
+
+**GET** `/api/v1/cities/major`
+
+---
+
+## city
+
+**GET** `/api/v1/cities/2cab901a-53c6-4df1-bbb0-7bde057ab985`
+
+{{shanyrak_url}}/api/v1/cities/{citiy's public id}
+
+---
+
+## createForAdmins
+
+**POST** `/api/v1/cities`
+
+### Request Body
+
+```json
+{
+  "name": "Город",
+  "nameKz": "Қала",
+  "code": "city_code",
+  "region": "Область",
+  "regionKz": "Облыс",
+  "isMajor": false,
+  "sortOrder": 100
+}
+```
+
+---
+
+## updateForAdmin
+
+**PUT** `/api/v1/cities/b86b4f63-75bd-44e4-8f30-2b323d67cf97`
+
+### Request Body
+
+```json
+{
+  "name": "Город",
+  "nameKz": "Қала",
+  "code": "city_code",
+  "region": "Область",
+  "regionKz": "Облыс",
+  "isMajor": false,
+  "sortOrder": 100
+}
+```
+
+---
+
+## deleteForAdmin
+
+**DELETE** `/api/v1/cities/b86b4f63-75bd-44e4-8f30-2b323d67cf97`
 
 ---
 
