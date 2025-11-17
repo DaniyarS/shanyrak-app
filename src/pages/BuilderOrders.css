@@ -29,6 +29,14 @@
   align-items: end;
 }
 
+.search-form > * {
+  min-width: 0;
+}
+
+.search-form .cascading-category-select {
+  width: 100%;
+}
+
 .orders-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
