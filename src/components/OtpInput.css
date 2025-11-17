@@ -4,57 +4,92 @@
 
 .otp-input-container {
   display: flex;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-3);
   justify-content: center;
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: var(--spacing-2);
 }
 
 .otp-input-container.has-error .otp-input-box {
   border-color: var(--color-error);
+  background-color: rgba(244, 67, 54, 0.05);
 }
 
 .otp-input-box {
-  width: 48px;
-  height: 56px;
+  width: 56px;
+  height: 64px;
   text-align: center;
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-semibold);
-  border: 2px solid var(--color-border);
-  border-radius: var(--border-radius-md);
-  background-color: var(--color-white);
+  font-size: 2rem;
+  font-weight: 600;
+  border: 2px solid var(--color-neutral-300);
+  border-radius: var(--radius-lg);
+  background-color: white;
   color: var(--color-text-primary);
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   outline: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.otp-input-box:hover:not(:disabled) {
+  border-color: var(--color-neutral-400);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
 }
 
 .otp-input-box:focus {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.15),
+              0 2px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Filled state */
+.otp-input-box:not(:placeholder-shown) {
+  border-color: var(--color-primary);
+  background: linear-gradient(to bottom, white, #f8fbff);
 }
 
 .otp-input-box:disabled {
-  background-color: var(--color-background-secondary);
+  background-color: var(--color-neutral-100);
+  color: var(--color-text-disabled);
   cursor: not-allowed;
   opacity: 0.6;
+  box-shadow: none;
 }
 
 .otp-input-error {
   display: block;
   color: var(--color-error);
   font-size: var(--font-size-sm);
-  margin-top: var(--spacing-xs);
+  margin-top: var(--spacing-2);
   text-align: center;
+  font-weight: 500;
+}
+
+/* Animation for auto-fill */
+@keyframes fillPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.otp-input-box:not(:placeholder-shown):not(:focus) {
+  animation: fillPulse 0.3s ease-out;
 }
 
 /* Mobile responsiveness */
 @media (max-width: 480px) {
   .otp-input-box {
-    width: 40px;
-    height: 48px;
-    font-size: var(--font-size-lg);
+    width: 48px;
+    height: 56px;
+    font-size: 1.75rem;
   }
 
   .otp-input-container {
-    gap: var(--spacing-xs);
+    gap: var(--spacing-2);
   }
 }
