@@ -6,6 +6,7 @@ import Button from '../components/Button';
 import Card from '../components/Card';
 import Input from '../components/Input';
 import Select from '../components/Select';
+import CascadingCategorySelect from '../components/CascadingCategorySelect';
 import OrderPhotoGallery from '../components/OrderPhotoGallery';
 import ConfirmDealModal from '../components/ConfirmDealModal';
 import { OrderStatus } from '../domain/entities/Order';
@@ -13,13 +14,15 @@ import { OfferStatus } from '../domain/entities/Offer';
 import './CustomerOrders.css';
 
 const CustomerOrders = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [categories, setCategories] = useState([]);
   const [estates, setEstates] = useState([]);
+  const [cities, setCities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
   const [editingOrder, setEditingOrder] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [offers, setOffers] = useState([]);
@@ -29,16 +32,14 @@ const CustomerOrders = () => {
   const [formData, setFormData] = useState({
     categoryId: '',
     estateId: '',
-    title: '',
     description: '',
-    budgetMin: '',
-    budgetMax: '',
+    price: '',
+    unit: '',
+    priceType: 'NEGOTIABLE',
   });
   const [errors, setErrors] = useState({});
-  const [pendingPhotos, setPendingPhotos] = useState([]); // Photos to upload after order creation
+  const [pendingPhotos, setPendingPhotos] = useState([]);
   const [uploadingPhotos, setUploadingPhotos] = useState(false);
-  const [showEstateForm, setShowEstateForm] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
   const [estateFormData, setEstateFormData] = useState({
     kind: '',
     addressLine: '',
@@ -48,8 +49,8 @@ const CustomerOrders = () => {
     floor: '',
   });
   const [requestingPhone, setRequestingPhone] = useState(false);
-  const [builderContacts, setBuilderContacts] = useState({}); // Store requested builder contacts
-  const [confirmingDealOffer, setConfirmingDealOffer] = useState(null); // Offer being confirmed/rejected
+  const [builderContacts, setBuilderContacts] = useState({});
+  const [confirmingDealOffer, setConfirmingDealOffer] = useState(null);
 
   useEffect(() => {
     fetchInitialData();
@@ -66,9 +67,10 @@ const CustomerOrders = () => {
     try {
       setLoading(true);
 
-      const categoryRepo = container.getCategoryRepository();
+      const getCategoryTreeUseCase = container.getGetCategoryTreeUseCase();
       const estateUseCase = container.getManageEstatesUseCase();
       const getCustomerOrdersUseCase = container.getCustomerOrdersUseCase();
+      const getCitiesUseCase = container.getGetCitiesUseCase();
 
       const ordersResult = await getCustomerOrdersUseCase.execute({
         page: 0,
@@ -76,16 +78,21 @@ const CustomerOrders = () => {
         sort: 'createAt,desc',
       });
 
-      const [categoriesData, estatesResult] = await Promise.all([
-        categoryRepo.getAll(),
+      const [categoryTreeResult, estatesResult, citiesResult] = await Promise.all([
+        getCategoryTreeUseCase.execute(false),
         estateUseCase.getAll(),
+        getCitiesUseCase.execute(false),
       ]);
 
-      setCategories(categoriesData || []);
+      const categoryTree = categoryTreeResult.success
+        ? categoryTreeResult.categories
+        : [];
+
+      setCategories(categoryTree);
       setEstates(estatesResult.estates || []);
       setOrders(ordersResult.orders || []);
+      setCities(citiesResult.success ? citiesResult.cities : []);
 
-      // Fetch offer counts for each order separately
       if (ordersResult.orders && ordersResult.orders.length > 0) {
         fetchOfferCounts(ordersResult.orders);
       }
@@ -99,14 +106,12 @@ const CustomerOrders = () => {
   const fetchOfferCounts = async (ordersList) => {
     const offerRepo = container.getOfferRepository();
 
-    // Set all orders as loading
     const loadingState = {};
     ordersList.forEach((order) => {
       loadingState[order.id] = true;
     });
     setLoadingOfferCounts(loadingState);
 
-    // Fetch counts for each order
     const countsPromises = ordersList.map(async (order) => {
       try {
         const offers = await offerRepo.getByOrderId(order.id, { page: 0, size: 100 });
@@ -119,7 +124,6 @@ const CustomerOrders = () => {
 
     const countsResults = await Promise.all(countsPromises);
 
-    // Update counts state
     const counts = {};
     const loading = {};
     countsResults.forEach((result) => {
@@ -133,11 +137,22 @@ const CustomerOrders = () => {
 
   const handleCreateOrderClick = () => {
     setShowForm(true);
+    setCurrentStep(1);
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (name === 'price') {
+      if (value && value.trim()) {
+        setFormData((prev) => ({ ...prev, [name]: value, priceType: 'FIXED' }));
+      } else {
+        setFormData((prev) => ({ ...prev, [name]: value, priceType: 'NEGOTIABLE', unit: '' }));
+      }
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: '' }));
     }
@@ -151,79 +166,154 @@ const CustomerOrders = () => {
     }
   };
 
-  const validateForm = () => {
+  const handleNextStep = () => {
+    // Validate current step before proceeding
     const newErrors = {};
 
-    if (!formData.categoryId) newErrors.categoryId = 'Category is required';
-    // Only require estateId if user has existing estates
-    if (estates.length > 0 && !formData.estateId) {
-      newErrors.estateId = 'Property is required';
+    if (currentStep === 1) {
+      // Step 1: Category selection
+      if (!formData.categoryId) {
+        newErrors.categoryId = t('orders.categoryRequired');
+      }
+    } else if (currentStep === 2 && estates.length === 0) {
+      // Step 2 (conditional): Estate creation for users without estates
+      if (!estateFormData.kind) newErrors.kind = t('estates.propertyTypeRequired');
+      if (!estateFormData.addressLine) newErrors.addressLine = t('estates.addressRequired');
+      if (!estateFormData.city) newErrors.city = t('estates.cityRequired');
+      if (!estateFormData.district) newErrors.district = t('estates.districtRequired');
+      if (!estateFormData.areaM2) newErrors.areaM2 = t('estates.areaRequired');
+    } else if (currentStep === 2 && estates.length > 0) {
+      // Step 2: Order details for users WITH estates
+      if (!formData.estateId) {
+        newErrors.estateId = t('orders.propertyRequired');
+      }
+      if (!formData.description) newErrors.description = t('orders.descriptionRequired');
+      if (formData.price && !formData.unit) {
+        newErrors.unit = t('orders.unitRequired');
+      }
+    } else if (currentStep === 3 && estates.length === 0) {
+      // Step 3: Order details for users WITHOUT estates
+      if (!formData.description) newErrors.description = t('orders.descriptionRequired');
+      if (formData.price && !formData.unit) {
+        newErrors.unit = t('orders.unitRequired');
+      }
     }
-    if (!formData.title) newErrors.title = 'Title is required';
-    if (!formData.description) newErrors.description = 'Description is required';
-    if (!formData.budgetMin) newErrors.budgetMin = 'Minimum budget is required';
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+
+    if (Object.keys(newErrors).length === 0) {
+      setCurrentStep(currentStep + 1);
+    }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handlePrevStep = () => {
+    setErrors({});
+    setCurrentStep(currentStep - 1);
+  };
 
-    if (!validateForm()) return;
-
-    // If user has no estates and not editing, show estate form with animation
-    if (estates.length === 0 && !editingOrder) {
-      setIsAnimating(true);
-      // Wait for animation to complete before hiding order form
-      setTimeout(() => {
-        setShowEstateForm(true);
-        setIsAnimating(false);
-      }, 400); // Match CSS transition duration
-      return;
-    }
-
+  const handleCreateOrder = async () => {
     try {
+      // Final validation before creating order
+      const newErrors = {};
+
+      if (!formData.categoryId) {
+        newErrors.categoryId = t('orders.categoryRequired');
+      }
+      if (!formData.description) {
+        newErrors.description = t('orders.descriptionRequired');
+      }
+      if (formData.price && !formData.unit) {
+        newErrors.unit = t('orders.unitRequired');
+      }
+
+      // For users with estates, validate estate selection
+      if (estates.length > 0 && !formData.estateId) {
+        newErrors.estateId = t('orders.propertyRequired');
+      }
+
+      // For users without estates, validate estate form data
+      if (estates.length === 0) {
+        if (!estateFormData.kind) newErrors.kind = t('estates.propertyTypeRequired');
+        if (!estateFormData.addressLine) newErrors.addressLine = t('estates.addressRequired');
+        if (!estateFormData.city) newErrors.city = t('estates.cityRequired');
+        if (!estateFormData.district) newErrors.district = t('estates.districtRequired');
+        if (!estateFormData.areaM2) newErrors.areaM2 = t('estates.areaRequired');
+      }
+
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
+        return;
+      }
+
+      setUploadingPhotos(true);
+
+      // If user has no estates, create estate first
+      if (estates.length === 0) {
+        const estateUseCase = container.getManageEstatesUseCase();
+        const estateData = {
+          kind: estateFormData.kind,
+          addressLine: estateFormData.addressLine,
+          city: estateFormData.city,
+          district: estateFormData.district,
+          areaM2: parseFloat(estateFormData.areaM2),
+          floor: estateFormData.floor ? parseInt(estateFormData.floor) : null,
+        };
+
+        const estateResult = await estateUseCase.create(estateData);
+
+        if (!estateResult.success) {
+          setErrors(estateResult.errors || { submit: t('orders.estateCreationFailed') });
+          setUploadingPhotos(false);
+          return;
+        }
+
+        // Use the newly created estate
+        formData.estateId = estateResult.estate.id;
+      }
+
+      // Create order
       const orderData = {
-        title: formData.title,
         description: formData.description,
-        budgetMin: parseInt(formData.budgetMin),
-        budgetMax: formData.budgetMax ? parseInt(formData.budgetMax) : 0,
+        priceType: formData.priceType,
       };
 
-      let result;
-      if (editingOrder) {
-        const updateOrderUseCase = container.getUpdateOrderUseCase();
-        result = await updateOrderUseCase.execute(
-          editingOrder.id,
-          orderData,
-          formData.categoryId,
-          formData.estateId
-        );
-      } else {
-        const createOrderUseCase = container.getCreateOrderUseCase();
-        result = await createOrderUseCase.execute(
-          orderData,
-          formData.categoryId,
-          formData.estateId
-        );
-
-        // Upload photos after order creation
-        if (result.success && pendingPhotos.length > 0) {
-          setUploadingPhotos(true);
-          await uploadOrderPhotos(result.order.id, pendingPhotos);
-          setUploadingPhotos(false);
-        }
+      if (formData.price && formData.price.trim()) {
+        orderData.price = parseFloat(formData.price);
+        orderData.unit = formData.unit;
       }
 
-      if (result.success) {
-        fetchInitialData();
-        resetForm();
-      } else {
-        setErrors(result.errors || { submit: 'Operation failed' });
+      console.log('Creating order with data:', {
+        orderData,
+        categoryId: formData.categoryId,
+        estateId: formData.estateId,
+      });
+
+      const createOrderUseCase = container.getCreateOrderUseCase();
+      const result = await createOrderUseCase.execute(
+        orderData,
+        formData.categoryId,
+        formData.estateId
+      );
+
+      console.log('Create order result:', result);
+
+      if (!result.success) {
+        console.error('Order creation failed with errors:', result.errors);
+        setErrors(result.errors || { submit: t('orders.operationFailed') });
+        return;
       }
+
+      // Upload photos if any
+      if (pendingPhotos.length > 0) {
+        await uploadOrderPhotos(result.order.id, pendingPhotos);
+      }
+
+      fetchInitialData();
+      resetForm();
     } catch (error) {
-      setErrors({ submit: error.response?.data?.message || 'Operation failed' });
+      console.error('Error creating order:', error);
+      setErrors({ submit: error.response?.data?.message || t('orders.operationFailed') });
+    } finally {
       setUploadingPhotos(false);
     }
   };
@@ -249,163 +339,52 @@ const CustomerOrders = () => {
       console.error('Error uploading photos:', error);
       setErrors((prev) => ({
         ...prev,
-        photos: 'Failed to upload photos',
+        photos: t('orders.photoUploadFailed'),
       }));
     }
   };
 
   const handlePhotoAdded = async (file) => {
-    // For new orders, store photos locally until order is created
-    if (!editingOrder) {
-      const photoUrl = URL.createObjectURL(file);
-      const newPhoto = {
-        id: `temp-${Date.now()}`,
-        file,
-        url: photoUrl,
-      };
-      setPendingPhotos((prev) => [...prev, newPhoto]);
-      return;
-    }
-
-    // For existing orders, upload immediately
-    try {
-      const uploadOrderPhotoUseCase = container.getUploadOrderPhotoUseCase();
-      const result = await uploadOrderPhotoUseCase.execute(
-        file,
-        editingOrder.id,
-        pendingPhotos.length
-      );
-
-      if (result.success) {
-        setPendingPhotos((prev) => [...prev, result.file]);
-      } else {
-        throw new Error(result.errors?.upload || 'Upload failed');
-      }
-    } catch (error) {
-      throw error;
-    }
+    const photoUrl = URL.createObjectURL(file);
+    const newPhoto = {
+      id: `temp-${Date.now()}`,
+      file,
+      url: photoUrl,
+    };
+    setPendingPhotos((prev) => [...prev, newPhoto]);
   };
 
   const handlePhotoDeleted = async (photoId) => {
-    // For temporary photos (new order), just remove from state
-    if (photoId.startsWith('temp-')) {
-      setPendingPhotos((prev) => {
-        const photo = prev.find((p) => p.id === photoId);
-        if (photo?.url) {
-          URL.revokeObjectURL(photo.url);
-        }
-        return prev.filter((p) => p.id !== photoId);
-      });
-      return;
-    }
-
-    // For uploaded photos, delete from server
-    try {
-      const deleteOrderPhotoUseCase = container.getDeleteOrderPhotoUseCase();
-      const result = await deleteOrderPhotoUseCase.execute(photoId);
-
-      if (result.success) {
-        setPendingPhotos((prev) => prev.filter((p) => p.id !== photoId));
-      } else {
-        throw new Error(result.errors?.delete || 'Delete failed');
+    setPendingPhotos((prev) => {
+      const photo = prev.find((p) => p.id === photoId);
+      if (photo?.url) {
+        URL.revokeObjectURL(photo.url);
       }
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const handleBackToOrderForm = () => {
-    setIsAnimating(true);
-    setErrors({});
-    // Wait for animation to start before switching forms
-    setTimeout(() => {
-      setShowEstateForm(false);
-      setIsAnimating(false);
-    }, 400); // Match CSS transition duration
-  };
-
-  const handleEstateSubmit = async (e) => {
-    e.preventDefault();
-    setErrors({});
-
-    try {
-      // Create the estate first
-      const estateUseCase = container.getManageEstatesUseCase();
-      const estateData = {
-        kind: estateFormData.kind,
-        addressLine: estateFormData.addressLine,
-        city: estateFormData.city,
-        district: estateFormData.district,
-        areaM2: parseFloat(estateFormData.areaM2),
-        floor: estateFormData.floor ? parseInt(estateFormData.floor) : null,
-      };
-
-      const estateResult = await estateUseCase.create(estateData);
-
-      if (!estateResult.success) {
-        setErrors(estateResult.errors || { submit: 'Failed to create property' });
-        return;
-      }
-
-      // Now create the order with the new estate
-      const orderData = {
-        title: formData.title,
-        description: formData.description,
-        budgetMin: parseInt(formData.budgetMin),
-        budgetMax: formData.budgetMax ? parseInt(formData.budgetMax) : 0,
-      };
-
-      const createOrderUseCase = container.getCreateOrderUseCase();
-      const result = await createOrderUseCase.execute(
-        orderData,
-        formData.categoryId,
-        estateResult.estate.id
-      );
-
-      // Upload photos after order creation
-      if (result.success && pendingPhotos.length > 0) {
-        setUploadingPhotos(true);
-        await uploadOrderPhotos(result.order.id, pendingPhotos);
-        setUploadingPhotos(false);
-      }
-
-      if (result.success) {
-        fetchInitialData();
-        resetForm();
-      } else {
-        setErrors(result.errors || { submit: 'Operation failed' });
-      }
-    } catch (error) {
-      setErrors({ submit: error.response?.data?.message || 'Operation failed' });
-      setUploadingPhotos(false);
-    }
+      return prev.filter((p) => p.id !== photoId);
+    });
   };
 
   const handleEdit = async (order) => {
+    // Editing not supported in wizard mode - use simple form
     setEditingOrder(order);
     setFormData({
       categoryId: order.category?.id || '',
       estateId: order.realEstate?.id || '',
-      title: order.title || '',
       description: order.description || '',
-      budgetMin: order.budgetMin?.toString() || '',
-      budgetMax: order.budgetMax?.toString() || '',
+      price: order.price?.toString() || '',
+      unit: order.unit || '',
+      priceType: order.priceType || 'NEGOTIABLE',
     });
     setShowForm(true);
+    setCurrentStep(1); // Show simplified edit view
 
-    // Fetch existing photos for this order
     try {
       const getOrderPhotosUseCase = container.getGetOrderPhotosUseCase();
       const result = await getOrderPhotosUseCase.execute(order.id);
 
-      console.log('Fetched order photos result:', result);
-      console.log('Photos array:', result.photos);
-
       if (result.success && result.photos && result.photos.length > 0) {
-        console.log('Setting pending photos:', result.photos);
         setPendingPhotos(result.photos);
       } else {
-        console.log('No photos found or fetch failed');
         setPendingPhotos([]);
       }
     } catch (error) {
@@ -418,7 +397,6 @@ const CustomerOrders = () => {
     if (!window.confirm(t('orders.deleteConfirm'))) return;
 
     try {
-      // Add deleting class for animation
       const orderCard = document.querySelector(`[data-order-id="${orderId}"]`);
       if (orderCard) {
         orderCard.classList.add('deleting');
@@ -428,7 +406,6 @@ const CustomerOrders = () => {
       const result = await deleteOrderUseCase.execute(orderId);
 
       if (result.success) {
-        // Wait for animation to complete before removing from state
         setTimeout(() => {
           setOrders((prevOrders) => prevOrders.filter((order) => order.id !== orderId));
         }, 300);
@@ -469,16 +446,13 @@ const CustomerOrders = () => {
       const result = await requestPhoneUseCase.execute(selectedOrder.id, offerId);
 
       if (result.success) {
-        // Store the builder contact info
         setBuilderContacts(prev => ({
           ...prev,
           [offerId]: result.builderContact
         }));
 
-        // Update order status to IN_PROGRESS
         setSelectedOrder(prev => ({ ...prev, status: OrderStatus.IN_PROGRESS }));
 
-        // Refresh orders list
         fetchInitialData();
 
         alert(t('orders.phoneRequested'));
@@ -500,7 +474,7 @@ const CustomerOrders = () => {
   const handleDealConfirmed = () => {
     setConfirmingDealOffer(null);
     setSelectedOrder(null);
-    fetchInitialData(); // Refresh orders list
+    fetchInitialData();
   };
 
   const toggleMenu = (orderId) => {
@@ -511,10 +485,10 @@ const CustomerOrders = () => {
     setFormData({
       categoryId: '',
       estateId: '',
-      title: '',
       description: '',
-      budgetMin: '',
-      budgetMax: '',
+      price: '',
+      unit: '',
+      priceType: 'NEGOTIABLE',
     });
     setEstateFormData({
       kind: '',
@@ -526,11 +500,9 @@ const CustomerOrders = () => {
     });
     setEditingOrder(null);
     setShowForm(false);
-    setShowEstateForm(false);
-    setIsAnimating(false);
+    setCurrentStep(1);
     setErrors({});
 
-    // Clean up temporary photo URLs
     pendingPhotos.forEach((photo) => {
       if (photo.url && photo.id.startsWith('temp-')) {
         URL.revokeObjectURL(photo.url);
@@ -538,6 +510,284 @@ const CustomerOrders = () => {
     });
     setPendingPhotos([]);
     setUploadingPhotos(false);
+  };
+
+  const getTotalSteps = () => {
+    return estates.length === 0 ? 4 : 3;
+  };
+
+  const renderStepIndicator = () => {
+    const totalSteps = getTotalSteps();
+    const steps = [];
+
+    for (let i = 1; i <= totalSteps; i++) {
+      steps.push(
+        <div key={i} className={`step-indicator ${currentStep >= i ? 'active' : ''}`}>
+          {i}
+        </div>
+      );
+    }
+
+    return <div className="step-indicators">{steps}</div>;
+  };
+
+  const renderStep1 = () => (
+    <div className="wizard-step">
+      <h2>{t('orders.selectCategory')}</h2>
+      <p className="step-description">{t('orders.selectCategoryDescription')}</p>
+      <CascadingCategorySelect
+        label={t('orders.category')}
+        categories={categories}
+        value={formData.categoryId}
+        onChange={handleChange}
+        placeholder={t('orders.selectCategory')}
+        error={errors.categoryId}
+        required
+      />
+    </div>
+  );
+
+  const renderStep2Estate = () => (
+    <div className="wizard-step">
+      <h2>{t('orders.providePropertyInfo')}</h2>
+      <p className="step-description">{t('orders.propertyInfoDescription')}</p>
+
+      <Select
+        label={t('estates.propertyType')}
+        name="kind"
+        value={estateFormData.kind}
+        onChange={handleEstateChange}
+        options={[
+          { value: 'APARTMENT', label: t('estates.apartment') },
+          { value: 'HOUSE', label: t('estates.house') },
+          { value: 'OFFICE', label: t('estates.office') },
+          { value: 'COMMERCIAL', label: t('estates.commercial') },
+        ]}
+        placeholder={t('estates.selectPropertyType')}
+        error={errors.kind}
+        required
+      />
+
+      <Input
+        label={t('estates.address')}
+        name="addressLine"
+        value={estateFormData.addressLine}
+        onChange={handleEstateChange}
+        placeholder={t('estates.addressPlaceholder')}
+        error={errors.addressLine}
+        required
+      />
+
+      <div className="form-row">
+        <Select
+          label={t('estates.city')}
+          name="city"
+          value={estateFormData.city}
+          onChange={handleEstateChange}
+          options={cities.map((city) => ({
+            value: city.getLocalizedName(language),
+            label: city.getLocalizedName(language),
+          }))}
+          placeholder={t('estates.cityPlaceholder')}
+          error={errors.city}
+          required
+        />
+        <Input
+          label={t('estates.district')}
+          name="district"
+          value={estateFormData.district}
+          onChange={handleEstateChange}
+          placeholder={t('estates.districtPlaceholder')}
+          error={errors.district}
+          required
+        />
+      </div>
+
+      <div className="form-row">
+        <Input
+          label={t('estates.area')}
+          name="areaM2"
+          type="number"
+          value={estateFormData.areaM2}
+          onChange={handleEstateChange}
+          placeholder="100"
+          error={errors.areaM2}
+          required
+        />
+        <Input
+          label={t('estates.floor')}
+          name="floor"
+          type="number"
+          value={estateFormData.floor}
+          onChange={handleEstateChange}
+          placeholder={t('estates.floorPlaceholder')}
+          error={errors.floor}
+        />
+      </div>
+    </div>
+  );
+
+  const renderStep3OrderDetails = () => (
+    <div className="wizard-step">
+      <h2>{t('orders.orderDetails')}</h2>
+      <p className="step-description">{t('orders.orderDetailsDescription')}</p>
+
+      {estates.length > 0 && (
+        <Select
+          label={t('orders.property')}
+          name="estateId"
+          value={formData.estateId}
+          onChange={handleChange}
+          options={estates.map((estate) => ({
+            value: estate.id,
+            label: `${estate.kind} - ${estate.addressLine}, ${estate.city}`,
+          }))}
+          placeholder={t('orders.selectProperty')}
+          error={errors.estateId}
+          required
+        />
+      )}
+
+      <div className="input-wrapper">
+        <label className="input-label">
+          {t('orders.description')} <span className="input-required">*</span>
+        </label>
+        <textarea
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+          placeholder={t('orders.descriptionPlaceholder')}
+          className={`input ${errors.description ? 'input-error' : ''}`}
+          rows="4"
+        />
+        {errors.description && (
+          <span className="input-error-message">{errors.description}</span>
+        )}
+      </div>
+
+      <div className="form-row">
+        <Input
+          label={t('orders.priceLabel')}
+          name="price"
+          type="number"
+          value={formData.price}
+          onChange={handleChange}
+          placeholder={t('orders.pricePlaceholder')}
+          error={errors.price}
+        />
+        {formData.price && formData.price.trim() && (
+          <Select
+            label={t('orders.unitLabel')}
+            name="unit"
+            value={formData.unit}
+            onChange={handleChange}
+            options={[
+              { value: 'perMeter', label: t('orders.units.perMeter') },
+              { value: 'perMeterSquare', label: t('orders.units.perMeterSquare') },
+              { value: 'perMeterCube', label: t('orders.units.perMeterCube') },
+              { value: 'perHour', label: t('orders.units.perHour') },
+              { value: 'perDay', label: t('orders.units.perDay') },
+              { value: 'perItem', label: t('orders.units.perItem') },
+              { value: 'total', label: t('orders.units.total') },
+              { value: 'other', label: t('orders.units.other') },
+            ]}
+            placeholder={t('orders.selectUnit')}
+            error={errors.unit}
+            required
+          />
+        )}
+      </div>
+    </div>
+  );
+
+  const renderStep4Photos = () => (
+    <div className="wizard-step">
+      <h2>{t('orders.uploadPhotos')}</h2>
+      <p className="step-description">{t('orders.uploadPhotosDescription')}</p>
+
+      <div className="form-section">
+        <OrderPhotoGallery
+          photos={pendingPhotos}
+          onPhotoAdded={handlePhotoAdded}
+          onPhotoDeleted={handlePhotoDeleted}
+          canEdit={true}
+        />
+      </div>
+
+      {errors.photos && (
+        <div className="error-message">{errors.photos}</div>
+      )}
+    </div>
+  );
+
+  const renderCurrentStep = () => {
+    if (currentStep === 1) {
+      // Step 1: Category selection (always)
+      return renderStep1();
+    } else if (currentStep === 2 && estates.length === 0) {
+      // Step 2: Estate form (only for users without estates)
+      return renderStep2Estate();
+    } else if (currentStep === 2 && estates.length > 0) {
+      // Step 2: Order details (for users WITH estates)
+      return renderStep3OrderDetails();
+    } else if (currentStep === 3 && estates.length === 0) {
+      // Step 3: Order details (for users WITHOUT estates)
+      return renderStep3OrderDetails();
+    } else if (currentStep === 3 && estates.length > 0) {
+      // Step 3: Photos (for users WITH estates - final step)
+      return renderStep4Photos();
+    } else if (currentStep === 4 && estates.length === 0) {
+      // Step 4: Photos (for users WITHOUT estates - final step)
+      return renderStep4Photos();
+    }
+  };
+
+  const renderWizardActions = () => {
+    const totalSteps = getTotalSteps();
+    const isLastStep = currentStep === totalSteps;
+
+    return (
+      <div className="wizard-actions">
+        {currentStep > 1 && (
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={handlePrevStep}
+            disabled={uploadingPhotos}
+          >
+            {t('common.back')}
+          </Button>
+        )}
+
+        <Button
+          type="button"
+          variant="ghost"
+          onClick={resetForm}
+          disabled={uploadingPhotos}
+        >
+          {t('common.cancel')}
+        </Button>
+
+        {!isLastStep ? (
+          <Button
+            type="button"
+            variant="primary"
+            onClick={handleNextStep}
+          >
+            {t('common.continue')}
+          </Button>
+        ) : (
+          <Button
+            type="button"
+            variant="primary"
+            onClick={handleCreateOrder}
+            disabled={uploadingPhotos}
+          >
+            {uploadingPhotos ? t('common.creating') : t('orders.createOrder')}
+          </Button>
+        )}
+      </div>
+    );
   };
 
   if (loading && !showForm) {
@@ -560,225 +810,18 @@ const CustomerOrders = () => {
           )}
         </div>
 
-        {/* Create/Edit Order Form */}
+        {/* Multi-Step Order Creation Wizard */}
         {showForm && (
-          <Card className="order-form-card">
-            <div className="form-container">
-              {/* Order Form */}
-              <div className={`form-slide ${showEstateForm ? 'slide-left-out' : 'slide-left-in'} ${showEstateForm && !isAnimating ? 'hidden' : ''}`}>
-                <h2>{editingOrder ? t('orders.editOrder') : t('orders.createNewOrder')}</h2>
-                <form onSubmit={handleSubmit} className="order-form">
-              <Select
-                label={t('orders.category')}
-                name="categoryId"
-                value={formData.categoryId}
-                onChange={handleChange}
-                options={categories.map((cat) => ({
-                  value: cat.id,
-                  label: cat.name,
-                }))}
-                placeholder={t('orders.selectCategory')}
-                error={errors.categoryId}
-                required
-              />
-
-              {/* Only show property select if user has estates OR is editing */}
-              {(estates.length > 0 || editingOrder) && (
-                <Select
-                  label={t('orders.property')}
-                  name="estateId"
-                  value={formData.estateId}
-                  onChange={handleChange}
-                  options={estates.map((estate) => ({
-                    value: estate.id,
-                    label: `${estate.kind} - ${estate.addressLine}, ${estate.city}`,
-                  }))}
-                  placeholder={t('orders.selectProperty')}
-                  error={errors.estateId}
-                  required
-                />
-              )}
-
-              <Input
-                label={t('orders.orderTitle')}
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                placeholder={t('orders.titlePlaceholder')}
-                error={errors.title}
-                required
-              />
-
-              <div className="input-wrapper">
-                <label className="input-label">
-                  {t('orders.description')} <span className="input-required">*</span>
-                </label>
-                <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                  placeholder={t('orders.descriptionPlaceholder')}
-                  className={`input ${errors.description ? 'input-error' : ''}`}
-                  rows="4"
-                />
-                {errors.description && (
-                  <span className="input-error-message">{errors.description}</span>
-                )}
-              </div>
-
-              <div className="form-row">
-                <Input
-                  label={t('orders.minBudget')}
-                  name="budgetMin"
-                  type="number"
-                  value={formData.budgetMin}
-                  onChange={handleChange}
-                  placeholder="1000"
-                  error={errors.budgetMin}
-                  required
-                />
-                <Input
-                  label={t('orders.maxBudget')}
-                  name="budgetMax"
-                  type="number"
-                  value={formData.budgetMax}
-                  onChange={handleChange}
-                  placeholder="5000"
-                />
-              </div>
-
-              {/* Order Photos */}
-              <div className="form-section">
-                <label className="section-label">{t('orders.orderPhotos')} (Optional)</label>
-                <OrderPhotoGallery
-                  photos={pendingPhotos}
-                  onPhotoAdded={handlePhotoAdded}
-                  onPhotoDeleted={handlePhotoDeleted}
-                  canEdit={true}
-                />
-              </div>
-
+          <div className="order-wizard">
+            <Card className="wizard-card">
+              {renderStepIndicator()}
+              {renderCurrentStep()}
               {errors.submit && (
                 <div className="error-message">{errors.submit}</div>
               )}
-              {errors.photos && (
-                <div className="error-message">{errors.photos}</div>
-              )}
-
-                  <div className="form-actions">
-                    <Button type="submit" variant="primary" disabled={uploadingPhotos}>
-                      {uploadingPhotos
-                        ? 'Uploading photos...'
-                        : editingOrder
-                        ? t('orders.updateOrder')
-                        : estates.length === 0
-                        ? t('common.continue')
-                        : t('orders.createOrder')}
-                    </Button>
-                    <Button type="button" variant="ghost" onClick={resetForm} disabled={uploadingPhotos}>
-                      {t('common.cancel')}
-                    </Button>
-                  </div>
-                </form>
-              </div>
-
-              {/* Estate Creation Form */}
-              <div className={`form-slide ${!showEstateForm ? 'slide-right-out' : 'slide-right-in'} ${!showEstateForm && !isAnimating ? 'hidden' : ''}`}>
-                <h2>{t('orders.providePropertyInfo')}</h2>
-                <p className="estate-form-description">{t('orders.propertyInfoDescription')}</p>
-                <form onSubmit={handleEstateSubmit} className="order-form">
-              <Select
-                label={t('estates.propertyType')}
-                name="kind"
-                value={estateFormData.kind}
-                onChange={handleEstateChange}
-                options={[
-                  { value: 'APARTMENT', label: t('estates.apartment') },
-                  { value: 'HOUSE', label: t('estates.house') },
-                  { value: 'OFFICE', label: t('estates.office') },
-                  { value: 'COMMERCIAL', label: t('estates.commercial') },
-                ]}
-                placeholder={t('estates.selectPropertyType')}
-                error={errors.kind}
-                required
-              />
-
-              <Input
-                label={t('estates.address')}
-                name="addressLine"
-                value={estateFormData.addressLine}
-                onChange={handleEstateChange}
-                placeholder={t('estates.addressPlaceholder')}
-                error={errors.addressLine}
-                required
-              />
-
-              <div className="form-row">
-                <Input
-                  label={t('estates.city')}
-                  name="city"
-                  value={estateFormData.city}
-                  onChange={handleEstateChange}
-                  placeholder={t('estates.cityPlaceholder')}
-                  error={errors.city}
-                  required
-                />
-                <Input
-                  label={t('estates.district')}
-                  name="district"
-                  value={estateFormData.district}
-                  onChange={handleEstateChange}
-                  placeholder={t('estates.districtPlaceholder')}
-                  error={errors.district}
-                  required
-                />
-              </div>
-
-              <div className="form-row">
-                <Input
-                  label={t('estates.area')}
-                  name="areaM2"
-                  type="number"
-                  value={estateFormData.areaM2}
-                  onChange={handleEstateChange}
-                  placeholder="100"
-                  error={errors.areaM2}
-                  required
-                />
-                <Input
-                  label={t('estates.floor')}
-                  name="floor"
-                  type="number"
-                  value={estateFormData.floor}
-                  onChange={handleEstateChange}
-                  placeholder={t('estates.floorPlaceholder')}
-                  error={errors.floor}
-                />
-              </div>
-
-              {errors.submit && (
-                <div className="error-message">{errors.submit}</div>
-              )}
-
-                  <div className="form-actions">
-                    <Button type="submit" variant="primary" disabled={uploadingPhotos}>
-                      {uploadingPhotos
-                        ? t('common.creating')
-                        : t('orders.createPropertyAndOrder')}
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      onClick={handleBackToOrderForm}
-                      disabled={uploadingPhotos}
-                    >
-                      {t('common.back')}
-                    </Button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </Card>
+              {renderWizardActions()}
+            </Card>
+          </div>
         )}
 
         {/* Orders List */}
@@ -796,13 +839,14 @@ const CustomerOrders = () => {
               <Card key={order.id} className="order-card" data-order-id={order.id}>
                 <div className="order-header">
                   <div className="order-title-row">
-                    <h3>{order.title}</h3>
+                    <h3>{order.category?.name || 'N/A'}</h3>
                   </div>
                   <div className="order-header-actions">
-                    <span className="order-budget">
-                      {order.budgetMin}
-                      {order.budgetMax ? `-${order.budgetMax}` : '+'} ₸
-                    </span>
+                    {order.price && (
+                      <span className="order-budget">
+                        {order.price} ₸
+                      </span>
+                    )}
                     <div className="order-menu">
                       <button
                         className="menu-button"
@@ -844,9 +888,6 @@ const CustomerOrders = () => {
                 </div>
                 <p className="order-description">{order.description}</p>
                 <div className="order-details">
-                  <p>
-                    <strong>{t('orders.category')}:</strong> {order.category?.name || 'N/A'}
-                  </p>
                   {order.realEstate && (
                     <>
                       <p>
@@ -890,10 +931,12 @@ const CustomerOrders = () => {
               className="modal-content"
               onClick={(e) => e.stopPropagation()}
             >
-              <h2>{t('orders.offers')}: {selectedOrder.title}</h2>
+              <h2>{t('orders.offers')}: {selectedOrder.category?.name}</h2>
               <p className="modal-order-description">{selectedOrder.description}</p>
               <div className="order-modal-details">
-                <p><strong>{t('orders.budget')}:</strong> {selectedOrder.budgetMin}{selectedOrder.budgetMax ? `-${selectedOrder.budgetMax}` : '+'} ₸</p>
+                {selectedOrder.price && (
+                  <p><strong>{t('orders.price')}:</strong> {selectedOrder.price} ₸</p>
+                )}
                 {selectedOrder.category && (
                   <p><strong>{t('orders.category')}:</strong> {selectedOrder.category.name}</p>
                 )}
@@ -987,7 +1030,6 @@ const CustomerOrders = () => {
                         </div>
                         <p className="offer-message">{offer.message}</p>
 
-                        {/* Offer Actions */}
                         {isPending && !builderContact && (
                           <div className="offer-actions">
                             <button
