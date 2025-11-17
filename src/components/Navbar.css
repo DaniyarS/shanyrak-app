@@ -156,33 +156,6 @@
   border-bottom: 2px solid var(--color-primary);
 }
 
-/* Testing link - only visible in development */
-.navbar-link-testing {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-weight: 600;
-  position: relative;
-}
-
-.navbar-link-testing::before {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-
-.navbar-link-testing:hover::before,
-.navbar-link-testing.active::before {
-  opacity: 1;
-}
-
 .navbar-user {
   display: flex;
   align-items: center;
