@@ -6,13 +6,16 @@ import offerService from '../services/offerService';
 import Button from '../components/Button';
 import Card from '../components/Card';
 import Input from '../components/Input';
+import Select from '../components/Select';
+import CascadingCategorySelect from '../components/CascadingCategorySelect';
 import './BuilderOrders.css';
 
 const BuilderOrders = () => {
   const { user } = useAuth();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [orders, setOrders] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [cities, setCities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showOfferForm, setShowOfferForm] = useState(false);
@@ -38,11 +41,15 @@ const BuilderOrders = () => {
     try {
       setLoading(true);
 
-      const categoryRepo = container.getCategoryRepository();
+      const getCategoryTreeUseCase = container.getGetCategoryTreeUseCase();
+      const getCitiesUseCase = container.getGetCitiesUseCase();
       const searchOrdersUseCase = container.getSearchOrdersUseCase();
 
-      const ordersResult = await searchOrdersUseCase.execute();
-      const categoriesData = await categoryRepo.getAll();
+      const [categoryTreeResult, citiesResult, ordersResult] = await Promise.all([
+        getCategoryTreeUseCase.execute(false),
+        getCitiesUseCase.execute(false),
+        searchOrdersUseCase.execute(),
+      ]);
 
       // Fetch builder's offers to check which orders already have offers
       const builderOffers = await offerService.getBuilderOffers({ size: 100 });
@@ -50,7 +57,8 @@ const BuilderOrders = () => {
         (builderOffers?.content || []).map(item => item.order?.uuid || item.order?.publicId || item.order?.id)
       );
 
-      setCategories(categoriesData || []);
+      setCategories(categoryTreeResult.success ? categoryTreeResult.categories : []);
+      setCities(citiesResult.success ? citiesResult.cities : []);
       setOrders(ordersResult.orders || []);
       setOrdersWithOffers(offerOrderIds);
     } catch (error) {
@@ -63,6 +71,10 @@ const BuilderOrders = () => {
   const handleSearchChange = (e) => {
     const { name, value } = e.target;
     setSearchFilters((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleCategoryChange = (categoryId) => {
+    setSearchFilters((prev) => ({ ...prev, categoryPublicId: categoryId }));
   };
 
   const handleSearch = async () => {
@@ -178,29 +190,24 @@ const BuilderOrders = () => {
               onChange={handleSearchChange}
               placeholder={t('orders.searchPlaceholder')}
             />
-            <Input
+            <Select
               label={t('estates.city')}
               name="city"
               value={searchFilters.city}
               onChange={handleSearchChange}
-              placeholder={t('orders.filterByCity')}
+              options={cities.map((city) => ({
+                value: city.getLocalizedName(language),
+                label: city.getLocalizedName(language),
+              }))}
+              placeholder={t('orders.filterByCity') || t('estates.cityPlaceholder')}
             />
-            <div className="input-wrapper">
-              <label className="input-label">{t('orders.category')}</label>
-              <select
-                name="categoryPublicId"
-                value={searchFilters.categoryPublicId}
-                onChange={handleSearchChange}
-                className="input"
-              >
-                <option value="">{t('orders.allCategories')}</option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <CascadingCategorySelect
+              label={t('orders.category')}
+              categories={categories}
+              value={searchFilters.categoryPublicId}
+              onChange={handleCategoryChange}
+              placeholder={t('orders.allCategories')}
+            />
             <Button onClick={handleSearch}>{t('common.search')}</Button>
           </div>
         </Card>

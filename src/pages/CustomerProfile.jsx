@@ -18,7 +18,6 @@ const CustomerProfile = () => {
   const [formData, setFormData] = useState({
     fullName: '',
     phone: '',
-    email: '',
   });
 
   useEffect(() => {
@@ -30,7 +29,6 @@ const CustomerProfile = () => {
       setFormData({
         fullName: fullName,
         phone: user.phone || '',
-        email: user.email || '',
       });
     }
     fetchAvatar();
@@ -131,14 +129,6 @@ const CustomerProfile = () => {
                 readOnly
               />
 
-              <Input
-                label={t('estates.email')}
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-              />
-
               <div className="form-actions">
                 <Button type="submit" variant="primary">
                   {t('common.save')}
@@ -173,10 +163,6 @@ const CustomerProfile = () => {
                   <div className="detail-row">
                     <span className="detail-label">{t('profile.phone')}:</span>
                     <span className="detail-value">{user?.phone}</span>
-                  </div>
-                  <div className="detail-row">
-                    <span className="detail-label">{t('estates.email')}:</span>
-                    <span className="detail-value">{user?.email || 'N/A'}</span>
                   </div>
                   <div className="detail-row">
                     <span className="detail-label">{t('auth.role')}:</span>
