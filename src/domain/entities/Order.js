@@ -20,10 +20,13 @@ export const OrderStatus = {
 export class Order {
   constructor({
     id,
-    title,
+    title, // Legacy field, may be null
     description,
-    budgetMin,
-    budgetMax,
+    budgetMin, // Legacy field, may be null
+    budgetMax, // Legacy field, may be null
+    price, // New field (optional)
+    unit, // New field (optional)
+    priceType, // New field: 'FIXED' or 'NEGOTIABLE'
     category,
     realEstate,
     status,
@@ -34,8 +37,13 @@ export class Order {
     this.id = id;
     this.title = title;
     this.description = description;
+    // Legacy fields
     this.budgetMin = budgetMin;
     this.budgetMax = budgetMax;
+    // New fields
+    this.price = price;
+    this.unit = unit;
+    this.priceType = priceType || 'NEGOTIABLE';
     this.category = category; // Category entity
     this.realEstate = realEstate; // Estate entity
     this.status = status || OrderStatus.OPEN;
@@ -47,7 +55,7 @@ export class Order {
   }
 
   /**
-   * Get budget range as formatted string
+   * Get budget range as formatted string (legacy)
    */
   getBudgetRange() {
     if (this.budgetMax && this.budgetMax > 0) {
@@ -57,10 +65,20 @@ export class Order {
   }
 
   /**
-   * Check if order has a maximum budget set
+   * Check if order has a maximum budget set (legacy)
    */
   hasMaxBudget() {
     return this.budgetMax && this.budgetMax > 0;
+  }
+
+  /**
+   * Get price display string
+   */
+  getPriceDisplay() {
+    if (this.priceType === 'FIXED' && this.price) {
+      return `${this.price} ₸`;
+    }
+    return 'Negotiable';
   }
 
   /**
@@ -69,20 +87,22 @@ export class Order {
   static validate(data) {
     const errors = {};
 
-    if (!data.title || data.title.trim().length === 0) {
-      errors.title = 'Title is required';
-    }
-
     if (!data.description || data.description.trim().length === 0) {
       errors.description = 'Description is required';
     }
 
-    if (!data.budgetMin || data.budgetMin <= 0) {
-      errors.budgetMin = 'Minimum budget must be greater than 0';
+    if (!data.priceType) {
+      errors.priceType = 'Price type is required';
     }
 
-    if (data.budgetMax && data.budgetMax < data.budgetMin) {
-      errors.budgetMax = 'Maximum budget must be greater than minimum budget';
+    // If priceType is FIXED, price and unit are required
+    if (data.priceType === 'FIXED') {
+      if (!data.price || data.price <= 0) {
+        errors.price = 'Price must be greater than 0 when price type is FIXED';
+      }
+      if (!data.unit || data.unit.trim().length === 0) {
+        errors.unit = 'Unit is required when price type is FIXED';
+      }
     }
 
     if (!data.category) {

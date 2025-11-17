@@ -14,6 +14,100 @@
   margin: 0;
 }
 
+/* Wizard Styles */
+.order-wizard {
+  margin-bottom: var(--spacing-8);
+}
+
+.wizard-card {
+  padding: var(--spacing-8);
+}
+
+.step-indicators {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-8);
+  padding-bottom: var(--spacing-6);
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+}
+
+.step-indicator {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: var(--font-size-base);
+  background-color: var(--color-neutral-200, #eeeeee);
+  color: var(--color-text-secondary, #757575);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.step-indicator::after {
+  content: '';
+  position: absolute;
+  left: 100%;
+  width: var(--spacing-4);
+  height: 2px;
+  background-color: var(--color-neutral-200, #eeeeee);
+  transition: background-color 0.3s ease;
+}
+
+.step-indicator:last-child::after {
+  display: none;
+}
+
+.step-indicator.active {
+  background-color: var(--color-primary, #2196f3);
+  color: white;
+}
+
+.step-indicator.active::after {
+  background-color: var(--color-primary, #2196f3);
+}
+
+.wizard-step {
+  min-height: 400px;
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.wizard-step h2 {
+  margin-bottom: var(--spacing-3);
+  color: var(--color-text-primary);
+}
+
+.step-description {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  margin-bottom: var(--spacing-6);
+  line-height: 1.6;
+}
+
+.wizard-actions {
+  display: flex;
+  gap: var(--spacing-3);
+  justify-content: flex-end;
+  margin-top: var(--spacing-8);
+  padding-top: var(--spacing-6);
+  border-top: 1px solid var(--color-border, #e5e7eb);
+}
+
 .order-form-card {
   margin-bottom: var(--spacing-8);
   overflow: hidden;
@@ -731,5 +825,21 @@
 
   .offer-price {
     font-size: var(--font-size-lg);
+  }
+}
+
+/* Unit field animation */
+.form-row > *:last-child {
+  animation: slideInFromRight 0.3s ease-out;
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }

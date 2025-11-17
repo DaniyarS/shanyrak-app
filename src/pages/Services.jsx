@@ -1,257 +1,201 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { container } from '../infrastructure/di/ServiceContainer';
-import Card from '../components/Card';
-import BuilderCard from '../components/services/BuilderCard';
-import BuilderDetailDialog from '../components/services/BuilderDetailDialog';
 import './Services.css';
 
 const Services = () => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [categoryPath, setCategoryPath] = useState([]);
-  const [builders, setBuilders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [buildersLoading, setBuildersLoading] = useState(false);
-  const [selectedBuilder, setSelectedBuilder] = useState(null);
-  const [imageLoadingStates, setImageLoadingStates] = useState({});
-  const [imageErrorStates, setImageErrorStates] = useState({});
+  const [hoveredCategory, setHoveredCategory] = useState(null);
+  const [hoveredSubCategory, setHoveredSubCategory] = useState(null);
 
   useEffect(() => {
-    loadRootCategories();
+    loadCategoryTree();
   }, []);
 
-  useEffect(() => {
-    // Set timeout for image loading (10 seconds)
-    categories.forEach((category) => {
-      if (imageLoadingStates[category.id] !== false && !imageErrorStates[category.id]) {
-        const timer = setTimeout(() => {
-          handleImageError(category.id);
-        }, 10000);
-
-        return () => clearTimeout(timer);
-      }
-    });
-  }, [categories, imageLoadingStates, imageErrorStates]);
-
-  const loadRootCategories = async () => {
+  const loadCategoryTree = async () => {
     try {
       setLoading(true);
-      const categoryRepository = container.getCategoryRepository();
-      const categories = await categoryRepository.getAll();
-      setCategories(categories);
-    } catch (error) {
-      console.error('Failed to load categories:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const loadCategoryChildren = async (category) => {
-    try {
-      setLoading(true);
-      const categoryRepository = container.getCategoryRepository();
-      const children = await categoryRepository.getChildren(category.id);
-
-      if (children && children.length > 0) {
-        // Has children - navigate to subcategories
-        setCategories(children);
-        setCategoryPath([...categoryPath, category]);
-        setSelectedCategory(null);
-        setBuilders([]);
-      } else {
-        // No children - this is a leaf category, load builders
-        setSelectedCategory(category);
-        setCategoryPath([...categoryPath, category]);
-        loadBuilders(category.id);
-      }
-    } catch (error) {
-      console.error('Failed to load category children:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const loadBuilders = async (categoryId) => {
-    try {
-      setBuildersLoading(true);
-      const searchBuildersUseCase = container.getSearchBuildersUseCase();
-      const result = await searchBuildersUseCase.execute({
-        categoryPublicId: categoryId,
-      });
+      const getCategoryTreeUseCase = container.getGetCategoryTreeUseCase();
+      const result = await getCategoryTreeUseCase.execute(false);
 
       if (result.success) {
-        setBuilders(result.builders);
-      } else {
-        setBuilders([]);
+        setCategories(result.categories);
       }
     } catch (error) {
-      console.error('Failed to load builders:', error);
-      setBuilders([]);
+      console.error('Failed to load category tree:', error);
     } finally {
-      setBuildersLoading(false);
+      setLoading(false);
     }
   };
 
-  const navigateBack = () => {
-    if (categoryPath.length === 0) return;
+  const handleCategoryClick = (category) => {
+    // If it's a leaf category (no children), navigate to builders page
+    if (category.isLeafCategory()) {
+      navigate(`/builders?categoryId=${category.id}`);
+    }
+    // If it has children, do nothing (hover will show them)
+  };
 
-    const newPath = [...categoryPath];
-    newPath.pop(); // Remove last category
-
-    if (newPath.length === 0) {
-      // Back to root
-      loadRootCategories();
-      setCategoryPath([]);
-      setSelectedCategory(null);
-      setBuilders([]);
-    } else {
-      // Load parent's children
-      const parent = newPath[newPath.length - 1];
-      const categoryRepository = container.getCategoryRepository();
-      categoryRepository.getChildren(parent.id).then((children) => {
-        setCategories(children);
-        setCategoryPath(newPath);
-        setSelectedCategory(null);
-        setBuilders([]);
-      });
+  const handleMouseEnter = (category, level = 'main') => {
+    if (level === 'main') {
+      setHoveredCategory(category);
+      setHoveredSubCategory(null);
+    } else if (level === 'sub') {
+      setHoveredSubCategory(category);
     }
   };
 
-  const handleBuilderClick = (builder) => {
-    setSelectedBuilder(builder);
+  const handleMouseLeave = (level = 'main') => {
+    if (level === 'main') {
+      setHoveredCategory(null);
+      setHoveredSubCategory(null);
+    } else if (level === 'sub') {
+      setHoveredSubCategory(null);
+    }
   };
 
-  const closeBuilderDialog = () => {
-    setSelectedBuilder(null);
-  };
-
-  const handleImageLoad = (categoryId) => {
-    setImageLoadingStates((prev) => ({ ...prev, [categoryId]: false }));
-  };
-
-  const handleImageError = (categoryId) => {
-    setImageLoadingStates((prev) => ({ ...prev, [categoryId]: false }));
-    setImageErrorStates((prev) => ({ ...prev, [categoryId]: true }));
-  };
+  if (loading) {
+    return (
+      <div className="services-page">
+        <div className="container">
+          <div className="services-header">
+            <h1>{t('services.title')}</h1>
+            <p className="services-subtitle">{t('services.subtitle')}</p>
+          </div>
+          <div className="loading-state">
+            <div className="spinner"></div>
+            <p>{t('services.loading')}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="services-page">
       <div className="container">
         <div className="services-header">
           <h1>{t('services.title')}</h1>
+          <p className="services-subtitle">{t('services.subtitle')}</p>
         </div>
 
-        {/* Breadcrumb Navigation */}
-        {categoryPath.length > 0 && (
-          <div className="breadcrumb">
-            <button onClick={loadRootCategories} className="breadcrumb-item">
-              {t('services.categories')}
-            </button>
-            {categoryPath.map((cat) => (
-              <span key={cat.id}>
-                <span className="breadcrumb-separator">/</span>
-                <span className="breadcrumb-item current">{cat.name}</span>
-              </span>
-            ))}
-            {categoryPath.length > 0 && (
-              <button onClick={navigateBack} className="back-button">
-                ← {t('common.back')}
-              </button>
-            )}
+        {categories.length === 0 ? (
+          <div className="empty-state">
+            <div className="empty-icon">📂</div>
+            <p>{t('services.noCategories')}</p>
           </div>
-        )}
-
-        {loading ? (
-          <div className="loading">{t('services.loading')}</div>
         ) : (
-          <>
-            {/* Category Grid */}
-            {!selectedCategory && categories.length > 0 && (
-              <div className="categories-section">
-                <div className="categories-grid">
-                  {categories.map((category) => (
-                    <div key={category.id} className="category-card-wrapper">
-                      <div
-                        className="category-card"
-                        onClick={() => loadCategoryChildren(category)}
-                      >
-                        <div className="category-image-container">
-                          {imageLoadingStates[category.id] !== false && !imageErrorStates[category.id] && (
-                            <div className="image-shimmer"></div>
-                          )}
-                          {imageErrorStates[category.id] ? (
-                            <div className="image-placeholder" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}></div>
-                          ) : (
-                            <img
-                              src={category.imageUrl || 'https://via.placeholder.com/400x200/667eea'}
-                              alt={category.name}
-                              className="category-image"
-                              loading="lazy"
-                              onLoad={() => handleImageLoad(category.id)}
-                              onError={() => handleImageError(category.id)}
-                              style={{ display: imageLoadingStates[category.id] === false ? 'block' : 'none' }}
-                            />
-                          )}
-                          <div className="category-overlay"></div>
-                          <div className="category-content">
-                            <h3 className="category-title">{category.name}</h3>
-                            <div className="category-arrow">→</div>
-                          </div>
+          <div className="categories-mega-grid">
+            {categories.map((category) => (
+              <div
+                key={category.id}
+                className={`category-card ${
+                  category.isLeafCategory() ? 'clickable' : 'has-dropdown'
+                } ${hoveredCategory?.id === category.id ? 'hovered' : ''}`}
+                onMouseEnter={() => handleMouseEnter(category, 'main')}
+                onMouseLeave={() => handleMouseLeave('main')}
+                onClick={() => handleCategoryClick(category)}
+              >
+                <div className="category-card-content">
+                  <div className="category-icon">{category.emoji}</div>
+                  <h3 className="category-name">{category.name}</h3>
+                  {category.description && (
+                    <p className="category-description">{category.description}</p>
+                  )}
+                  {!category.isLeafCategory() && (
+                    <div className="category-badge">
+                      {category.children.length} {t('services.subcategories')}
+                    </div>
+                  )}
+                </div>
+
+                {/* First Level Dropdown - Children of root category */}
+                {hoveredCategory?.id === category.id &&
+                  !category.isLeafCategory() &&
+                  category.children.length > 0 && (
+                    <div className="mega-dropdown level-1">
+                      <div className="mega-dropdown-content">
+                        <h4 className="dropdown-title">{category.name}</h4>
+                        <div className="dropdown-grid">
+                          {category.children.map((child) => (
+                            <div
+                              key={child.id}
+                              className="dropdown-item-wrapper"
+                              onMouseEnter={() => handleMouseEnter(child, 'sub')}
+                              onMouseLeave={() => handleMouseLeave('sub')}
+                            >
+                              <div
+                                className={`dropdown-item ${
+                                  child.isLeafCategory() ? 'clickable' : ''
+                                } ${hoveredSubCategory?.id === child.id ? 'hovered' : ''}`}
+                                onClick={() => handleCategoryClick(child)}
+                              >
+                                <span className="dropdown-item-icon">{child.emoji}</span>
+                                <span className="dropdown-item-name">{child.name}</span>
+                                {!child.isLeafCategory() && (
+                                  <span className="dropdown-item-arrow">→</span>
+                                )}
+                              </div>
+
+                              {/* Second Level Dropdown - Grandchildren */}
+                              {hoveredSubCategory?.id === child.id &&
+                                !child.isLeafCategory() &&
+                                child.children.length > 0 && (
+                                  <div className="mega-dropdown level-2">
+                                    <div className="mega-dropdown-content">
+                                      <h5 className="dropdown-title-small">{child.name}</h5>
+                                      <div className="dropdown-list">
+                                        {child.children.map((grandchild) => (
+                                          <div
+                                            key={grandchild.id}
+                                            className="dropdown-item clickable"
+                                            onClick={() => handleCategoryClick(grandchild)}
+                                          >
+                                            <span className="dropdown-item-icon">
+                                              {grandchild.emoji}
+                                            </span>
+                                            <span className="dropdown-item-name">
+                                              {grandchild.name}
+                                            </span>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+                            </div>
+                          ))}
                         </div>
                       </div>
                     </div>
-                  ))}
-                </div>
+                  )}
               </div>
-            )}
-
-            {/* Builders List */}
-            {selectedCategory && (
-              <div className="builders-section">
-                <h2 className="section-title">
-                  {t('services.builders')} - {selectedCategory.name}
-                </h2>
-
-                {buildersLoading ? (
-                  <div className="loading">{t('services.loading')}</div>
-                ) : builders.length > 0 ? (
-                  <div className="builders-grid">
-                    {builders.map((builder) => (
-                      <BuilderCard
-                        key={builder.id}
-                        builder={builder}
-                        onClick={() => handleBuilderClick(builder)}
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <Card>
-                    <div className="no-data">
-                      <p>{t('services.noBuilders')}</p>
-                    </div>
-                  </Card>
-                )}
-              </div>
-            )}
-
-            {/* No Categories State */}
-            {!selectedCategory && categories.length === 0 && !loading && (
-              <Card>
-                <div className="no-data">
-                  <p>{t('services.selectCategory')}</p>
-                </div>
-              </Card>
-            )}
-          </>
+            ))}
+          </div>
         )}
-      </div>
 
-      {/* Builder Detail Dialog */}
-      {selectedBuilder && (
-        <BuilderDetailDialog builder={selectedBuilder} onClose={closeBuilderDialog} />
-      )}
+        <div className="services-info">
+          <div className="info-card">
+            <div className="info-icon">🎯</div>
+            <h3>{t('services.howItWorks')}</h3>
+            <p>{t('services.howItWorksDescription')}</p>
+          </div>
+          <div className="info-card">
+            <div className="info-icon">⭐</div>
+            <h3>{t('services.qualityGuarantee')}</h3>
+            <p>{t('services.qualityGuaranteeDescription')}</p>
+          </div>
+          <div className="info-card">
+            <div className="info-icon">💬</div>
+            <h3>{t('services.support')}</h3>
+            <p>{t('services.supportDescription')}</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

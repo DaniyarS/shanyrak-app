@@ -148,6 +148,12 @@
 
 .order-photo-upload-item {
   background: linear-gradient(135deg, var(--color-background) 0%, var(--color-background-secondary) 100%);
+  border: 2px dashed var(--color-border-secondary, #9ca3af);
+}
+
+.order-photo-upload-item:hover {
+  border-color: var(--color-primary);
+  border-style: dashed;
 }
 
 .order-photo-upload-btn {

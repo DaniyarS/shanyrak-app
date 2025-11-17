@@ -101,6 +101,7 @@
 .logout-section {
   max-width: 800px;
   margin: 0 auto;
+  margin-bottom: var(--spacing-6);
 }
 
 .logout-content {

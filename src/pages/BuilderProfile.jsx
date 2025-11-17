@@ -182,6 +182,28 @@ const BuilderProfile = () => {
     navigate('/login');
   };
 
+  const handleDeleteAccount = async () => {
+    if (!window.confirm(t('profile.confirmDeleteAccount'))) {
+      return;
+    }
+
+    try {
+      const deleteAccountUseCase = container.getDeleteAccountUseCase();
+      const result = await deleteAccountUseCase.execute();
+
+      if (result.success) {
+        alert(t('profile.accountDeleted'));
+        logout();
+        navigate('/login');
+      } else {
+        alert(result.errors?.message || t('profile.accountDeletionFailed'));
+      }
+    } catch (error) {
+      console.error('Error deleting account:', error);
+      alert(t('profile.accountDeletionFailed'));
+    }
+  };
+
   if (loading) {
     return (
       <div className="builder-profile-page">
@@ -421,6 +443,18 @@ const BuilderProfile = () => {
             </div>
             <Button variant="outline" onClick={handleLogout}>
               {t('navbar.logout')}
+            </Button>
+          </div>
+        </Card>
+
+        <Card className="logout-section">
+          <div className="logout-content">
+            <div>
+              <h3>{t('profile.deleteAccount')}</h3>
+              <p>{t('profile.deleteAccountDescription')}</p>
+            </div>
+            <Button variant="outline" onClick={handleDeleteAccount} style={{ borderColor: '#ef4444', color: '#ef4444' }}>
+              {t('profile.deleteAccount')}
             </Button>
           </div>
         </Card>

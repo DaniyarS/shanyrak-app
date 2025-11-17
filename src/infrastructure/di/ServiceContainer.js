@@ -13,6 +13,8 @@ import { ApiBuilderRepository } from '../api/repositories/ApiBuilderRepository';
 import { ApiFileRepository } from '../api/repositories/ApiFileRepository';
 import { ApiContractRepository } from '../api/repositories/ApiContractRepository';
 import { ApiReviewRepository } from '../api/repositories/ApiReviewRepository';
+import { ApiAuthRepository } from '../api/repositories/ApiAuthRepository';
+import { ApiCityRepository } from '../api/repositories/ApiCityRepository';
 
 // Use Cases - Orders
 import { CreateOrder } from '../../application/use-cases/orders/CreateOrder';
@@ -57,6 +59,15 @@ import { UploadOrderPhoto } from '../../application/use-cases/files/UploadOrderP
 import { GetOrderPhotos } from '../../application/use-cases/files/GetOrderPhotos';
 import { DeleteOrderPhoto } from '../../application/use-cases/files/DeleteOrderPhoto';
 
+// Use Cases - Auth
+import { DeleteAccount } from '../../application/use-cases/auth/DeleteAccount';
+
+// Use Cases - Categories
+import { GetCategoryTree } from '../../application/use-cases/categories/GetCategoryTree';
+
+// Use Cases - Cities
+import { GetCities } from '../../application/use-cases/cities/GetCities';
+
 /**
  * ServiceContainer - Singleton pattern for dependency injection
  */
@@ -77,6 +88,8 @@ class ServiceContainer {
     this.repositories.file = new ApiFileRepository();
     this.repositories.contract = new ApiContractRepository();
     this.repositories.review = new ApiReviewRepository();
+    this.repositories.auth = new ApiAuthRepository();
+    this.repositories.city = new ApiCityRepository();
 
     // Initialize use cases with their dependencies
     // Orders
@@ -121,6 +134,15 @@ class ServiceContainer {
     this.useCases.uploadOrderPhoto = new UploadOrderPhoto(this.repositories.file);
     this.useCases.getOrderPhotos = new GetOrderPhotos(this.repositories.file);
     this.useCases.deleteOrderPhoto = new DeleteOrderPhoto(this.repositories.file);
+
+    // Auth
+    this.useCases.deleteAccount = new DeleteAccount(this.repositories.auth);
+
+    // Categories
+    this.useCases.getCategoryTree = new GetCategoryTree(this.repositories.category);
+
+    // Cities
+    this.useCases.getCities = new GetCities(this.repositories.city);
   }
 
   // Getters for repositories
@@ -273,6 +295,21 @@ class ServiceContainer {
 
   getDeleteOrderPhotoUseCase() {
     return this.useCases.deleteOrderPhoto;
+  }
+
+  // Getters for use cases - Auth
+  getDeleteAccountUseCase() {
+    return this.useCases.deleteAccount;
+  }
+
+  // Getters for use cases - Categories
+  getGetCategoryTreeUseCase() {
+    return this.useCases.getCategoryTree;
+  }
+
+  // Getters for use cases - Cities
+  getGetCitiesUseCase() {
+    return this.useCases.getCities;
   }
 }
 

@@ -26,10 +26,15 @@ export class OrderMapper {
 
     return new Order({
       id: orderData.uuid || orderData.publicId || orderData.id,
+      // Legacy fields
       title: orderData.title,
-      description: orderData.description,
       budgetMin: orderData.budgetMin || 0,
       budgetMax: orderData.budgetMax || 0,
+      // New fields
+      description: orderData.description,
+      price: orderData.price,
+      unit: orderData.unit,
+      priceType: orderData.priceType || 'NEGOTIABLE',
       category: apiData.category ? CategoryMapper.toDomain(apiData.category) : null,
       realEstate: apiData.realEstate ? EstateMapper.toDomain(apiData.realEstate) : null,
       status: orderData.status,
@@ -51,15 +56,21 @@ export class OrderMapper {
    * Map Order entity to API create request DTO
    */
   static toCreateDTO(order, categoryId, estateId) {
+    const orderData = {
+      description: order.description,
+      priceType: order.priceType,
+    };
+
+    // Add price and unit only if price is provided
+    if (order.price && order.price > 0) {
+      orderData.price = order.price;
+      orderData.unit = order.unit;
+    }
+
     return {
       category: { publicId: categoryId },
       realEstate: { publicId: estateId },
-      order: {
-        title: order.title,
-        description: order.description,
-        budgetMin: order.budgetMin,
-        budgetMax: order.budgetMax || 0,
-      },
+      order: orderData,
     };
   }
 
@@ -69,11 +80,15 @@ export class OrderMapper {
   static toUpdateDTO(order, categoryId, estateId) {
     const dto = {
       uuid: order.id,
-      title: order.title,
       description: order.description,
-      budgetMin: order.budgetMin,
-      budgetMax: order.budgetMax || 0,
+      priceType: order.priceType,
     };
+
+    // Add price and unit only if price is provided
+    if (order.price && order.price > 0) {
+      dto.price = order.price;
+      dto.unit = order.unit;
+    }
 
     // Include category and realEstate if provided
     if (categoryId) {

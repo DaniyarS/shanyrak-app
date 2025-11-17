@@ -18,7 +18,11 @@ import Offers from './pages/Offers';
 import Contracts from './pages/Contracts';
 import Unauthorized from './pages/Unauthorized';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import Testing from './pages/Testing';
 import './App.css';
+
+// Check if we're in development mode
+const isDevelopment = import.meta.env.DEV;
 
 function App() {
   return (
@@ -34,6 +38,9 @@ function App() {
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/unauthorized" element={<Unauthorized />} />
+
+            {/* Testing route - only available in development */}
+            {isDevelopment && <Route path="/testing" element={<Testing />} />}
 
             {/* Protected routes with role-based access control */}
             <Route

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import { container } from '../infrastructure/di/ServiceContainer';
 import estateService from '../services/estateService';
 import Button from '../components/Button';
 import Card from '../components/Card';
@@ -8,8 +9,9 @@ import Select from '../components/Select';
 import './Estates.css';
 
 const Estates = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [estates, setEstates] = useState([]);
+  const [cities, setCities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingEstate, setEditingEstate] = useState(null);
@@ -25,6 +27,7 @@ const Estates = () => {
 
   useEffect(() => {
     fetchEstates();
+    fetchCities();
   }, []);
 
   const fetchEstates = async () => {
@@ -37,6 +40,19 @@ const Estates = () => {
       setEstates([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchCities = async () => {
+    try {
+      const getCitiesUseCase = container.getGetCitiesUseCase();
+      const result = await getCitiesUseCase.execute(false); // Get all cities
+
+      if (result.success) {
+        setCities(result.cities);
+      }
+    } catch (error) {
+      console.error('Error fetching cities:', error);
     }
   };
 
@@ -178,11 +194,15 @@ const Estates = () => {
               />
 
               <div className="form-row">
-                <Input
+                <Select
                   label={t('estates.city')}
                   name="city"
                   value={formData.city}
                   onChange={handleChange}
+                  options={cities.map((city) => ({
+                    value: city.getLocalizedName(language),
+                    label: city.getLocalizedName(language),
+                  }))}
                   placeholder={t('estates.cityPlaceholder')}
                   error={errors.city}
                   required
