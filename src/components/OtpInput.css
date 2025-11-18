@@ -1,60 +1,65 @@
 .otp-input-wrapper {
   width: 100%;
+  padding: var(--spacing-2) 0;
 }
 
 .otp-input-container {
   display: flex;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-3);
   justify-content: center;
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: var(--spacing-2);
 }
 
 .otp-input-container.has-error .otp-input-box {
-  border-color: var(--color-error);
+  border-color: #ef4444;
 }
 
 .otp-input-box {
-  width: 48px;
+  width: 56px;
   height: 56px;
   text-align: center;
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-semibold);
-  border: 2px solid var(--color-border);
-  border-radius: var(--border-radius-md);
-  background-color: var(--color-white);
-  color: var(--color-text-primary);
-  transition: all 0.2s ease;
+  font-size: 1.5rem;
+  font-weight: 600;
+  border: 2px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #1f2937;
+  transition: border-color 0.15s ease;
   outline: none;
 }
 
+.otp-input-box:hover:not(:disabled) {
+  border-color: #9ca3af;
+}
+
 .otp-input-box:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  border-color: #3b82f6;
 }
 
 .otp-input-box:disabled {
-  background-color: var(--color-background-secondary);
+  background-color: #f9fafb;
+  color: #9ca3af;
+  border-color: #e5e7eb;
   cursor: not-allowed;
-  opacity: 0.6;
 }
 
 .otp-input-error {
   display: block;
-  color: var(--color-error);
-  font-size: var(--font-size-sm);
-  margin-top: var(--spacing-xs);
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: var(--spacing-2);
   text-align: center;
 }
 
 /* Mobile responsiveness */
 @media (max-width: 480px) {
   .otp-input-box {
-    width: 40px;
-    height: 48px;
-    font-size: var(--font-size-lg);
+    width: 50px;
+    height: 50px;
+    font-size: 1.25rem;
   }
 
   .otp-input-container {
-    gap: var(--spacing-xs);
+    gap: var(--spacing-2);
   }
 }
