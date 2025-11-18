@@ -154,26 +154,53 @@ const Home = () => {
                 </Card>
               ) : (
                 <div className="orders-preview-grid">
-                  {orders.slice(0, 3).map((order) => (
-                    <Card key={order.id} className="order-preview-card">
+                  {orders.slice(0, 3).map((order) => {
+                    const getUnitLabel = (unit) => {
+                      const unitMap = {
+                        'm2': t('offers.perM2'),
+                        'areaM2': t('offers.perM2'),
+                        'unit': t('offers.perUnit'),
+                        'hour': t('offers.perHour'),
+                        'day': t('offers.perDay'),
+                        'fixed': t('offers.fixedPrice'),
+                      };
+                      return unitMap[unit] || unit;
+                    };
+
+                    return (
+                    <Card key={order.id} className="order-preview-card" onClick={() => navigate(`/orders`)}>
                       <div className="order-preview-header">
-                        <h3>{order.title}</h3>
-                        <span className="order-budget">
-                          {order.budgetMin}
-                          {order.budgetMax ? `-${order.budgetMax}` : '+'} ₸
+                        <span className="order-category-badge">{order.category?.name || 'N/A'}</span>
+                        <span className={`order-price-badge ${order.priceType === 'FIXED' ? 'fixed' : 'negotiable'}`}>
+                          {order.priceType === 'FIXED' && order.price
+                            ? `${order.price} ₸${order.unit ? `/${getUnitLabel(order.unit)}` : ''}`
+                            : t('orders.negotiable')}
                         </span>
                       </div>
                       <p className="order-preview-description">{order.description}</p>
-                      <div className="order-preview-meta">
-                        <span className="order-category">{order.category?.name || 'N/A'}</span>
+                      <div className="order-preview-details">
                         {order.realEstate && (
-                          <span className="order-location">
-                            📍 {order.realEstate.city}
-                          </span>
+                          <>
+                            <div className="order-detail-row">
+                              <span className="detail-icon">📍</span>
+                              <span>{order.realEstate.city}, {order.realEstate.district}</span>
+                            </div>
+                            <div className="order-detail-row">
+                              <span className="detail-icon">🏠</span>
+                              <span>{order.realEstate.kind} - {order.realEstate.areaM2} m²</span>
+                            </div>
+                          </>
+                        )}
+                        {order.createdAt && (
+                          <div className="order-detail-row">
+                            <span className="detail-icon">📅</span>
+                            <span>{new Date(order.createdAt).toLocaleDateString()}</span>
+                          </div>
                         )}
                       </div>
                     </Card>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>

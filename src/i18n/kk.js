@@ -22,6 +22,7 @@ export const kk = {
     alreadyResponded: 'Сіз жауап бердіңіз',
     createdAt: 'Жасалды',
     error: 'Қате',
+    view: 'Көру',
   },
 
   // Navbar
@@ -297,6 +298,7 @@ export const kk = {
     latitude: 'Ендік',
     longitude: 'Бойлық',
     area: 'Аумақ (м²)',
+    m2: 'м²',
     floor: 'Қабат',
     floorPlaceholder: '5',
     coordinates: 'Координаттар',
@@ -378,6 +380,7 @@ export const kk = {
     deleteFailed: 'Тапсырысты жою сәтсіз аяқталды',
     offer: 'Ұсыныс',
     offers: 'Ұсыныстар',
+    negotiable: 'Келісімді',
     receivedOffers: 'Алынған ұсыныстар',
     submittedOffers: 'Алынған ұсыныстар:',
     noOffers: 'Әлі ұсыныстар жоқ.',
@@ -470,9 +473,12 @@ export const kk = {
   contracts: {
     title: 'Келісімшарттар',
     myContracts: 'Менің келісімшарттарым',
+    contract: 'Келісімшарт',
     contractDetails: 'Келісімшарт мәліметтері',
+    status: 'Күйі',
     startDate: 'Басталу күні',
     endDate: 'Аяқталу күні',
+    createdAt: 'Жасалған күні',
     noContracts: 'Әлі келісімшарттар жоқ',
     noContractsDescription: 'Келісімшарттар құрылысшымен келісімді растағаннан кейін осында көрінеді.',
     // Contract statuses
