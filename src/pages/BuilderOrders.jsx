@@ -19,6 +19,19 @@ const BuilderOrders = () => {
   const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showOfferForm, setShowOfferForm] = useState(false);
+
+  // Helper function to translate unit labels
+  const getUnitLabel = (unit) => {
+    const unitMap = {
+      'm2': t('offers.perM2'),
+      'areaM2': t('offers.perM2'),
+      'unit': t('offers.perUnit'),
+      'hour': t('offers.perHour'),
+      'day': t('offers.perDay'),
+      'fixed': t('offers.fixedPrice'),
+    };
+    return unitMap[unit] || unit;
+  };
   const [offerFormData, setOfferFormData] = useState({
     price: '',
     unit: 'm2',
@@ -224,28 +237,38 @@ const BuilderOrders = () => {
             orders.map((order) => (
               <Card key={order.id} className="order-card">
                 <div className="order-header">
-                  <h3>{order.title}</h3>
-                  <span className="order-budget">
-                    {order.budgetMin}
-                    {order.budgetMax ? `-${order.budgetMax}` : '+'} ₸
+                  <span className="order-category-badge">{order.category?.name || 'N/A'}</span>
+                  <span className={`order-price-badge ${order.priceType === 'FIXED' ? 'fixed' : 'negotiable'}`}>
+                    {order.priceType === 'FIXED' && order.price
+                      ? `${order.price} ₸${order.unit ? `/${getUnitLabel(order.unit)}` : ''}`
+                      : t('orders.negotiable')}
                   </span>
                 </div>
                 <p className="order-description">{order.description}</p>
                 <div className="order-details">
-                  <p>
-                    <strong>{t('orders.category')}:</strong> {order.category?.name || 'N/A'}
-                  </p>
                   {order.realEstate && (
                     <>
-                      <p>
-                        <strong>{t('orders.location')}:</strong> {order.realEstate.city},{' '}
-                        {order.realEstate.district}
-                      </p>
-                      <p>
-                        <strong>{t('orders.property')}:</strong> {order.realEstate.kind} -{' '}
-                        {order.realEstate.areaM2} m²
-                      </p>
+                      <div className="order-detail-item">
+                        <span className="detail-icon">📍</span>
+                        <span><strong>{t('orders.location')}:</strong> {order.realEstate.city}, {order.realEstate.district}</span>
+                      </div>
+                      <div className="order-detail-item">
+                        <span className="detail-icon">🏠</span>
+                        <span><strong>{t('orders.property')}:</strong> {order.realEstate.kind} - {order.realEstate.areaM2} m²</span>
+                      </div>
                     </>
+                  )}
+                  {order.createdAt && (
+                    <div className="order-detail-item">
+                      <span className="detail-icon">📅</span>
+                      <span><strong>{t('common.createdAt')}:</strong> {new Date(order.createdAt).toLocaleDateString()}</span>
+                    </div>
+                  )}
+                  {order.offersCount > 0 && (
+                    <div className="order-detail-item">
+                      <span className="detail-icon">💼</span>
+                      <span><strong>{t('orders.offers')}:</strong> {order.offersCount}</span>
+                    </div>
                   )}
                 </div>
                 <div className="order-actions">
@@ -273,15 +296,24 @@ const BuilderOrders = () => {
               className="modal-content"
               onClick={(e) => e.stopPropagation()}
             >
-              <h2>{t('orders.makeOfferTitle')}: {selectedOrder.title}</h2>
+              <h2>{t('orders.makeOfferTitle')}</h2>
               <p className="modal-order-description">{selectedOrder.description}</p>
               <div className="order-modal-details">
-                <p><strong>{t('orders.budget')}:</strong> {selectedOrder.budgetMin}{selectedOrder.budgetMax ? `-${selectedOrder.budgetMax}` : '+'} ₸</p>
-                {selectedOrder.category && (
-                  <p><strong>{t('orders.category')}:</strong> {selectedOrder.category.name}</p>
-                )}
+                <div className="modal-detail-badges">
+                  {selectedOrder.category && (
+                    <span className="order-category-badge">{selectedOrder.category.name}</span>
+                  )}
+                  <span className={`order-price-badge ${selectedOrder.priceType === 'FIXED' ? 'fixed' : 'negotiable'}`}>
+                    {selectedOrder.priceType === 'FIXED' && selectedOrder.price
+                      ? `${selectedOrder.price} ₸${selectedOrder.unit ? `/${getUnitLabel(selectedOrder.unit)}` : ''}`
+                      : t('orders.negotiable')}
+                  </span>
+                </div>
                 {selectedOrder.realEstate && (
-                  <p><strong>{t('orders.area')}:</strong> {selectedOrder.realEstate.areaM2} m²</p>
+                  <>
+                    <p><strong>{t('orders.location')}:</strong> {selectedOrder.realEstate.city}, {selectedOrder.realEstate.district}</p>
+                    <p><strong>{t('orders.property')}:</strong> {selectedOrder.realEstate.kind} - {selectedOrder.realEstate.areaM2} m²</p>
+                  </>
                 )}
               </div>
 

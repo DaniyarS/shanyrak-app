@@ -22,6 +22,7 @@ export const ru = {
     alreadyResponded: 'Вы откликнулись',
     createdAt: 'Создано',
     error: 'Ошибка',
+    view: 'Просмотр',
   },
 
   // Navbar
@@ -296,6 +297,7 @@ export const ru = {
     latitude: 'Широта',
     longitude: 'Долгота',
     area: 'Площадь (м²)',
+    m2: 'м²',
     floor: 'Этаж',
     floorPlaceholder: '5',
     coordinates: 'Координаты',
@@ -376,7 +378,8 @@ export const ru = {
     deleteSuccess: 'Заказ успешно удален',
     deleteFailed: 'Не удалось удалить заказ',
     offer: 'Предложение',
-    offers: 'Предложения для',
+    offers: 'Предложений',
+    negotiable: 'Договорная',
     receivedOffers: 'Полученные предложения',
     submittedOffers: 'Полученные предложения:',
     noOffers: 'Пока нет предложений.',
@@ -469,9 +472,12 @@ export const ru = {
   contracts: {
     title: 'Договоры',
     myContracts: 'Мои договоры',
+    contract: 'Договор',
     contractDetails: 'Детали договора',
+    status: 'Статус',
     startDate: 'Дата начала',
     endDate: 'Дата окончания',
+    createdAt: 'Дата создания',
     noContracts: 'Пока нет договоров',
     noContractsDescription: 'Договоры появятся здесь, когда вы подтвердите сделку со строителем.',
     // Contract statuses
