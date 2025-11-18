@@ -103,13 +103,13 @@ const Services = () => {
                 <div className="category-card-content">
                   <div className="category-icon">{category.emoji}</div>
                   <h3 className="category-name">{category.name}</h3>
-                  {category.description && (
-                    <p className="category-description">{category.description}</p>
-                  )}
                   {!category.isLeafCategory() && (
                     <div className="category-badge">
                       {category.children.length} {t('services.subcategories')}
                     </div>
+                  )}
+                  {category.description && (
+                    <p className="category-description">{category.description}</p>
                   )}
                 </div>
 

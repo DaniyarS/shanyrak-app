@@ -22,6 +22,7 @@ export const en = {
     alreadyResponded: 'You responded',
     createdAt: 'Created',
     error: 'Error',
+    view: 'View',
   },
 
   // Navbar
@@ -296,6 +297,7 @@ export const en = {
     latitude: 'Latitude',
     longitude: 'Longitude',
     area: 'Area (m²)',
+    m2: 'm²',
     floor: 'Floor',
     floorPlaceholder: '5',
     coordinates: 'Coordinates',
@@ -376,7 +378,8 @@ export const en = {
     deleteSuccess: 'Order deleted successfully',
     deleteFailed: 'Failed to delete order',
     offer: 'Offer',
-    offers: 'Offers for',
+    offers: 'Offers',
+    negotiable: 'Negotiable',
     receivedOffers: 'Received Offers',
     submittedOffers: 'Submitted Offers:',
     noOffers: 'No offers yet.',
@@ -469,9 +472,12 @@ export const en = {
   contracts: {
     title: 'Contracts',
     myContracts: 'My Contracts',
+    contract: 'Contract',
     contractDetails: 'Contract Details',
+    status: 'Status',
     startDate: 'Start Date',
     endDate: 'End Date',
+    createdAt: 'Created At',
     noContracts: 'No contracts yet',
     noContractsDescription: 'Contracts will appear here when you confirm a deal with a builder.',
     // Contract statuses
