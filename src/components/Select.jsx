@@ -85,13 +85,14 @@ const Select = ({
   return (
     <div className={`select-wrapper ${className}`} ref={selectRef}>
       {label && (
-        <label className="select-label">
+        <label htmlFor={`select-${name}`} className="select-label">
           {label}
           {required && <span className="select-required">*</span>}
         </label>
       )}
 
       <div
+        id={`select-${name}`}
         className={`select-control ${error ? 'select-error' : ''} ${
           disabled ? 'select-disabled' : ''
         } ${isOpen ? 'select-open' : ''}`}

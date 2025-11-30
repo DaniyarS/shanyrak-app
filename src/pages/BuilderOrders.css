@@ -22,25 +22,122 @@
   margin-bottom: var(--spacing-4);
 }
 
+/* COMPLETELY REMADE SEARCH FORM - PERFECT ALIGNMENT */
 .search-form {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr auto;
-  gap: var(--spacing-4);
-  align-items: flex-end;
+  display: flex;
+  gap: 20px;
+  align-items: baseline;
+  justify-content: flex-start;
+  padding: 0;
+  margin: 0;
 }
 
+/* STEP 1: Reset all form field containers to identical structure */
 .search-form > * {
+  flex: 1;
   min-width: 0;
 }
 
+.search-form .input-wrapper,
+.search-form .select-wrapper,
 .search-form .cascading-category-select {
-  width: 100%;
+  position: relative;
+  margin: 0;
+  padding-top: 20px; /* Space for label */
 }
 
-.search-form button {
-  align-self: flex-end;
+/* STEP 2: Position all labels absolutely at the top */
+.search-form .input-label,
+.search-form .select-label,
+.search-form .cascading-category-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: flex-end;
+  line-height: 1;
+}
+
+/* STEP 3: Position all controls at exact same baseline */
+.search-form .input,
+.search-form .select-control,
+.search-form .cascading-category-input {
+  position: relative;
+  top: 0;
   height: 44px;
-  margin-top: auto;
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  padding: 0 12px;
+  font-size: 14px;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+/* STEP 4: Style individual controls */
+.search-form .input {
+  outline: none;
+}
+
+.search-form .input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.search-form .select-control {
+  cursor: pointer;
+  justify-content: space-between;
+  user-select: none;
+}
+
+.search-form .select-control:hover {
+  border-color: #9ca3af;
+}
+
+.search-form .cascading-category-input {
+  cursor: pointer;
+  justify-content: space-between;
+  user-select: none;
+}
+
+.search-form .cascading-category-input:hover {
+  border-color: #9ca3af;
+}
+
+/* STEP 5: Search button aligned to baseline */
+.search-form button {
+  flex: 0 0 auto;
+  height: 44px;
+  padding: 0 24px;
+  margin: 0;
+  margin-top: 20px; /* Same as padding-top of form fields */
+  border: none;
+  border-radius: 6px;
+  background: #3b82f6;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.search-form button:hover {
+  background: #2563eb;
+}
+
+.search-form button:active {
+  background: #1d4ed8;
 }
 
 .orders-grid {
@@ -261,7 +358,18 @@
 
 @media (max-width: 1024px) {
   .search-form {
-    grid-template-columns: 1fr 1fr;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .search-form > * {
+    flex: 1 1 calc(50% - 8px);
+    min-width: 250px;
+  }
+  
+  .search-form button {
+    flex: 1 1 100%;
+    margin-top: 16px;
   }
 }
 
@@ -288,7 +396,17 @@
   }
 
   .search-form {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .search-form > * {
+    flex: none;
+    width: 100%;
+  }
+  
+  .search-form button {
+    margin-top: 0;
   }
 
   .orders-grid {

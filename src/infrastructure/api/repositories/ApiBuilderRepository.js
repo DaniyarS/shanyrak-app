@@ -93,4 +93,36 @@ export class ApiBuilderRepository extends IBuilderRepository {
       throw error;
     }
   }
+
+  /**
+   * Add category to builder
+   */
+  async addCategory(builderId, categoryData) {
+    try {
+      const response = await api.post(`/api/v1/builders/${builderId}/category`, {
+        category: {
+          publicId: categoryData.categoryPublicId
+        },
+        price: categoryData.price,
+        description: categoryData.description
+      });
+      return BuilderMapper.toDomain(response.data);
+    } catch (error) {
+      console.error('Error adding builder category:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Delete category from builder
+   */
+  async deleteCategory(priceListId) {
+    try {
+      const response = await api.delete(`/api/v1/builders/category/${priceListId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error deleting builder category:', error);
+      throw error;
+    }
+  }
 }

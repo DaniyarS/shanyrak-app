@@ -10,6 +10,7 @@ import Card from '../components/Card';
 import Input from '../components/Input';
 import Select from '../components/Select';
 import AvatarUpload from '../components/AvatarUpload';
+import DeleteAccountDialog from '../components/DeleteAccountDialog';
 import './CustomerProfile.css';
 
 const CustomerProfile = () => {
@@ -19,6 +20,7 @@ const CustomerProfile = () => {
   const [activeTab, setActiveTab] = useState('profile');
   const [editing, setEditing] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState('');
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   // Estates state
   const [estates, setEstates] = useState([]);
@@ -294,10 +296,6 @@ const CustomerProfile = () => {
   };
 
   const handleDeleteAccount = async () => {
-    if (!window.confirm(t('profile.confirmDeleteAccount'))) {
-      return;
-    }
-
     try {
       const deleteAccountUseCase = container.getDeleteAccountUseCase();
       const result = await deleteAccountUseCase.execute();
@@ -403,17 +401,28 @@ const CustomerProfile = () => {
         </div>
       </Card>
 
-      <Card className="logout-section">
-        <div className="logout-content">
+      <Card className="delete-section">
+        <div className="delete-content">
           <div>
-            <h3>{t('profile.deleteAccount')}</h3>
-            <p>{t('profile.deleteAccountDescription')}</p>
+            <p className="delete-link-text">
+              Need to delete your account? 
+              <button 
+                type="button"
+                className="delete-link-button"
+                onClick={() => setShowDeleteDialog(true)}
+              >
+                Click here
+              </button>
+            </p>
           </div>
-          <Button variant="outline" onClick={handleDeleteAccount} style={{ borderColor: '#ef4444', color: '#ef4444' }}>
-            {t('profile.deleteAccount')}
-          </Button>
         </div>
       </Card>
+
+      <DeleteAccountDialog
+        isOpen={showDeleteDialog}
+        onClose={() => setShowDeleteDialog(false)}
+        onConfirm={handleDeleteAccount}
+      />
     </>
   );
 
