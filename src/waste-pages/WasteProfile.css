@@ -1,0 +1,10 @@
+/* Hide profile inner navigation tabs for waste flow */
+.waste-profile-wrapper .profile-nav,
+.waste-profile-wrapper .profile-tabs {
+  display: none !important;
+}
+
+/* Adjust profile content spacing since nav is hidden */
+.waste-profile-wrapper .profile-content {
+  padding-top: 0;
+}

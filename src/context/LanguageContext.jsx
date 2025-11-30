@@ -46,10 +46,18 @@ export const LanguageProvider = ({ children }) => {
     setLanguage(lang);
   };
 
+  // Create a proxy that works both as a function AND as an object
+  const tProxy = new Proxy(t, {
+    get(target, prop) {
+      // If accessing a property, return from translations object
+      return translations[language]?.[prop];
+    }
+  });
+
   const value = {
     language,
     changeLanguage,
-    t,
+    t: tProxy,
   };
 
   return (

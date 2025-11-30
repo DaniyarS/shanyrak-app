@@ -15,6 +15,8 @@ import { ApiContractRepository } from '../api/repositories/ApiContractRepository
 import { ApiReviewRepository } from '../api/repositories/ApiReviewRepository';
 import { ApiAuthRepository } from '../api/repositories/ApiAuthRepository';
 import { ApiCityRepository } from '../api/repositories/ApiCityRepository';
+import { ApiWasteRepository } from '../api/repositories/ApiWasteRepository';
+import { ApiWasteCategoryRepository } from '../api/repositories/ApiWasteCategoryRepository';
 
 // Use Cases - Orders
 import { CreateOrder } from '../../application/use-cases/orders/CreateOrder';
@@ -68,6 +70,16 @@ import { GetCategoryTree } from '../../application/use-cases/categories/GetCateg
 // Use Cases - Cities
 import { GetCities } from '../../application/use-cases/cities/GetCities';
 
+// Use Cases - Waste
+import { CreateWaste } from '../../application/use-cases/waste/CreateWaste';
+import { SearchWaste } from '../../application/use-cases/waste/SearchWaste';
+import { GetWasteById } from '../../application/use-cases/waste/GetWasteById';
+import { GetMyWaste } from '../../application/use-cases/waste/GetMyWaste';
+import { UpdateWaste } from '../../application/use-cases/waste/UpdateWaste';
+import { DeleteWaste } from '../../application/use-cases/waste/DeleteWaste';
+import { RequestWastePhone } from '../../application/use-cases/waste/RequestWastePhone';
+import { GetWasteCategoryTree } from '../../application/use-cases/waste/GetWasteCategoryTree';
+
 /**
  * ServiceContainer - Singleton pattern for dependency injection
  */
@@ -90,6 +102,8 @@ class ServiceContainer {
     this.repositories.review = new ApiReviewRepository();
     this.repositories.auth = new ApiAuthRepository();
     this.repositories.city = new ApiCityRepository();
+    this.repositories.waste = new ApiWasteRepository();
+    this.repositories.wasteCategory = new ApiWasteCategoryRepository();
 
     // Initialize use cases with their dependencies
     // Orders
@@ -143,6 +157,16 @@ class ServiceContainer {
 
     // Cities
     this.useCases.getCities = new GetCities(this.repositories.city);
+
+    // Waste
+    this.useCases.createWaste = new CreateWaste(this.repositories.waste);
+    this.useCases.searchWaste = new SearchWaste(this.repositories.waste);
+    this.useCases.getWasteById = new GetWasteById(this.repositories.waste);
+    this.useCases.getMyWaste = new GetMyWaste(this.repositories.waste);
+    this.useCases.updateWaste = new UpdateWaste(this.repositories.waste);
+    this.useCases.deleteWaste = new DeleteWaste(this.repositories.waste);
+    this.useCases.requestWastePhone = new RequestWastePhone(this.repositories.waste);
+    this.useCases.getWasteCategoryTree = new GetWasteCategoryTree(this.repositories.wasteCategory);
   }
 
   // Getters for repositories
@@ -310,6 +334,39 @@ class ServiceContainer {
   // Getters for use cases - Cities
   getGetCitiesUseCase() {
     return this.useCases.getCities;
+  }
+
+  // Getters for use cases - Waste
+  getCreateWasteUseCase() {
+    return this.useCases.createWaste;
+  }
+
+  getSearchWasteUseCase() {
+    return this.useCases.searchWaste;
+  }
+
+  getGetWasteByIdUseCase() {
+    return this.useCases.getWasteById;
+  }
+
+  getGetMyWasteUseCase() {
+    return this.useCases.getMyWaste;
+  }
+
+  getUpdateWasteUseCase() {
+    return this.useCases.updateWaste;
+  }
+
+  getDeleteWasteUseCase() {
+    return this.useCases.deleteWaste;
+  }
+
+  getRequestWastePhoneUseCase() {
+    return this.useCases.requestWastePhone;
+  }
+
+  getGetWasteCategoryTreeUseCase() {
+    return this.useCases.getWasteCategoryTree;
   }
 }
 
