@@ -48,6 +48,8 @@ import { GetReview } from '../../application/use-cases/reviews/GetReview';
 import { SearchBuilders } from '../../application/use-cases/builders/SearchBuilders';
 import { GetBuilder } from '../../application/use-cases/builders/GetBuilder';
 import { UpdateBuilder } from '../../application/use-cases/builders/UpdateBuilder';
+import { AddBuilderCategory } from '../../application/use-cases/builders/AddBuilderCategory';
+import { DeleteBuilderCategory } from '../../application/use-cases/builders/DeleteBuilderCategory';
 
 // Use Cases - Files
 import { UploadAvatar } from '../../application/use-cases/files/UploadAvatar';
@@ -124,6 +126,8 @@ class ServiceContainer {
     this.useCases.searchBuilders = new SearchBuilders(this.repositories.builder);
     this.useCases.getBuilder = new GetBuilder(this.repositories.builder);
     this.useCases.updateBuilder = new UpdateBuilder(this.repositories.builder);
+    this.useCases.addBuilderCategory = new AddBuilderCategory(this.repositories.builder);
+    this.useCases.deleteBuilderCategory = new DeleteBuilderCategory(this.repositories.builder);
 
     // Files
     this.useCases.uploadAvatar = new UploadAvatar(this.repositories.file);
@@ -262,6 +266,14 @@ class ServiceContainer {
 
   getUpdateBuilderUseCase() {
     return this.useCases.updateBuilder;
+  }
+
+  getAddBuilderCategoryUseCase() {
+    return this.useCases.addBuilderCategory;
+  }
+
+  getDeleteBuilderCategoryUseCase() {
+    return this.useCases.deleteBuilderCategory;
   }
 
   // Getters for use cases - Files

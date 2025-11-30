@@ -79,26 +79,134 @@ const Home = () => {
                 </Card>
               ) : (
                 <div className="orders-preview-grid">
-                  {orders.slice(0, 3).map((order) => (
-                    <Card key={order.id} className="order-preview-card">
-                      <div className="order-preview-header">
-                        <h3>{order.title}</h3>
-                        <span className="order-budget">
-                          {order.budgetMin}
-                          {order.budgetMax ? `-${order.budgetMax}` : '+'} ₸
-                        </span>
-                      </div>
-                      <p className="order-preview-description">{order.description}</p>
-                      <div className="order-preview-meta">
-                        <span className="order-category">{order.category?.name || 'N/A'}</span>
-                        {order.realEstate && (
-                          <span className="order-location">
-                            📍 {order.realEstate.city}
+                  {orders.slice(0, 3).map((order) => {
+                    // Helper function to translate unit types from English API response to current locale
+                    const getLocalizedUnitLabel = (unit) => {
+                      if (!unit) return '';
+                      
+                      const unitTranslationMap = {
+                        // Area-based units (API returns these)
+                        'm2': t('offers.perM2'),
+                        'areaM2': t('offers.perM2'),
+                        'aream2': t('offers.perM2'),
+                        'sqm': t('offers.perM2'),
+                        'meter2': t('offers.perM2'),
+                        'square_meter': t('offers.perM2'),
+                        'square meter': t('offers.perM2'),
+                        'permetersquare': t('orders.units.perMeterSquare'),
+                        'permeter²': t('orders.units.perMeterSquare'),
+                        'perMeterSquare': t('orders.units.perMeterSquare'),
+                        
+                        // Time-based units
+                        'hour': t('offers.perHour'),
+                        'hr': t('offers.perHour'),
+                        'hours': t('offers.perHour'),
+                        'day': t('offers.perDay'),
+                        'daily': t('offers.perDay'),
+                        'days': t('offers.perDay'),
+                        
+                        // Quantity-based units
+                        'unit': t('offers.perUnit'),
+                        'piece': t('offers.perItem'),
+                        'pieces': t('offers.perItem'),
+                        'pcs': t('offers.perItem'),
+                        'item': t('offers.perItem'),
+                        'items': t('offers.perItem'),
+                        'each': t('offers.perItem'),
+                        'peritem': t('orders.units.perItem'),
+                        'perItem': t('orders.units.perItem'),
+                        
+                        // Fixed price
+                        'fixed': t('offers.fixedPrice'),
+                        'total': t('orders.units.total'),
+                        'lump_sum': t('offers.fixedPrice'),
+                        'flat_rate': t('offers.fixedPrice'),
+                      };
+                      
+                      // Check both original case and lowercase
+                      return unitTranslationMap[unit] || unitTranslationMap[unit.toLowerCase()] || unit;
+                    };
+
+                    // Helper function for price display
+                    const getPriceDisplay = () => {
+                      if (order.priceType === 'FIXED' && order.price) {
+                        const unitLabel = getLocalizedUnitLabel(order.unit);
+                        return `${order.price} ₸${unitLabel ? ` / ${unitLabel}` : ''}`;
+                      }
+                      
+                      // Fallback to legacy budget fields
+                      if (order.budgetMin || order.budgetMax) {
+                        const min = order.budgetMin || 0;
+                        const max = order.budgetMax;
+                        return max && max > 0 ? `${min}-${max} ₸` : `${min}+ ₸`;
+                      }
+                      
+                      return t('orders.negotiable');
+                    };
+
+                    return (
+                      <Card key={order.id} className="order-preview-card" onClick={() => navigate('/my-orders')}>
+                        <div className="order-preview-header">
+                          <span className="order-category-badge">
+                            {order.category?.name || t('orders.uncategorized')}
                           </span>
+                          <span className={`order-price-badge ${order.priceType === 'FIXED' ? 'fixed' : 'negotiable'}`}>
+                            {getPriceDisplay()}
+                          </span>
+                        </div>
+                        
+                        {order.title && (
+                          <h3 className="order-preview-title">{order.title}</h3>
                         )}
-                      </div>
-                    </Card>
-                  ))}
+                        
+                        <p className="order-preview-description">{order.description}</p>
+                        
+                        <div className="order-preview-details">
+                          {order.realEstate && (
+                            <>
+                              <div className="order-detail-row">
+                                <span className="detail-icon">📍</span>
+                                <span>
+                                  {order.realEstate.city}
+                                  {order.realEstate.district && `, ${order.realEstate.district}`}
+                                </span>
+                              </div>
+                              <div className="order-detail-row">
+                                <span className="detail-icon">🏠</span>
+                                <span>
+                                  {t(`estates.${order.realEstate.kind?.toLowerCase()}`) || order.realEstate.kind}
+                                  {order.realEstate.areaM2 && ` - ${order.realEstate.areaM2} m²`}
+                                </span>
+                              </div>
+                            </>
+                          )}
+                          
+                          {order.status && (
+                            <div className="order-detail-row">
+                              <span className="detail-icon">📊</span>
+                              <span className={`order-status status-${order.status.toLowerCase()}`}>
+                                {t(`orders.status.${order.status.toLowerCase()}`) || order.status}
+                              </span>
+                            </div>
+                          )}
+                          
+                          {order.createdAt && (
+                            <div className="order-detail-row">
+                              <span className="detail-icon">📅</span>
+                              <span>{new Date(order.createdAt).toLocaleDateString()}</span>
+                            </div>
+                          )}
+                          
+                          {order.offersCount > 0 && (
+                            <div className="order-detail-row">
+                              <span className="detail-icon">💼</span>
+                              <span>{order.offersCount} {t('orders.offers')}</span>
+                            </div>
+                          )}
+                        </div>
+                      </Card>
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -155,16 +263,51 @@ const Home = () => {
               ) : (
                 <div className="orders-preview-grid">
                   {orders.slice(0, 3).map((order) => {
+                    // Helper function to translate unit types from English API response to current locale
                     const getUnitLabel = (unit) => {
-                      const unitMap = {
+                      if (!unit) return '';
+                      
+                      const unitTranslationMap = {
+                        // Area-based units (API returns these)
                         'm2': t('offers.perM2'),
                         'areaM2': t('offers.perM2'),
-                        'unit': t('offers.perUnit'),
+                        'aream2': t('offers.perM2'),
+                        'sqm': t('offers.perM2'),
+                        'meter2': t('offers.perM2'),
+                        'square_meter': t('offers.perM2'),
+                        'square meter': t('offers.perM2'),
+                        'permetersquare': t('orders.units.perMeterSquare'),
+                        'permeter²': t('orders.units.perMeterSquare'),
+                        'perMeterSquare': t('orders.units.perMeterSquare'),
+                        
+                        // Time-based units
                         'hour': t('offers.perHour'),
+                        'hr': t('offers.perHour'),
+                        'hours': t('offers.perHour'),
                         'day': t('offers.perDay'),
+                        'daily': t('offers.perDay'),
+                        'days': t('offers.perDay'),
+                        
+                        // Quantity-based units
+                        'unit': t('offers.perUnit'),
+                        'piece': t('offers.perItem'),
+                        'pieces': t('offers.perItem'),
+                        'pcs': t('offers.perItem'),
+                        'item': t('offers.perItem'),
+                        'items': t('offers.perItem'),
+                        'each': t('offers.perItem'),
+                        'peritem': t('orders.units.perItem'),
+                        'perItem': t('orders.units.perItem'),
+                        
+                        // Fixed price
                         'fixed': t('offers.fixedPrice'),
+                        'total': t('orders.units.total'),
+                        'lump_sum': t('offers.fixedPrice'),
+                        'flat_rate': t('offers.fixedPrice'),
                       };
-                      return unitMap[unit] || unit;
+                      
+                      // Check both original case and lowercase
+                      return unitTranslationMap[unit] || unitTranslationMap[unit.toLowerCase()] || unit;
                     };
 
                     return (

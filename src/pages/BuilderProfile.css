@@ -279,3 +279,146 @@
     font-size: var(--font-size-sm);
   }
 }
+
+/* Category Management Styles */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-4);
+}
+
+.section-header h3 {
+  margin: 0;
+}
+
+.categories-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.category-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: var(--spacing-4);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  background-color: var(--color-neutral-50);
+}
+
+.category-info {
+  flex: 1;
+}
+
+.category-info h4 {
+  margin: 0 0 var(--spacing-2) 0;
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.category-price {
+  margin: 0 0 var(--spacing-1) 0;
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.category-description {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.add-category-form {
+  margin-top: var(--spacing-4);
+  padding: var(--spacing-4);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  background-color: var(--color-neutral-25);
+}
+
+.add-category-form h4 {
+  margin: 0 0 var(--spacing-4) 0;
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.add-category-form form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.rating-value {
+  font-weight: 700;
+  color: var(--color-primary);
+  font-size: var(--font-size-lg);
+}
+
+/* Delete Account Section */
+.delete-section {
+  max-width: 800px;
+  margin: 0 auto;
+  margin-bottom: var(--spacing-4);
+  border: 1px solid var(--color-neutral-200);
+  background-color: var(--color-neutral-25);
+}
+
+.delete-content {
+  padding: var(--spacing-3);
+}
+
+.delete-link-text {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.delete-link-button {
+  background: none;
+  border: none;
+  color: #dc2626;
+  font-size: var(--font-size-sm);
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 4px;
+  transition: color 0.2s ease;
+}
+
+.delete-link-button:hover {
+  color: #991b1b;
+  text-decoration: none;
+}
+
+/* Mobile responsive for categories */
+@media (max-width: 768px) {
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-3);
+  }
+  
+  .section-header button {
+    width: 100%;
+  }
+  
+  .category-item {
+    flex-direction: column;
+    gap: var(--spacing-3);
+  }
+  
+  .category-item button {
+    width: 100%;
+  }
+
+  .delete-section {
+    margin-bottom: var(--spacing-3);
+  }
+}

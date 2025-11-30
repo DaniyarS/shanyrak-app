@@ -947,16 +947,51 @@ const CustomerOrders = () => {
                   <p className="empty-message">{t('orders.noOffers')}</p>
                 ) : (
                   offers.map((offer) => {
+                    // Helper function to translate unit types from English API response to current locale
                     const getUnitLabel = (unit) => {
-                      const unitMap = {
+                      if (!unit) return '';
+                      
+                      const unitTranslationMap = {
+                        // Area-based units (API returns these)
                         'm2': t('offers.perM2'),
                         'areaM2': t('offers.perM2'),
-                        'unit': t('offers.perUnit'),
+                        'aream2': t('offers.perM2'),
+                        'sqm': t('offers.perM2'),
+                        'meter2': t('offers.perM2'),
+                        'square_meter': t('offers.perM2'),
+                        'square meter': t('offers.perM2'),
+                        'permetersquare': t('orders.units.perMeterSquare'),
+                        'permeter²': t('orders.units.perMeterSquare'),
+                        'perMeterSquare': t('orders.units.perMeterSquare'),
+                        
+                        // Time-based units
                         'hour': t('offers.perHour'),
+                        'hr': t('offers.perHour'),
+                        'hours': t('offers.perHour'),
                         'day': t('offers.perDay'),
+                        'daily': t('offers.perDay'),
+                        'days': t('offers.perDay'),
+                        
+                        // Quantity-based units
+                        'unit': t('offers.perUnit'),
+                        'piece': t('offers.perItem'),
+                        'pieces': t('offers.perItem'),
+                        'pcs': t('offers.perItem'),
+                        'item': t('offers.perItem'),
+                        'items': t('offers.perItem'),
+                        'each': t('offers.perItem'),
+                        'peritem': t('orders.units.perItem'),
+                        'perItem': t('orders.units.perItem'),
+                        
+                        // Fixed price
                         'fixed': '',
+                        'total': t('orders.units.total'),
+                        'lump_sum': t('offers.fixedPrice'),
+                        'flat_rate': t('offers.fixedPrice'),
                       };
-                      return unitMap[unit] || unit;
+                      
+                      // Check both original case and lowercase
+                      return unitTranslationMap[unit] || unitTranslationMap[unit.toLowerCase()] || unit;
                     };
 
                     const getDaysLabel = (days) => {

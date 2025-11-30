@@ -8,6 +8,8 @@ import Card from '../components/Card';
 import Input from '../components/Input';
 import AvatarUpload from '../components/AvatarUpload';
 import PortfolioGallery from '../components/PortfolioGallery';
+import CascadingCategorySelect from '../components/CascadingCategorySelect';
+import DeleteAccountDialog from '../components/DeleteAccountDialog';
 import './BuilderProfile.css';
 
 const BuilderProfile = () => {
@@ -19,6 +21,14 @@ const BuilderProfile = () => {
   const [builderData, setBuilderData] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState('');
   const [portfolioPhotos, setPortfolioPhotos] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [showAddCategory, setShowAddCategory] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [addCategoryForm, setAddCategoryForm] = useState({
+    categoryPublicId: '',
+    price: '',
+    description: ''
+  });
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -36,6 +46,7 @@ const BuilderProfile = () => {
   useEffect(() => {
     fetchBuilderProfile();
     fetchAvatar();
+    fetchCategories();
   }, []);
 
   const fetchBuilderProfile = async () => {
@@ -100,6 +111,19 @@ const BuilderProfile = () => {
     }
   };
 
+  const fetchCategories = async () => {
+    try {
+      const getCategoryTreeUseCase = container.getGetCategoryTreeUseCase();
+      const result = await getCategoryTreeUseCase.execute();
+
+      if (result.success) {
+        setCategories(result.categories);
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
   const handleAvatarUpdate = (newAvatarUrl) => {
     setAvatarUrl(newAvatarUrl);
     // Optionally update the builder data with new avatar link
@@ -114,6 +138,84 @@ const BuilderProfile = () => {
 
   const handlePhotoDeleted = (photoId) => {
     setPortfolioPhotos(portfolioPhotos.filter(photo => photo.id !== photoId));
+  };
+
+  const handleAddCategoryFormChange = (e) => {
+    const { name, value } = e.target;
+    setAddCategoryForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  const handleCategorySelect = (categoryId) => {
+    setAddCategoryForm(prev => ({
+      ...prev,
+      categoryPublicId: categoryId
+    }));
+    if (errors.categoryPublicId) {
+      setErrors(prev => ({ ...prev, categoryPublicId: '' }));
+    }
+  };
+
+  const handleAddCategory = async (e) => {
+    e.preventDefault();
+
+    if (!addCategoryForm.categoryPublicId) {
+      setErrors(prev => ({ ...prev, categoryPublicId: 'Please select a category' }));
+      return;
+    }
+
+    if (!addCategoryForm.price || parseFloat(addCategoryForm.price) <= 0) {
+      setErrors(prev => ({ ...prev, price: 'Please enter a valid price' }));
+      return;
+    }
+
+    try {
+      const addCategoryUseCase = container.getAddBuilderCategoryUseCase();
+      const result = await addCategoryUseCase.execute(builderData.id, {
+        categoryPublicId: addCategoryForm.categoryPublicId,
+        price: parseFloat(addCategoryForm.price),
+        description: addCategoryForm.description
+      });
+
+      if (result.success) {
+        setBuilderData(result.builder);
+        setAddCategoryForm({ categoryPublicId: '', price: '', description: '' });
+        setShowAddCategory(false);
+        alert(t('profile.addCategorySuccess'));
+      } else {
+        setErrors(result.errors || { submit: t('profile.addCategoryFailed') });
+      }
+    } catch (error) {
+      console.error('Error adding category:', error);
+      setErrors({ submit: t('profile.addCategoryFailed') });
+    }
+  };
+
+  const handleDeleteCategory = async (priceListId) => {
+    if (!window.confirm(t('profile.confirmDeleteCategory'))) {
+      return;
+    }
+
+    try {
+      const deleteCategoryUseCase = container.getDeleteBuilderCategoryUseCase();
+      const result = await deleteCategoryUseCase.execute(priceListId);
+
+      if (result.success) {
+        // Refresh builder data to get updated price list
+        await fetchBuilderProfile();
+        alert(t('profile.deleteCategorySuccess'));
+      } else {
+        alert(result.errors?.submit || t('profile.deleteCategoryFailed'));
+      }
+    } catch (error) {
+      console.error('Error deleting category:', error);
+      alert(t('profile.deleteCategoryFailed'));
+    }
   };
 
   const handleChange = (e) => {
@@ -183,10 +285,6 @@ const BuilderProfile = () => {
   };
 
   const handleDeleteAccount = async () => {
-    if (!window.confirm(t('profile.confirmDeleteAccount'))) {
-      return;
-    }
-
     try {
       const deleteAccountUseCase = container.getDeleteAccountUseCase();
       const result = await deleteAccountUseCase.execute();
@@ -361,21 +459,21 @@ const BuilderProfile = () => {
               <div className="profile-section">
                 <h3>{t('profile.personalInfo')}</h3>
                 <div className="profile-details">
+                  {(builderData?.firstName || builderData?.lastName) && (
+                    <div className="detail-row">
+                      <span className="detail-label">Name:</span>
+                      <span className="detail-value">
+                        {[builderData?.firstName, builderData?.lastName].filter(Boolean).join(' ') || 'N/A'}
+                      </span>
+                    </div>
+                  )}
                   <div className="detail-row">
                     <span className="detail-label">{t('profile.fullName')}:</span>
-                    <span className="detail-value">{builderData?.fullName}</span>
-                  </div>
-                  <div className="detail-row">
-                    <span className="detail-label">{t('estates.email')}:</span>
-                    <span className="detail-value">{builderData?.email || 'N/A'}</span>
+                    <span className="detail-value">{builderData?.fullName || 'N/A'}</span>
                   </div>
                   <div className="detail-row">
                     <span className="detail-label">{t('profile.phone')}:</span>
                     <span className="detail-value">{builderData?.phone}</span>
-                  </div>
-                  <div className="detail-row">
-                    <span className="detail-label">{t('profile.login')}:</span>
-                    <span className="detail-value">{builderData?.login || 'N/A'}</span>
                   </div>
                 </div>
               </div>
@@ -391,24 +489,24 @@ const BuilderProfile = () => {
                 <h3>{t('profile.professionalInfo')}</h3>
                 <div className="profile-details">
                   <div className="detail-row">
+                    <span className="detail-label">{t('services.rating')}:</span>
+                    <span className="detail-value rating-value">
+                      ⭐ {builderData?.ratingAvg?.toFixed(1) || '0.0'} / 5.0
+                    </span>
+                  </div>
+                  <div className="detail-row">
                     <span className="detail-label">{t('services.experienceYears')}:</span>
                     <span className="detail-value">{builderData?.experienceYears || 0} {t('services.years')}</span>
                   </div>
                   <div className="detail-row">
                     <span className="detail-label">{t('services.jobsDone')}:</span>
-                    <span className="detail-value">{builderData?.jobsDone || 0}</span>
+                    <span className="detail-value">{builderData?.jobsDone || 0} {t('profile.completedProjects')}</span>
                   </div>
                   <div className="detail-row">
-                    <span className="detail-label">{t('services.city')}:</span>
-                    <span className="detail-value">{builderData?.city || 'N/A'}</span>
-                  </div>
-                  <div className="detail-row">
-                    <span className="detail-label">{t('services.district')}:</span>
-                    <span className="detail-value">{builderData?.district || 'N/A'}</span>
-                  </div>
-                  <div className="detail-row">
-                    <span className="detail-label">{t('services.rating')}:</span>
-                    <span className="detail-value">{builderData?.ratingAvg?.toFixed(1) || '0.0'}</span>
+                    <span className="detail-label">{t('profile.location')}:</span>
+                    <span className="detail-value">
+                      {[builderData?.city, builderData?.district].filter(Boolean).join(', ') || 'N/A'}
+                    </span>
                   </div>
                   <div className="detail-row">
                     <span className="detail-label">{t('profile.status')}:</span>
@@ -417,6 +515,111 @@ const BuilderProfile = () => {
                     </span>
                   </div>
                 </div>
+              </div>
+
+              {/* Categories Section */}
+              <div className="profile-section">
+                <div className="section-header">
+                  <h3>{t('profile.serviceCategories')}</h3>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowAddCategory(true)}
+                  >
+                    {t('profile.addCategory')}
+                  </Button>
+                </div>
+                
+                {builderData?.priceList && builderData.priceList.length > 0 ? (
+                  <div className="categories-list">
+                    {builderData.priceList.map((item) => {
+                      const categoryName = typeof item.category === 'object' && item.category !== null
+                        ? (item.category.name || 'Service')
+                        : (item.category || 'Service');
+                      
+                      return (
+                        <div key={item.id} className="category-item">
+                          <div className="category-info">
+                            <h4>{categoryName}</h4>
+                            <p className="category-price">${item.price}</p>
+                            {item.description && (
+                              <p className="category-description">{item.description}</p>
+                            )}
+                          </div>
+                          <Button
+                            variant="outline"
+                            onClick={() => handleDeleteCategory(item.id)}
+                            style={{ borderColor: '#ef4444', color: '#ef4444' }}
+                          >
+                            {t('common.delete')}
+                          </Button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p>{t('profile.noCategoriesYet')}</p>
+                )}
+
+                {/* Add Category Form */}
+                {showAddCategory && (
+                  <div className="add-category-form">
+                    <h4>{t('profile.addNewCategory')}</h4>
+                    <form onSubmit={handleAddCategory}>
+                      <CascadingCategorySelect
+                        label={t('profile.selectCategory')}
+                        categories={categories}
+                        value={addCategoryForm.categoryPublicId}
+                        onChange={handleCategorySelect}
+                        error={errors.categoryPublicId}
+                        required
+                      />
+                      
+                      <Input
+                        label={t('profile.price')}
+                        name="price"
+                        type="number"
+                        step="0.01"
+                        value={addCategoryForm.price}
+                        onChange={handleAddCategoryFormChange}
+                        error={errors.price}
+                        required
+                      />
+                      
+                      <div className="input-wrapper">
+                        <label className="input-label">{t('profile.description')}</label>
+                        <textarea
+                          name="description"
+                          value={addCategoryForm.description}
+                          onChange={handleAddCategoryFormChange}
+                          placeholder={t('profile.categoryDescription')}
+                          className="input"
+                          rows="3"
+                        />
+                      </div>
+
+                      {errors.submit && (
+                        <div className="error-message">{errors.submit}</div>
+                      )}
+
+                      <div className="form-actions">
+                        <Button type="submit" variant="primary">
+                          {t('profile.addCategory')}
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          onClick={() => {
+                            setShowAddCategory(false);
+                            setAddCategoryForm({ categoryPublicId: '', price: '', description: '' });
+                            setErrors({});
+                          }}
+                        >
+                          {t('common.cancel')}
+                        </Button>
+                      </div>
+                    </form>
+                  </div>
+                )}
               </div>
 
               {/* Portfolio Section */}
@@ -447,17 +650,28 @@ const BuilderProfile = () => {
           </div>
         </Card>
 
-        <Card className="logout-section">
-          <div className="logout-content">
+        <Card className="delete-section">
+          <div className="delete-content">
             <div>
-              <h3>{t('profile.deleteAccount')}</h3>
-              <p>{t('profile.deleteAccountDescription')}</p>
+              <p className="delete-link-text">
+                Need to delete your account? 
+                <button 
+                  type="button"
+                  className="delete-link-button"
+                  onClick={() => setShowDeleteDialog(true)}
+                >
+                  Click here
+                </button>
+              </p>
             </div>
-            <Button variant="outline" onClick={handleDeleteAccount} style={{ borderColor: '#ef4444', color: '#ef4444' }}>
-              {t('profile.deleteAccount')}
-            </Button>
           </div>
         </Card>
+
+        <DeleteAccountDialog
+          isOpen={showDeleteDialog}
+          onClose={() => setShowDeleteDialog(false)}
+          onConfirm={handleDeleteAccount}
+        />
       </div>
     </div>
   );

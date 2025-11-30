@@ -6,6 +6,147 @@ API Documentation
 
 ---
 
+## create
+
+**POST** `/api/v1/waste`
+
+### Request Body
+
+```json
+{
+  "title": "Остатки кирпича M150",
+  "description": "Около 200 штук",
+  "categoryPublicId": "1e6e56f5-d942-4174-a5ea-79ab004c6e5f",
+  "city": "Алматы",
+  "district": "Наурызбай",
+  "unit": "pcs",
+  "amount": 200,
+  "price": 0
+}
+```
+
+---
+
+## update
+
+**PUT** `/api/v1/waste/{publicId}`
+
+/api/v1/waste/{waste's public id}
+
+### Request Body
+
+```json
+{
+  "title": "Остатки кирпича M150",
+  "description": "Около 200 штук",
+  "categoryPublicId": "uuid",
+  "city": "Алматы",
+  "district": "Наурызбай",
+  "unit": "pcs",
+  "amount": 200,
+  "price": 0
+}
+```
+
+---
+
+## setStatus
+
+**PATCH** `/api/v1/waste/{publicId}/status`
+
+/api/v1/waste/{waste's public id}/status
+
+### Request Body
+
+```json
+{
+  "status": "SOLD"
+}
+```
+
+---
+
+## delete
+
+**DELETE** `/api/v1/waste/359a4646-9202-4247-a86c-68699a387987`
+
+/api/v1/waste/{waste's public id}
+
+---
+
+## search
+
+**GET** `/api/v1/waste`
+
+### Query Parameters
+
+- `city`
+- `onlyFree`
+- `page`
+- `size`
+- `sort` - price,asc or createdAt,desc or amount,desc
+- `minPrice`
+- `maxPrice`
+- `categoryPublicId`
+- `q`
+
+---
+
+## my
+
+**GET** `/api/v1/waste/my`
+
+### Query Parameters
+
+- `page`
+- `size`
+
+---
+
+## waste
+
+**GET** `/api/v1/waste/8aa07d5c-6338-4bbd-8131-9f5f5201cc7b`
+
+/api/v1/waste/{waste's public id}
+
+---
+
+## requestPhone
+
+**POST** `/api/v1/waste/884ffa71-2724-4db9-854f-2c06bbdc5ffe/request-phone`
+
+/api/v1/waste/8aa07d5c-6338-4bbd-8131-9f5f5201cc7b/request-phone
+
+---
+
+## all
+
+**GET** `/api/v1/waste-categories`
+
+---
+
+## category
+
+**GET** `/api/v1/waste-categories/4d8c32c8-6355-4545-b2c5-1ad69bfc0f08`
+
+/api/v1/waste-categories/{waste's category public id}
+
+---
+
+## children
+
+**GET** `/api/v1/waste-categories/4d8c32c8-6355-4545-b2c5-1ad69bfc0f08/children`
+
+/api/v1/waste-categories/{waste's category public id}
+
+---
+
+## tree
+
+**GET** `/api/v1/waste-categories/tree`
+
+---
+
 ## all
 
 **GET** `/api/v1/categories`

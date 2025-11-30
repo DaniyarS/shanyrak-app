@@ -107,15 +107,20 @@ const CascadingCategorySelect = ({
   return (
     <div className="cascading-category-select" ref={dropdownRef}>
       {label && (
-        <label className="cascading-category-label">
+        <label htmlFor="cascading-category-input" className="cascading-category-label">
           {label}
           {required && <span className="required-asterisk"> *</span>}
         </label>
       )}
 
       <div
+        id="cascading-category-input"
         className={`cascading-category-input ${error ? 'error' : ''} ${isOpen ? 'open' : ''}`}
         onClick={handleToggle}
+        role="combobox"
+        aria-expanded={isOpen}
+        aria-haspopup="listbox"
+        tabIndex={0}
       >
         <span className={selectedPath ? 'selected-value' : 'placeholder'}>
           {selectedPath || placeholder}
