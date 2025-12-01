@@ -14,6 +14,9 @@ const CascadingCategorySelect = ({
   error,
   required,
   placeholder = 'Select category',
+  inputId,
+  className = '',
+  disabled = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentLevel, setCurrentLevel] = useState(categories);
@@ -45,7 +48,7 @@ const CascadingCategorySelect = ({
     }
   }, [value, categories]);
 
-  // Recursively find the path to a category by ID
+  // Recursively find the path to a category by id
   const findCategoryPath = (cats, targetId, path = []) => {
     for (const cat of cats) {
       const newPath = [...path, cat];
@@ -63,6 +66,7 @@ const CascadingCategorySelect = ({
   };
 
   const handleToggle = () => {
+    if (disabled) return;
     setIsOpen(!isOpen);
     if (!isOpen) {
       // Reset to root level when opening
@@ -71,16 +75,29 @@ const CascadingCategorySelect = ({
     }
   };
 
+  // Helper function to check if category is a leaf (has no children)
+  const isLeafCategory = (category) => {
+    // Handle both domain entities and plain objects
+    if (typeof category.isLeafCategory === 'function') {
+      return category.isLeafCategory();
+    }
+    // For plain objects, check if children is null, empty array, or undefined
+    return !category.children || category.children.length === 0;
+  };
+
   const handleCategoryClick = (category) => {
-    if (category.isLeafCategory()) {
+    if (isLeafCategory(category)) {
       // Leaf category - select it
-      onChange({
+      // Use category.id which contains the normalized publicId from the mapper
+      const categoryId = category.id;
+      const eventObject = {
         target: {
           name: 'categoryId',
-          value: category.id,
+          value: categoryId,
         },
-      });
-      setSelectedPath([...breadcrumb, category].map(cat => cat.name).join(' > '));
+      };
+      onChange(eventObject);
+      setSelectedPath(category.name);
       setIsOpen(false);
       setCurrentLevel(categories);
       setBreadcrumb([]);
@@ -105,17 +122,22 @@ const CascadingCategorySelect = ({
   };
 
   return (
-    <div className="cascading-category-select" ref={dropdownRef}>
+    <div className={`cascading-category-select ${className}`} ref={dropdownRef}>
       {label && (
-        <label className="cascading-category-label">
+        <label htmlFor={inputId || "cascading-category-input"} className="cascading-category-label">
           {label}
           {required && <span className="required-asterisk"> *</span>}
         </label>
       )}
 
       <div
-        className={`cascading-category-input ${error ? 'error' : ''} ${isOpen ? 'open' : ''}`}
+        id={inputId || "cascading-category-input"}
+        className={`cascading-category-input ${error ? 'error' : ''} ${isOpen ? 'open' : ''} ${disabled ? 'disabled' : ''}`}
         onClick={handleToggle}
+        role="combobox"
+        aria-expanded={isOpen}
+        aria-haspopup="listbox"
+        tabIndex={0}
       >
         <span className={selectedPath ? 'selected-value' : 'placeholder'}>
           {selectedPath || placeholder}
@@ -150,7 +172,7 @@ const CascadingCategorySelect = ({
                 ← All Categories
               </button>
               {breadcrumb.map((crumb, index) => (
-                <span key={crumb.id}>
+                <span key={`${crumb.id}-${index}`}>
                   <span className="breadcrumb-separator">/</span>
                   <button
                     type="button"
@@ -166,18 +188,28 @@ const CascadingCategorySelect = ({
 
           {/* Category list */}
           <div className="category-list">
-            {currentLevel.map((category) => (
-              <div
-                key={category.id}
-                className={`category-item ${category.isLeafCategory() ? 'leaf' : 'parent'}`}
-                onClick={() => handleCategoryClick(category)}
-              >
-                <span className="category-name">{category.name}</span>
-                {!category.isLeafCategory() && (
-                  <span className="category-arrow">→</span>
-                )}
-              </div>
-            ))}
+            {currentLevel.map((category, index) => {
+              // Determine additional classes for builder categories
+              let additionalClasses = '';
+              if (category.isBuilderSection) {
+                additionalClasses = 'builder-section';
+              } else if (category.isBuilderCategory) {
+                additionalClasses = 'builder-category';
+              }
+
+              return (
+                <div
+                  key={category.id || `category-${index}`}
+                  className={`category-item ${isLeafCategory(category) ? 'leaf' : 'parent'} ${additionalClasses}`.trim()}
+                  onClick={() => handleCategoryClick(category)}
+                >
+                  <span className="category-name">{category.name}</span>
+                  {!isLeafCategory(category) && (
+                    <span className="category-arrow">→</span>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       )}

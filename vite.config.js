@@ -10,7 +10,7 @@ export default defineConfig({
       // Only used if VITE_API_BASE_URL is empty in .env.local
       // Current setup: Direct requests to dev server (no proxy needed)
       '/api': {
-        target: 'http://185.197.194.111:8080',
+        target: 'https://api.shanyrak.group',
         changeOrigin: true,
         secure: false, // Allow http (not https)
       }

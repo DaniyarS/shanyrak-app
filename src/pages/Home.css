@@ -109,7 +109,7 @@
 /* Dashboard Section */
 .dashboard-section {
   padding: var(--spacing-12) 0;
-  background-color: var(--color-bg);
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
 .dashboard-header {
@@ -144,7 +144,7 @@
 .order-preview-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: var(--spacing-3);
   gap: var(--spacing-2);
   flex-wrap: wrap;
@@ -158,6 +158,10 @@
   font-size: var(--font-size-sm);
   font-weight: 600;
   white-space: nowrap;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  min-height: 28px;
 }
 
 .order-price-badge {
@@ -166,6 +170,10 @@
   font-size: var(--font-size-sm);
   font-weight: 600;
   white-space: nowrap;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  min-height: 28px;
 }
 
 .order-price-badge.fixed {
@@ -180,14 +188,23 @@
   border: 1px solid #fde047;
 }
 
+.order-preview-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: var(--spacing-2) 0;
+  line-height: 1.3;
+}
+
 .order-preview-description {
   font-size: var(--font-size-base);
   color: var(--color-text-secondary);
   margin-bottom: var(--spacing-4);
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  line-height: 1.5;
 }
 
 .order-preview-details {
@@ -203,11 +220,35 @@
   align-items: center;
   gap: var(--spacing-2);
   color: var(--color-text-secondary);
+  line-height: 1.4;
 }
 
 .detail-icon {
   font-size: var(--font-size-base);
   flex-shrink: 0;
+  width: 16px;
+  text-align: center;
+}
+
+.order-status {
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.order-status.status-open {
+  color: #059669;
+}
+
+.order-status.status-in_progress {
+  color: #d97706;
+}
+
+.order-status.status-completed {
+  color: #7c3aed;
+}
+
+.order-status.status-cancelled {
+  color: #dc2626;
 }
 
 /* Empty State */
@@ -242,7 +283,7 @@
 /* Quick Actions Section */
 .quick-actions-section {
   padding: var(--spacing-12) 0;
-  background-color: var(--color-bg-paper);
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
 .quick-actions-section h2 {
