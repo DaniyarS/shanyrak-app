@@ -3,6 +3,251 @@
   "baseUrl": "",
   "endpoints": [
     {
+      "name": "create",
+      "method": "POST",
+      "path": "/api/v1/waste",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "  {\n    \"title\": \"Остатки кирпича M150\",\n    \"description\": \"Около 200 штук\",\n    \"categoryPublicId\": \"1e6e56f5-d942-4174-a5ea-79ab004c6e5f\",\n    \"city\": \"Алматы\",\n    \"district\": \"Наурызбай\",\n    \"unit\": \"pcs\",\n    \"amount\": 200,\n    \"price\": 0\n  }\n",
+        "options": {
+          "raw": {
+            "language": "json"
+          }
+        }
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "  {\n    \"title\": \"Остатки кирпича M150\",\n    \"description\": \"Около 200 штук\",\n    \"categoryPublicId\": \"1e6e56f5-d942-4174-a5ea-79ab004c6e5f\",\n    \"city\": \"Алматы\",\n    \"district\": \"Наурызбай\",\n    \"unit\": \"pcs\",\n    \"amount\": 200,\n    \"price\": 0\n  }\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "update",
+      "method": "PUT",
+      "path": "/api/v1/waste/{publicId}",
+      "description": "/api/v1/waste/{waste's public id}",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "  {\n    \"title\": \"Остатки кирпича M150\",\n    \"description\": \"Около 200 штук\",\n    \"categoryPublicId\": \"uuid\",\n    \"city\": \"Алматы\",\n    \"district\": \"Наурызбай\",\n    \"unit\": \"pcs\",\n    \"amount\": 200,\n    \"price\": 0\n  }",
+        "options": {
+          "raw": {
+            "language": "json"
+          }
+        }
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "  {\n    \"title\": \"Остатки кирпича M150\",\n    \"description\": \"Около 200 штук\",\n    \"categoryPublicId\": \"uuid\",\n    \"city\": \"Алматы\",\n    \"district\": \"Наурызбай\",\n    \"unit\": \"pcs\",\n    \"amount\": 200,\n    \"price\": 0\n  }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "setStatus",
+      "method": "PATCH",
+      "path": "/api/v1/waste/{publicId}/status",
+      "description": "/api/v1/waste/{waste's public id}/status",
+      "headers": [],
+      "queryParams": [],
+      "body": {
+        "mode": "raw",
+        "raw": "{\"status\": \"SOLD\"}",
+        "options": {
+          "raw": {
+            "language": "json"
+          }
+        }
+      },
+      "examples": {
+        "request": {
+          "mode": "raw",
+          "raw": "{\"status\": \"SOLD\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "response": null
+      }
+    },
+    {
+      "name": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/waste/359a4646-9202-4247-a86c-68699a387987",
+      "description": "/api/v1/waste/{waste's public id}",
+      "headers": [],
+      "queryParams": [],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "search",
+      "method": "GET",
+      "path": "/api/v1/waste",
+      "description": "",
+      "headers": [],
+      "queryParams": [
+        {
+          "key": "city",
+          "value": "Алматы"
+        },
+        {
+          "key": "onlyFree",
+          "value": "true"
+        },
+        {
+          "key": "page",
+          "value": "0"
+        },
+        {
+          "key": "size",
+          "value": "20"
+        },
+        {
+          "key": "sort",
+          "value": "price,desc",
+          "description": "price,asc or createdAt,desc or amount,desc"
+        },
+        {
+          "key": "minPrice",
+          "value": "1000",
+          "disabled": true
+        },
+        {
+          "key": "maxPrice",
+          "value": "3000",
+          "disabled": true
+        },
+        {
+          "key": "categoryPublicId",
+          "value": "fcb2ec72-8d08-4725-a734-8cd3283fd3db"
+        },
+        {
+          "key": "q",
+          "value": "кирпич",
+          "disabled": true
+        }
+      ],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "my",
+      "method": "GET",
+      "path": "/api/v1/waste/my",
+      "description": "",
+      "headers": [],
+      "queryParams": [
+        {
+          "key": "page",
+          "value": "0"
+        },
+        {
+          "key": "size",
+          "value": "20"
+        }
+      ],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "waste",
+      "method": "GET",
+      "path": "/api/v1/waste/8aa07d5c-6338-4bbd-8131-9f5f5201cc7b",
+      "description": "/api/v1/waste/{waste's public id}",
+      "headers": [],
+      "queryParams": [],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "requestPhone",
+      "method": "POST",
+      "path": "/api/v1/waste/884ffa71-2724-4db9-854f-2c06bbdc5ffe/request-phone",
+      "description": "/api/v1/waste/8aa07d5c-6338-4bbd-8131-9f5f5201cc7b/request-phone",
+      "headers": [],
+      "queryParams": [],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "all",
+      "method": "GET",
+      "path": "/api/v1/waste-categories",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "category",
+      "method": "GET",
+      "path": "/api/v1/waste-categories/4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+      "description": "/api/v1/waste-categories/{waste's category public id}",
+      "headers": [],
+      "queryParams": [],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "children",
+      "method": "GET",
+      "path": "/api/v1/waste-categories/4d8c32c8-6355-4545-b2c5-1ad69bfc0f08/children",
+      "description": "/api/v1/waste-categories/{waste's category public id}",
+      "headers": [],
+      "queryParams": [],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
+      "name": "tree",
+      "method": "GET",
+      "path": "/api/v1/waste-categories/tree",
+      "description": "",
+      "headers": [],
+      "queryParams": [],
+      "body": null,
+      "examples": {
+        "response": null
+      }
+    },
+    {
       "name": "all",
       "method": "GET",
       "path": "/api/v1/categories",

@@ -8,6 +8,2068 @@
   },
   "item": [
     {
+      "name": "waste",
+      "item": [
+        {
+          "name": "create",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "  {\n    \"title\": \"Остатки кирпича M150\",\n    \"description\": \"Около 200 штук\",\n    \"categoryPublicId\": \"1e6e56f5-d942-4174-a5ea-79ab004c6e5f\",\n    \"city\": \"Алматы\",\n    \"district\": \"Наурызбай\",\n    \"unit\": \"pcs\",\n    \"amount\": 200,\n    \"price\": 0\n  }\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{shanyrak_url}}/api/v1/waste",
+              "host": ["{{shanyrak_url}}"],
+              "path": ["api", "v1", "waste"]
+            }
+          },
+          "response": {
+            "publicId": "f6f9e657-2806-4767-98aa-65de804e8f90",
+            "title": "Остатки кирпича M150",
+            "description": "Около 220 штук",
+            "categoryPublicId": "a5e507fd-2565-4f27-a78b-a71e260de0bb",
+            "categoryName": "Краски, Лаки, Эмали, Растворители",
+            "city": "Алматы",
+            "district": "Наурызбай",
+            "unit": "pcs",
+            "amount": 200,
+            "price": 0,
+            "status": "ACTIVE",
+            "createdAt": "2025-11-23T11:14:44.300111Z",
+            "updatedAt": "2025-11-23T11:14:44.300142Z",
+            "ownerName": "Daniyar B.",
+            "ownerPhone": "7771******",
+            "ownerCity": "Алматы",
+            "photos": []
+          }
+        },
+        {
+          "name": "update",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "  {\n    \"title\": \"Остатки кирпича M150\",\n    \"description\": \"Около 200 штук\",\n    \"categoryPublicId\": \"uuid\",\n    \"city\": \"Алматы\",\n    \"district\": \"Наурызбай\",\n    \"unit\": \"pcs\",\n    \"amount\": 200,\n    \"price\": 0\n  }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{shanyrak_url}}/api/v1/waste/{publicId}",
+              "host": ["{{shanyrak_url}}"],
+              "path": ["api", "v1", "waste", "{publicId}"]
+            },
+            "description": "/api/v1/waste/{waste's public id}"
+          },
+          "response": {
+            "publicId": "359a4646-9202-4247-a86c-68699a387987",
+            "title": "Остатки кирпича M150",
+            "description": "Около 200 штук",
+            "categoryPublicId": "a5e507fd-2565-4f27-a78b-a71e260de0bb",
+            "categoryName": "Краски, Лаки, Эмали, Растворители",
+            "city": "Алматы",
+            "district": "Наурызбай",
+            "unit": "pcs",
+            "amount": 200,
+            "price": 0,
+            "status": "SOLD",
+            "createdAt": "2025-11-19T03:45:20.482979Z",
+            "updatedAt": "2025-11-19T03:50:34.592318Z",
+            "ownerName": "Daniyar B.",
+            "ownerPhone": "7771******",
+            "ownerCity": "Алматы",
+            "photos": []
+          }
+        },
+        {
+          "name": "setStatus",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\": \"SOLD\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{shanyrak_url}}/api/v1/waste/{publicId}/status",
+              "host": ["{{shanyrak_url}}"],
+              "path": ["api", "v1", "waste", "{publicId}", "status"]
+            },
+            "description": "/api/v1/waste/{waste's public id}/status"
+          },
+          "response": {
+            "publicId": "359a4646-9202-4247-a86c-68699a387987",
+            "title": "Остатки кирпича M150",
+            "description": "Около 200 штук",
+            "categoryPublicId": "a5e507fd-2565-4f27-a78b-a71e260de0bb",
+            "categoryName": "Краски, Лаки, Эмали, Растворители",
+            "city": "Алматы",
+            "district": "Наурызбай",
+            "unit": "pcs",
+            "amount": 200.0,
+            "price": 0.0,
+            "status": "SOLD",
+            "createdAt": "2025-11-19T03:45:20.482979Z",
+            "updatedAt": "2025-11-19T03:50:34.592318Z",
+            "ownerName": "Daniyar B.",
+            "ownerPhone": "7771******",
+            "ownerCity": "Алматы",
+            "photos": []
+          }
+        },
+        {
+          "name": "delete",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{shanyrak_url}}/api/v1/waste/359a4646-9202-4247-a86c-68699a387987",
+              "host": ["{{shanyrak_url}}"],
+              "path": [
+                "api",
+                "v1",
+                "waste",
+                "359a4646-9202-4247-a86c-68699a387987"
+              ]
+            },
+            "description": "/api/v1/waste/{waste's public id}"
+          },
+          "response": []
+        },
+        {
+          "name": "search",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{shanyrak_url}}/api/v1/waste?city=Алматы&onlyFree=true&page=0&size=20&sort=price,desc&categoryPublicId=fcb2ec72-8d08-4725-a734-8cd3283fd3db",
+              "host": ["{{shanyrak_url}}"],
+              "path": ["api", "v1", "waste"],
+              "query": [
+                {
+                  "key": "city",
+                  "value": "Алматы"
+                },
+                {
+                  "key": "onlyFree",
+                  "value": "true"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "20"
+                },
+                {
+                  "key": "sort",
+                  "value": "price,desc",
+                  "description": "price,asc or createdAt,desc or amount,desc"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "1000",
+                  "disabled": true
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "3000",
+                  "disabled": true
+                },
+                {
+                  "key": "categoryPublicId",
+                  "value": "fcb2ec72-8d08-4725-a734-8cd3283fd3db"
+                },
+                {
+                  "key": "q",
+                  "value": "кирпич",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": {
+            "content": [
+              {
+                "publicId": "8aa07d5c-6338-4bbd-8131-9f5f5201cc7b",
+                "title": "Остатки кирпича M150",
+                "description": null,
+                "categoryPublicId": "a5e507fd-2565-4f27-a78b-a71e260de0bb",
+                "categoryName": "Краски, Лаки, Эмали, Растворители",
+                "city": "Алматы",
+                "district": "Наурызбай",
+                "unit": "pcs",
+                "amount": 200.0,
+                "price": 0.0,
+                "status": "ACTIVE",
+                "createdAt": "2025-11-19T04:41:51.725973Z",
+                "updatedAt": null,
+                "ownerName": null,
+                "ownerPhone": null,
+                "ownerCity": "Алматы",
+                "photos": []
+              }
+            ],
+            "pageable": {
+              "pageNumber": 0,
+              "pageSize": 20,
+              "sort": {
+                "sorted": true,
+                "empty": false,
+                "unsorted": false
+              },
+              "offset": 0,
+              "paged": true,
+              "unpaged": false
+            },
+            "totalPages": 1,
+            "totalElements": 1,
+            "last": true,
+            "size": 20,
+            "number": 0,
+            "sort": {
+              "sorted": true,
+              "empty": false,
+              "unsorted": false
+            },
+            "numberOfElements": 1,
+            "first": true,
+            "empty": false
+          }
+        },
+        {
+          "name": "my",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{shanyrak_url}}/api/v1/waste/my?page=0&size=20",
+              "host": ["{{shanyrak_url}}"],
+              "path": ["api", "v1", "waste", "my"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "20"
+                }
+              ]
+            }
+          },
+          "response": {
+            "content": [
+              {
+                "publicId": "8aa07d5c-6338-4bbd-8131-9f5f5201cc7b",
+                "title": "Остатки кирпича M150",
+                "description": "Около 220 штук",
+                "categoryPublicId": "a5e507fd-2565-4f27-a78b-a71e260de0bb",
+                "categoryName": "Краски, Лаки, Эмали, Растворители",
+                "city": "Алматы",
+                "district": "Наурызбай",
+                "unit": "pcs",
+                "amount": 200.0,
+                "price": 0.0,
+                "status": "ACTIVE",
+                "createdAt": "2025-11-19T04:41:51.725973Z",
+                "updatedAt": "2025-11-19T04:41:51.726002Z",
+                "ownerName": "Daniyar B.",
+                "ownerPhone": "7771******",
+                "ownerCity": "Алматы",
+                "photos": []
+              },
+              {
+                "publicId": "359a4646-9202-4247-a86c-68699a387987",
+                "title": "Остатки кирпича M150",
+                "description": "Около 200 штук",
+                "categoryPublicId": "a5e507fd-2565-4f27-a78b-a71e260de0bb",
+                "categoryName": "Краски, Лаки, Эмали, Растворители",
+                "city": "Алматы",
+                "district": "Наурызбай",
+                "unit": "pcs",
+                "amount": 200.0,
+                "price": 0.0,
+                "status": "SOLD",
+                "createdAt": "2025-11-19T03:45:20.482979Z",
+                "updatedAt": "2025-11-19T03:50:34.592318Z",
+                "ownerName": "Daniyar B.",
+                "ownerPhone": "7771******",
+                "ownerCity": "Алматы",
+                "photos": []
+              }
+            ],
+            "pageable": {
+              "pageNumber": 0,
+              "pageSize": 20,
+              "sort": {
+                "sorted": true,
+                "empty": false,
+                "unsorted": false
+              },
+              "offset": 0,
+              "paged": true,
+              "unpaged": false
+            },
+            "totalPages": 1,
+            "totalElements": 2,
+            "last": true,
+            "size": 20,
+            "number": 0,
+            "sort": {
+              "sorted": true,
+              "empty": false,
+              "unsorted": false
+            },
+            "numberOfElements": 2,
+            "first": true,
+            "empty": false
+          }
+        },
+        {
+          "name": "waste",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{shanyrak_url}}/api/v1/waste/8aa07d5c-6338-4bbd-8131-9f5f5201cc7b",
+              "host": ["{{shanyrak_url}}"],
+              "path": [
+                "api",
+                "v1",
+                "waste",
+                "8aa07d5c-6338-4bbd-8131-9f5f5201cc7b"
+              ]
+            },
+            "description": "/api/v1/waste/{waste's public id}"
+          },
+          "response": {
+            "publicId": "8aa07d5c-6338-4bbd-8131-9f5f5201cc7b",
+            "title": "Остатки кирпича M150",
+            "description": "Около 220 штук",
+            "categoryPublicId": "a5e507fd-2565-4f27-a78b-a71e260de0bb",
+            "categoryName": "Краски, Лаки, Эмали, Растворители",
+            "city": "Алматы",
+            "district": "Наурызбай",
+            "unit": "pcs",
+            "amount": 200.0,
+            "price": 0.0,
+            "status": "ACTIVE",
+            "createdAt": "2025-11-19T04:41:51.725973Z",
+            "updatedAt": "2025-11-19T04:41:51.726002Z",
+            "ownerName": "Daniyar B.",
+            "ownerPhone": "7771******",
+            "ownerCity": "Алматы",
+            "photos": []
+          }
+        },
+        {
+          "name": "requestPhone",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{shanyrak_url}}/api/v1/waste/884ffa71-2724-4db9-854f-2c06bbdc5ffe/request-phone",
+              "host": ["{{shanyrak_url}}"],
+              "path": [
+                "api",
+                "v1",
+                "waste",
+                "884ffa71-2724-4db9-854f-2c06bbdc5ffe",
+                "request-phone"
+              ]
+            },
+            "description": "/api/v1/waste/8aa07d5c-6338-4bbd-8131-9f5f5201cc7b/request-phone"
+          },
+          "response": {
+            "ownerName": "Daniyar B.",
+            "ownerPhone": "77714451775",
+            "ownerCity": "Алматы"
+          }
+        }
+      ],
+      "description": "Папка для создания объявлений по строй отходу"
+    },
+    {
+      "name": "wasteCategories",
+      "item": [
+        {
+          "name": "all",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{shanyrak_url}}/api/v1/waste-categories",
+              "host": ["{{shanyrak_url}}"],
+              "path": ["api", "v1", "waste-categories"]
+            }
+          },
+          "response": [
+            {
+              "publicId": "4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+              "slug": "finishing_materials",
+              "name": "Отделочные и Декоративные Материалы",
+              "nameKz": "Әрлеу және Безендіру Материалдары",
+              "nameEng": null,
+              "icon": "🎨",
+              "children": null,
+              "parent": null
+            },
+            {
+              "publicId": "531b9f3b-44e7-4aae-b87e-b9b1512893a6",
+              "slug": "mixtures_bulk",
+              "name": "Строительные Смеси и Сыпучие Материалы",
+              "nameKz": "Құрылыс Қоспалары және Сусымалы Материалдар",
+              "nameEng": null,
+              "icon": "🪣",
+              "children": null,
+              "parent": null
+            },
+            {
+              "publicId": "ed1e119f-5f8d-4342-bc47-943b59d88e88",
+              "slug": "metals_reinforcement",
+              "name": "Металлы и Арматура",
+              "nameKz": "Металдар және Арматура",
+              "nameEng": null,
+              "icon": "🔩",
+              "children": null,
+              "parent": null
+            },
+            {
+              "publicId": "bb2f5018-7254-4dd7-be35-78b388dd795b",
+              "slug": "structural_materials",
+              "name": "Конструкционные Материалы",
+              "nameKz": "Құрылымдық Материалдар",
+              "nameEng": null,
+              "icon": "🏗️",
+              "children": null,
+              "parent": null
+            },
+            {
+              "publicId": "3af5502f-9b8f-48ae-9ccf-0eaad4719c28",
+              "slug": "insulation_materials",
+              "name": "Изоляционные Материалы",
+              "nameKz": "Оқшаулағыш Материалдар",
+              "nameEng": null,
+              "icon": "🧊",
+              "children": null,
+              "parent": null
+            },
+            {
+              "publicId": "dabf9b12-90e4-4d92-94a4-2f136901e23d",
+              "slug": "engineering_communications",
+              "name": "Элементы Инженерии и Коммуникаций",
+              "nameKz": "Инженерлік және Коммуникация Элементтері",
+              "nameEng": null,
+              "icon": "🔌",
+              "children": null,
+              "parent": null
+            }
+          ]
+        },
+        {
+          "name": "category",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{shanyrak_url}}/api/v1/waste-categories/4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+              "host": ["{{shanyrak_url}}"],
+              "path": [
+                "api",
+                "v1",
+                "waste-categories",
+                "4d8c32c8-6355-4545-b2c5-1ad69bfc0f08"
+              ]
+            },
+            "description": "/api/v1/waste-categories/{waste's category public id}"
+          },
+          "response": {
+            "publicId": "4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+            "slug": "finishing_materials",
+            "name": "Отделочные и Декоративные Материалы",
+            "nameKz": "Әрлеу және Безендіру Материалдары",
+            "nameEng": null,
+            "icon": "🎨",
+            "children": null,
+            "parent": null
+          }
+        },
+        {
+          "name": "children",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{shanyrak_url}}/api/v1/waste-categories/4d8c32c8-6355-4545-b2c5-1ad69bfc0f08/children",
+              "host": ["{{shanyrak_url}}"],
+              "path": [
+                "api",
+                "v1",
+                "waste-categories",
+                "4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+                "children"
+              ]
+            },
+            "description": "/api/v1/waste-categories/{waste's category public id}"
+          },
+          "response": [
+            {
+              "publicId": "a5e507fd-2565-4f27-a78b-a71e260de0bb",
+              "slug": "paints_varnishes",
+              "name": "Краски, Лаки, Эмали, Растворители",
+              "nameKz": "Бояулар, Лактар, Эмальдар, Еріткіштер",
+              "nameEng": null,
+              "icon": "🖌️",
+              "children": null,
+              "parent": {
+                "publicId": "4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+                "slug": "finishing_materials",
+                "name": "Отделочные и Декоративные Материалы",
+                "nameKz": "Әрлеу және Безендіру Материалдары",
+                "nameEng": null,
+                "icon": "🎨",
+                "children": null,
+                "parent": null
+              }
+            },
+            {
+              "publicId": "c8f202ae-8957-4e99-b04b-6d9562cbf88c",
+              "slug": "wallpaper",
+              "name": "Обои",
+              "nameKz": "Тұсқағаз",
+              "nameEng": null,
+              "icon": "📄",
+              "children": null,
+              "parent": {
+                "publicId": "4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+                "slug": "finishing_materials",
+                "name": "Отделочные и Декоративные Материалы",
+                "nameKz": "Әрлеу және Безендіру Материалдары",
+                "nameEng": null,
+                "icon": "🎨",
+                "children": null,
+                "parent": null
+              }
+            },
+            {
+              "publicId": "5aa1dafc-22f0-4a13-ab34-f4efc6fd5e84",
+              "slug": "flooring",
+              "name": "Напольные покрытия",
+              "nameKz": "Еден жабындылары",
+              "nameEng": null,
+              "icon": "🟫",
+              "children": null,
+              "parent": {
+                "publicId": "4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+                "slug": "finishing_materials",
+                "name": "Отделочные и Декоративные Материалы",
+                "nameKz": "Әрлеу және Безендіру Материалдары",
+                "nameEng": null,
+                "icon": "🎨",
+                "children": null,
+                "parent": null
+              }
+            },
+            {
+              "publicId": "051f1ca8-74d0-4fd6-87fd-535ead5dddf2",
+              "slug": "tiles",
+              "name": "Плитка и Кафель",
+              "nameKz": "Плитка және Кафель",
+              "nameEng": null,
+              "icon": "🔳",
+              "children": null,
+              "parent": {
+                "publicId": "4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+                "slug": "finishing_materials",
+                "name": "Отделочные и Декоративные Материалы",
+                "nameKz": "Әрлеу және Безендіру Материалдары",
+                "nameEng": null,
+                "icon": "🎨",
+                "children": null,
+                "parent": null
+              }
+            },
+            {
+              "publicId": "281e2819-809c-46f0-a8bd-4429f6ae9f8a",
+              "slug": "decorative_elements",
+              "name": "Декоративные элементы",
+              "nameKz": "Безендіру элементтері",
+              "nameEng": null,
+              "icon": "✨",
+              "children": null,
+              "parent": {
+                "publicId": "4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+                "slug": "finishing_materials",
+                "name": "Отделочные и Декоративные Материалы",
+                "nameKz": "Әрлеу және Безендіру Материалдары",
+                "nameEng": null,
+                "icon": "🎨",
+                "children": null,
+                "parent": null
+              }
+            }
+          ]
+        },
+        {
+          "name": "tree",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{shanyrak_url}}/api/v1/waste-categories/tree",
+              "host": ["{{shanyrak_url}}"],
+              "path": ["api", "v1", "waste-categories", "tree"]
+            }
+          },
+          "response": [
+            {
+              "publicId": "4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+              "slug": "finishing_materials",
+              "name": "Отделочные и Декоративные Материалы",
+              "nameKz": "Әрлеу және Безендіру Материалдары",
+              "nameEng": null,
+              "icon": "🎨",
+              "children": [
+                {
+                  "publicId": "a5e507fd-2565-4f27-a78b-a71e260de0bb",
+                  "slug": "paints_varnishes",
+                  "name": "Краски, Лаки, Эмали, Растворители",
+                  "nameKz": "Бояулар, Лактар, Эмальдар, Еріткіштер",
+                  "nameEng": null,
+                  "icon": "🖌️",
+                  "children": null,
+                  "parent": {
+                    "publicId": "4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+                    "slug": "finishing_materials",
+                    "name": "Отделочные и Декоративные Материалы",
+                    "nameKz": "Әрлеу және Безендіру Материалдары",
+                    "nameEng": null,
+                    "icon": "🎨",
+                    "children": null,
+                    "parent": null
+                  }
+                },
+                {
+                  "publicId": "c8f202ae-8957-4e99-b04b-6d9562cbf88c",
+                  "slug": "wallpaper",
+                  "name": "Обои",
+                  "nameKz": "Тұсқағаз",
+                  "nameEng": null,
+                  "icon": "📄",
+                  "children": null,
+                  "parent": {
+                    "publicId": "4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+                    "slug": "finishing_materials",
+                    "name": "Отделочные и Декоративные Материалы",
+                    "nameKz": "Әрлеу және Безендіру Материалдары",
+                    "nameEng": null,
+                    "icon": "🎨",
+                    "children": null,
+                    "parent": null
+                  }
+                },
+                {
+                  "publicId": "5aa1dafc-22f0-4a13-ab34-f4efc6fd5e84",
+                  "slug": "flooring",
+                  "name": "Напольные покрытия",
+                  "nameKz": "Еден жабындылары",
+                  "nameEng": null,
+                  "icon": "🟫",
+                  "children": [
+                    {
+                      "publicId": "f2f0ab3b-2725-49f8-8b83-b8e288cebf7b",
+                      "slug": "flooring_linoleum",
+                      "name": "Линолеум, ПВХ-плитка",
+                      "nameKz": "Линолеум, ПВХ плиткасы",
+                      "nameEng": null,
+                      "icon": "📏",
+                      "children": null,
+                      "parent": {
+                        "publicId": "5aa1dafc-22f0-4a13-ab34-f4efc6fd5e84",
+                        "slug": "flooring",
+                        "name": "Напольные покрытия",
+                        "nameKz": "Еден жабындылары",
+                        "nameEng": null,
+                        "icon": "🟫",
+                        "children": null,
+                        "parent": {
+                          "publicId": "4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+                          "slug": "finishing_materials",
+                          "name": "Отделочные и Декоративные Материалы",
+                          "nameKz": "Әрлеу және Безендіру Материалдары",
+                          "nameEng": null,
+                          "icon": "🎨",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    },
+                    {
+                      "publicId": "8523ed23-e296-4b31-91ea-f1e16ec9ff2b",
+                      "slug": "flooring_laminate",
+                      "name": "Ламинат",
+                      "nameKz": "Ламинат",
+                      "nameEng": null,
+                      "icon": "🪵",
+                      "children": null,
+                      "parent": {
+                        "publicId": "5aa1dafc-22f0-4a13-ab34-f4efc6fd5e84",
+                        "slug": "flooring",
+                        "name": "Напольные покрытия",
+                        "nameKz": "Еден жабындылары",
+                        "nameEng": null,
+                        "icon": "🟫",
+                        "children": null,
+                        "parent": {
+                          "publicId": "4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+                          "slug": "finishing_materials",
+                          "name": "Отделочные и Декоративные Материалы",
+                          "nameKz": "Әрлеу және Безендіру Материалдары",
+                          "nameEng": null,
+                          "icon": "🎨",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    },
+                    {
+                      "publicId": "12d58b93-9673-46ff-a19a-b1fe4248efe1",
+                      "slug": "flooring_parquet",
+                      "name": "Паркет, Паркетная доска",
+                      "nameKz": "Паркет, Паркет тақтасы",
+                      "nameEng": null,
+                      "icon": "🌳",
+                      "children": null,
+                      "parent": {
+                        "publicId": "5aa1dafc-22f0-4a13-ab34-f4efc6fd5e84",
+                        "slug": "flooring",
+                        "name": "Напольные покрытия",
+                        "nameKz": "Еден жабындылары",
+                        "nameEng": null,
+                        "icon": "🟫",
+                        "children": null,
+                        "parent": {
+                          "publicId": "4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+                          "slug": "finishing_materials",
+                          "name": "Отделочные и Декоративные Материалы",
+                          "nameKz": "Әрлеу және Безендіру Материалдары",
+                          "nameEng": null,
+                          "icon": "🎨",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    },
+                    {
+                      "publicId": "1f853c1b-8208-4d5a-8918-0428609f65d2",
+                      "slug": "flooring_carpet",
+                      "name": "Ковролин",
+                      "nameKz": "Кілем жабын",
+                      "nameEng": null,
+                      "icon": "🔲",
+                      "children": null,
+                      "parent": {
+                        "publicId": "5aa1dafc-22f0-4a13-ab34-f4efc6fd5e84",
+                        "slug": "flooring",
+                        "name": "Напольные покрытия",
+                        "nameKz": "Еден жабындылары",
+                        "nameEng": null,
+                        "icon": "🟫",
+                        "children": null,
+                        "parent": {
+                          "publicId": "4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+                          "slug": "finishing_materials",
+                          "name": "Отделочные и Декоративные Материалы",
+                          "nameKz": "Әрлеу және Безендіру Материалдары",
+                          "nameEng": null,
+                          "icon": "🎨",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    }
+                  ],
+                  "parent": {
+                    "publicId": "4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+                    "slug": "finishing_materials",
+                    "name": "Отделочные и Декоративные Материалы",
+                    "nameKz": "Әрлеу және Безендіру Материалдары",
+                    "nameEng": null,
+                    "icon": "🎨",
+                    "children": null,
+                    "parent": null
+                  }
+                },
+                {
+                  "publicId": "051f1ca8-74d0-4fd6-87fd-535ead5dddf2",
+                  "slug": "tiles",
+                  "name": "Плитка и Кафель",
+                  "nameKz": "Плитка және Кафель",
+                  "nameEng": null,
+                  "icon": "🔳",
+                  "children": [
+                    {
+                      "publicId": "8c51d748-e153-4808-a140-4678a1c64fff",
+                      "slug": "tiles_ceramic",
+                      "name": "Настенная и Напольная Плитка",
+                      "nameKz": "Қабырға және Еден Плиткасы",
+                      "nameEng": null,
+                      "icon": "◻️",
+                      "children": null,
+                      "parent": {
+                        "publicId": "051f1ca8-74d0-4fd6-87fd-535ead5dddf2",
+                        "slug": "tiles",
+                        "name": "Плитка и Кафель",
+                        "nameKz": "Плитка және Кафель",
+                        "nameEng": null,
+                        "icon": "🔳",
+                        "children": null,
+                        "parent": {
+                          "publicId": "4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+                          "slug": "finishing_materials",
+                          "name": "Отделочные и Декоративные Материалы",
+                          "nameKz": "Әрлеу және Безендіру Материалдары",
+                          "nameEng": null,
+                          "icon": "🎨",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    },
+                    {
+                      "publicId": "ce69770a-26d1-4717-95cc-f8823b9bc0b9",
+                      "slug": "tiles_porcelain",
+                      "name": "Керамогранит",
+                      "nameKz": "Керамогранит",
+                      "nameEng": null,
+                      "icon": "⬜",
+                      "children": null,
+                      "parent": {
+                        "publicId": "051f1ca8-74d0-4fd6-87fd-535ead5dddf2",
+                        "slug": "tiles",
+                        "name": "Плитка и Кафель",
+                        "nameKz": "Плитка және Кафель",
+                        "nameEng": null,
+                        "icon": "🔳",
+                        "children": null,
+                        "parent": {
+                          "publicId": "4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+                          "slug": "finishing_materials",
+                          "name": "Отделочные и Декоративные Материалы",
+                          "nameKz": "Әрлеу және Безендіру Материалдары",
+                          "nameEng": null,
+                          "icon": "🎨",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    },
+                    {
+                      "publicId": "903318ac-0c70-45d4-8366-6e14d5b3f71e",
+                      "slug": "tiles_mosaic",
+                      "name": "Мозаика",
+                      "nameKz": "Мозаика",
+                      "nameEng": null,
+                      "icon": "🔲",
+                      "children": null,
+                      "parent": {
+                        "publicId": "051f1ca8-74d0-4fd6-87fd-535ead5dddf2",
+                        "slug": "tiles",
+                        "name": "Плитка и Кафель",
+                        "nameKz": "Плитка және Кафель",
+                        "nameEng": null,
+                        "icon": "🔳",
+                        "children": null,
+                        "parent": {
+                          "publicId": "4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+                          "slug": "finishing_materials",
+                          "name": "Отделочные и Декоративные Материалы",
+                          "nameKz": "Әрлеу және Безендіру Материалдары",
+                          "nameEng": null,
+                          "icon": "🎨",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    },
+                    {
+                      "publicId": "ca65c489-2b09-452f-8aef-9b56dce7dd5d",
+                      "slug": "tiles_clinker",
+                      "name": "Клинкерная плитка",
+                      "nameKz": "Клинкер плиткасы",
+                      "nameEng": null,
+                      "icon": "🧱",
+                      "children": null,
+                      "parent": {
+                        "publicId": "051f1ca8-74d0-4fd6-87fd-535ead5dddf2",
+                        "slug": "tiles",
+                        "name": "Плитка и Кафель",
+                        "nameKz": "Плитка және Кафель",
+                        "nameEng": null,
+                        "icon": "🔳",
+                        "children": null,
+                        "parent": {
+                          "publicId": "4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+                          "slug": "finishing_materials",
+                          "name": "Отделочные и Декоративные Материалы",
+                          "nameKz": "Әрлеу және Безендіру Материалдары",
+                          "nameEng": null,
+                          "icon": "🎨",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    }
+                  ],
+                  "parent": {
+                    "publicId": "4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+                    "slug": "finishing_materials",
+                    "name": "Отделочные и Декоративные Материалы",
+                    "nameKz": "Әрлеу және Безендіру Материалдары",
+                    "nameEng": null,
+                    "icon": "🎨",
+                    "children": null,
+                    "parent": null
+                  }
+                },
+                {
+                  "publicId": "281e2819-809c-46f0-a8bd-4429f6ae9f8a",
+                  "slug": "decorative_elements",
+                  "name": "Декоративные элементы",
+                  "nameKz": "Безендіру элементтері",
+                  "nameEng": null,
+                  "icon": "✨",
+                  "children": [
+                    {
+                      "publicId": "c5fb6af3-974f-4acc-aa6b-28b24f4394fa",
+                      "slug": "decorative_skirting",
+                      "name": "Плинтусы, Наличники",
+                      "nameKz": "Плинтустар, Қаптамалар",
+                      "nameEng": null,
+                      "icon": "📐",
+                      "children": null,
+                      "parent": {
+                        "publicId": "281e2819-809c-46f0-a8bd-4429f6ae9f8a",
+                        "slug": "decorative_elements",
+                        "name": "Декоративные элементы",
+                        "nameKz": "Безендіру элементтері",
+                        "nameEng": null,
+                        "icon": "✨",
+                        "children": null,
+                        "parent": {
+                          "publicId": "4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+                          "slug": "finishing_materials",
+                          "name": "Отделочные и Декоративные Материалы",
+                          "nameKz": "Әрлеу және Безендіру Материалдары",
+                          "nameEng": null,
+                          "icon": "🎨",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    },
+                    {
+                      "publicId": "bcf66899-533c-491a-ba1c-0379f43f2fdb",
+                      "slug": "decorative_molding",
+                      "name": "Галтели (Потолочные карнизы), Розетки",
+                      "nameKz": "Галтельдер (Төбе карниздері), Розеткалар",
+                      "nameEng": null,
+                      "icon": "🎭",
+                      "children": null,
+                      "parent": {
+                        "publicId": "281e2819-809c-46f0-a8bd-4429f6ae9f8a",
+                        "slug": "decorative_elements",
+                        "name": "Декоративные элементы",
+                        "nameKz": "Безендіру элементтері",
+                        "nameEng": null,
+                        "icon": "✨",
+                        "children": null,
+                        "parent": {
+                          "publicId": "4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+                          "slug": "finishing_materials",
+                          "name": "Отделочные и Декоративные Материалы",
+                          "nameKz": "Әрлеу және Безендіру Материалдары",
+                          "nameEng": null,
+                          "icon": "🎨",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    },
+                    {
+                      "publicId": "76a0129f-c0a6-4a7e-93ae-8d1621f4f81f",
+                      "slug": "decorative_panels",
+                      "name": "Декоративные панели (МДФ, ПВХ)",
+                      "nameKz": "Безендіру панельдері (МДФ, ПВХ)",
+                      "nameEng": null,
+                      "icon": "🪟",
+                      "children": null,
+                      "parent": {
+                        "publicId": "281e2819-809c-46f0-a8bd-4429f6ae9f8a",
+                        "slug": "decorative_elements",
+                        "name": "Декоративные элементы",
+                        "nameKz": "Безендіру элементтері",
+                        "nameEng": null,
+                        "icon": "✨",
+                        "children": null,
+                        "parent": {
+                          "publicId": "4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+                          "slug": "finishing_materials",
+                          "name": "Отделочные и Декоративные Материалы",
+                          "nameKz": "Әрлеу және Безендіру Материалдары",
+                          "nameEng": null,
+                          "icon": "🎨",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    }
+                  ],
+                  "parent": {
+                    "publicId": "4d8c32c8-6355-4545-b2c5-1ad69bfc0f08",
+                    "slug": "finishing_materials",
+                    "name": "Отделочные и Декоративные Материалы",
+                    "nameKz": "Әрлеу және Безендіру Материалдары",
+                    "nameEng": null,
+                    "icon": "🎨",
+                    "children": null,
+                    "parent": null
+                  }
+                }
+              ],
+              "parent": null
+            },
+            {
+              "publicId": "531b9f3b-44e7-4aae-b87e-b9b1512893a6",
+              "slug": "mixtures_bulk",
+              "name": "Строительные Смеси и Сыпучие Материалы",
+              "nameKz": "Құрылыс Қоспалары және Сусымалы Материалдар",
+              "nameEng": null,
+              "icon": "🪣",
+              "children": [
+                {
+                  "publicId": "cd280586-cdc5-4591-b785-fb48430954bb",
+                  "slug": "cement_binders",
+                  "name": "Цемент и Вяжущие",
+                  "nameKz": "Цемент және Байланыстырғыштар",
+                  "nameEng": null,
+                  "icon": "⚫",
+                  "children": null,
+                  "parent": {
+                    "publicId": "531b9f3b-44e7-4aae-b87e-b9b1512893a6",
+                    "slug": "mixtures_bulk",
+                    "name": "Строительные Смеси и Сыпучие Материалы",
+                    "nameKz": "Құрылыс Қоспалары және Сусымалы Материалдар",
+                    "nameEng": null,
+                    "icon": "🪣",
+                    "children": null,
+                    "parent": null
+                  }
+                },
+                {
+                  "publicId": "7a49eab6-b5a0-4162-8524-cae1daf6bbd1",
+                  "slug": "gypsum_mixtures",
+                  "name": "Гипсовые смеси (Штукатурки, Шпаклёвки)",
+                  "nameKz": "Гипсті қоспалар (Сылағыштар, Шпатльовкалар)",
+                  "nameEng": null,
+                  "icon": "⚪",
+                  "children": null,
+                  "parent": {
+                    "publicId": "531b9f3b-44e7-4aae-b87e-b9b1512893a6",
+                    "slug": "mixtures_bulk",
+                    "name": "Строительные Смеси и Сыпучие Материалы",
+                    "nameKz": "Құрылыс Қоспалары және Сусымалы Материалдар",
+                    "nameEng": null,
+                    "icon": "🪣",
+                    "children": null,
+                    "parent": null
+                  }
+                },
+                {
+                  "publicId": "7baa3b59-e25d-4c55-96bb-a39551c0eb4d",
+                  "slug": "masonry_mortar",
+                  "name": "Кладочные растворы",
+                  "nameKz": "Қалау ерітінділері",
+                  "nameEng": null,
+                  "icon": "🧱",
+                  "children": null,
+                  "parent": {
+                    "publicId": "531b9f3b-44e7-4aae-b87e-b9b1512893a6",
+                    "slug": "mixtures_bulk",
+                    "name": "Строительные Смеси и Сыпучие Материалы",
+                    "nameKz": "Құрылыс Қоспалары және Сусымалы Материалдар",
+                    "nameEng": null,
+                    "icon": "🪣",
+                    "children": null,
+                    "parent": null
+                  }
+                },
+                {
+                  "publicId": "2523a8cc-38bb-4a04-b773-a5d220d92d93",
+                  "slug": "adhesives_sealants",
+                  "name": "Клеи и Герметики (Монтажный клей, Силикон, Пена)",
+                  "nameKz": "Желімдер және Герметиктер (Монтаждық желім, Силикон, Көбік)",
+                  "nameEng": null,
+                  "icon": "🧴",
+                  "children": null,
+                  "parent": {
+                    "publicId": "531b9f3b-44e7-4aae-b87e-b9b1512893a6",
+                    "slug": "mixtures_bulk",
+                    "name": "Строительные Смеси и Сыпучие Материалы",
+                    "nameKz": "Құрылыс Қоспалары және Сусымалы Материалдар",
+                    "nameEng": null,
+                    "icon": "🪣",
+                    "children": null,
+                    "parent": null
+                  }
+                },
+                {
+                  "publicId": "c076ae09-27d3-4c9b-a8f3-1caa8a349748",
+                  "slug": "bulk_materials",
+                  "name": "Сыпучие материалы (Песок, Щебень, Гравий)",
+                  "nameKz": "Сусымалы материалдар (Құм, Қиыршық тас, Шағыл)",
+                  "nameEng": null,
+                  "icon": "⛰️",
+                  "children": null,
+                  "parent": {
+                    "publicId": "531b9f3b-44e7-4aae-b87e-b9b1512893a6",
+                    "slug": "mixtures_bulk",
+                    "name": "Строительные Смеси и Сыпучие Материалы",
+                    "nameKz": "Құрылыс Қоспалары және Сусымалы Материалдар",
+                    "nameEng": null,
+                    "icon": "🪣",
+                    "children": null,
+                    "parent": null
+                  }
+                }
+              ],
+              "parent": null
+            },
+            {
+              "publicId": "ed1e119f-5f8d-4342-bc47-943b59d88e88",
+              "slug": "metals_reinforcement",
+              "name": "Металлы и Арматура",
+              "nameKz": "Металдар және Арматура",
+              "nameEng": null,
+              "icon": "🔩",
+              "children": [
+                {
+                  "publicId": "34148c71-42a0-49e1-90c1-3567ab1f21cf",
+                  "slug": "rebar_mesh",
+                  "name": "Арматура и Сетка",
+                  "nameKz": "Арматура және Тор",
+                  "nameEng": null,
+                  "icon": "🔗",
+                  "children": null,
+                  "parent": {
+                    "publicId": "ed1e119f-5f8d-4342-bc47-943b59d88e88",
+                    "slug": "metals_reinforcement",
+                    "name": "Металлы и Арматура",
+                    "nameKz": "Металдар және Арматура",
+                    "nameEng": null,
+                    "icon": "🔩",
+                    "children": null,
+                    "parent": null
+                  }
+                },
+                {
+                  "publicId": "c3ba800c-0192-4d01-9235-cd131c55dff9",
+                  "slug": "metal_profiles",
+                  "name": "Профили (для гипсокартона, уголки, швеллеры)",
+                  "nameKz": "Профильдер (гипсокартон үшін, бұрыштар, швеллерлер)",
+                  "nameEng": null,
+                  "icon": "📏",
+                  "children": null,
+                  "parent": {
+                    "publicId": "ed1e119f-5f8d-4342-bc47-943b59d88e88",
+                    "slug": "metals_reinforcement",
+                    "name": "Металлы и Арматура",
+                    "nameKz": "Металдар және Арматура",
+                    "nameEng": null,
+                    "icon": "🔩",
+                    "children": null,
+                    "parent": null
+                  }
+                },
+                {
+                  "publicId": "eb6dc9a9-c75f-4813-9431-064de03bc51d",
+                  "slug": "fasteners",
+                  "name": "Крепёж (Гвозди, Саморезы, Болты, Дюбели)",
+                  "nameKz": "Бекіткіштер (Шегелер, Бұрандалар, Болттар, Дюбельдер)",
+                  "nameEng": null,
+                  "icon": "🔧",
+                  "children": null,
+                  "parent": {
+                    "publicId": "ed1e119f-5f8d-4342-bc47-943b59d88e88",
+                    "slug": "metals_reinforcement",
+                    "name": "Металлы и Арматура",
+                    "nameKz": "Металдар және Арматура",
+                    "nameEng": null,
+                    "icon": "🔩",
+                    "children": null,
+                    "parent": null
+                  }
+                },
+                {
+                  "publicId": "0e1a5992-29bc-4839-ac78-da8467c3e589",
+                  "slug": "metal_pipes_fittings",
+                  "name": "Металлические трубы и фитинги",
+                  "nameKz": "Металл құбырлар және фитингтер",
+                  "nameEng": null,
+                  "icon": "🔧",
+                  "children": null,
+                  "parent": {
+                    "publicId": "ed1e119f-5f8d-4342-bc47-943b59d88e88",
+                    "slug": "metals_reinforcement",
+                    "name": "Металлы и Арматура",
+                    "nameKz": "Металдар және Арматура",
+                    "nameEng": null,
+                    "icon": "🔩",
+                    "children": null,
+                    "parent": null
+                  }
+                }
+              ],
+              "parent": null
+            },
+            {
+              "publicId": "bb2f5018-7254-4dd7-be35-78b388dd795b",
+              "slug": "structural_materials",
+              "name": "Конструкционные Материалы",
+              "nameKz": "Құрылымдық Материалдар",
+              "nameEng": null,
+              "icon": "🏗️",
+              "children": [
+                {
+                  "publicId": "c772aba2-ad24-470c-8dae-b1013c64eef9",
+                  "slug": "lumber",
+                  "name": "Пиломатериалы",
+                  "nameKz": "Ағаш материалдары",
+                  "nameEng": null,
+                  "icon": "🪵",
+                  "children": [
+                    {
+                      "publicId": "1c42dea0-b7e0-41ab-8f56-a697628e1046",
+                      "slug": "lumber_boards",
+                      "name": "Доски, Брус, Рейки",
+                      "nameKz": "Тақталар, Брус, Рейкалар",
+                      "nameEng": null,
+                      "icon": "🪚",
+                      "children": null,
+                      "parent": {
+                        "publicId": "c772aba2-ad24-470c-8dae-b1013c64eef9",
+                        "slug": "lumber",
+                        "name": "Пиломатериалы",
+                        "nameKz": "Ағаш материалдары",
+                        "nameEng": null,
+                        "icon": "🪵",
+                        "children": null,
+                        "parent": {
+                          "publicId": "bb2f5018-7254-4dd7-be35-78b388dd795b",
+                          "slug": "structural_materials",
+                          "name": "Конструкционные Материалы",
+                          "nameKz": "Құрылымдық Материалдар",
+                          "nameEng": null,
+                          "icon": "🏗️",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    },
+                    {
+                      "publicId": "553038ef-4b33-4043-8a4d-9d46a6a9bbf3",
+                      "slug": "lumber_panels",
+                      "name": "Фанера, ОСБ (OSB), ДСП",
+                      "nameKz": "Фанера, ОСБ (OSB), ДСП",
+                      "nameEng": null,
+                      "icon": "📋",
+                      "children": null,
+                      "parent": {
+                        "publicId": "c772aba2-ad24-470c-8dae-b1013c64eef9",
+                        "slug": "lumber",
+                        "name": "Пиломатериалы",
+                        "nameKz": "Ағаш материалдары",
+                        "nameEng": null,
+                        "icon": "🪵",
+                        "children": null,
+                        "parent": {
+                          "publicId": "bb2f5018-7254-4dd7-be35-78b388dd795b",
+                          "slug": "structural_materials",
+                          "name": "Конструкционные Материалы",
+                          "nameKz": "Құрылымдық Материалдар",
+                          "nameEng": null,
+                          "icon": "🏗️",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    }
+                  ],
+                  "parent": {
+                    "publicId": "bb2f5018-7254-4dd7-be35-78b388dd795b",
+                    "slug": "structural_materials",
+                    "name": "Конструкционные Материалы",
+                    "nameKz": "Құрылымдық Материалдар",
+                    "nameEng": null,
+                    "icon": "🏗️",
+                    "children": null,
+                    "parent": null
+                  }
+                },
+                {
+                  "publicId": "ebb4eb8e-3550-4984-935d-60f5f02c8d7b",
+                  "slug": "stone_materials",
+                  "name": "Каменные материалы",
+                  "nameKz": "Тас материалдары",
+                  "nameEng": null,
+                  "icon": "🧱",
+                  "children": [
+                    {
+                      "publicId": "13c8ccd4-198e-4818-87cc-0857c009c277",
+                      "slug": "stone_brick",
+                      "name": "Кирпич (целый или бой)",
+                      "nameKz": "Кірпіш (тұтас немесе сынған)",
+                      "nameEng": null,
+                      "icon": "🧱",
+                      "children": null,
+                      "parent": {
+                        "publicId": "ebb4eb8e-3550-4984-935d-60f5f02c8d7b",
+                        "slug": "stone_materials",
+                        "name": "Каменные материалы",
+                        "nameKz": "Тас материалдары",
+                        "nameEng": null,
+                        "icon": "🧱",
+                        "children": null,
+                        "parent": {
+                          "publicId": "bb2f5018-7254-4dd7-be35-78b388dd795b",
+                          "slug": "structural_materials",
+                          "name": "Конструкционные Материалы",
+                          "nameKz": "Құрылымдық Материалдар",
+                          "nameEng": null,
+                          "icon": "🏗️",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    },
+                    {
+                      "publicId": "4b6acd22-e2da-4cac-890a-c548d7c7b783",
+                      "slug": "stone_blocks",
+                      "name": "Блоки (Газобетон, Пенобетон, Керамзитобетон)",
+                      "nameKz": "Блоктар (Газобетон, Пенобетон, Керамзитобетон)",
+                      "nameEng": null,
+                      "icon": "⬜",
+                      "children": null,
+                      "parent": {
+                        "publicId": "ebb4eb8e-3550-4984-935d-60f5f02c8d7b",
+                        "slug": "stone_materials",
+                        "name": "Каменные материалы",
+                        "nameKz": "Тас материалдары",
+                        "nameEng": null,
+                        "icon": "🧱",
+                        "children": null,
+                        "parent": {
+                          "publicId": "bb2f5018-7254-4dd7-be35-78b388dd795b",
+                          "slug": "structural_materials",
+                          "name": "Конструкционные Материалы",
+                          "nameKz": "Құрылымдық Материалдар",
+                          "nameEng": null,
+                          "icon": "🏗️",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    }
+                  ],
+                  "parent": {
+                    "publicId": "bb2f5018-7254-4dd7-be35-78b388dd795b",
+                    "slug": "structural_materials",
+                    "name": "Конструкционные Материалы",
+                    "nameKz": "Құрылымдық Материалдар",
+                    "nameEng": null,
+                    "icon": "🏗️",
+                    "children": null,
+                    "parent": null
+                  }
+                },
+                {
+                  "publicId": "f0e392bb-6095-4042-982d-80a84346bb13",
+                  "slug": "drywall",
+                  "name": "Гипсокартон (ГКЛ)",
+                  "nameKz": "Гипсокартон (ГКЛ)",
+                  "nameEng": null,
+                  "icon": "📄",
+                  "children": null,
+                  "parent": {
+                    "publicId": "bb2f5018-7254-4dd7-be35-78b388dd795b",
+                    "slug": "structural_materials",
+                    "name": "Конструкционные Материалы",
+                    "nameKz": "Құрылымдық Материалдар",
+                    "nameEng": null,
+                    "icon": "🏗️",
+                    "children": null,
+                    "parent": null
+                  }
+                },
+                {
+                  "publicId": "37938890-4f43-4c4c-adbc-4e449c9723e7",
+                  "slug": "roofing_materials",
+                  "name": "Кровельные материалы",
+                  "nameKz": "Шатыр материалдары",
+                  "nameEng": null,
+                  "icon": "🏠",
+                  "children": [
+                    {
+                      "publicId": "f7c7cd9f-2011-4a7b-83ee-d6629a1e7e8b",
+                      "slug": "roofing_tiles",
+                      "name": "Черепица",
+                      "nameKz": "Шатыр қаптамасы",
+                      "nameEng": null,
+                      "icon": "🏘️",
+                      "children": null,
+                      "parent": {
+                        "publicId": "37938890-4f43-4c4c-adbc-4e449c9723e7",
+                        "slug": "roofing_materials",
+                        "name": "Кровельные материалы",
+                        "nameKz": "Шатыр материалдары",
+                        "nameEng": null,
+                        "icon": "🏠",
+                        "children": null,
+                        "parent": {
+                          "publicId": "bb2f5018-7254-4dd7-be35-78b388dd795b",
+                          "slug": "structural_materials",
+                          "name": "Конструкционные Материалы",
+                          "nameKz": "Құрылымдық Материалдар",
+                          "nameEng": null,
+                          "icon": "🏗️",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    },
+                    {
+                      "publicId": "df33b433-b858-4e28-8f7e-5e1093e77038",
+                      "slug": "roofing_metal",
+                      "name": "Профнастил",
+                      "nameKz": "Профнастил",
+                      "nameEng": null,
+                      "icon": "📊",
+                      "children": null,
+                      "parent": {
+                        "publicId": "37938890-4f43-4c4c-adbc-4e449c9723e7",
+                        "slug": "roofing_materials",
+                        "name": "Кровельные материалы",
+                        "nameKz": "Шатыр материалдары",
+                        "nameEng": null,
+                        "icon": "🏠",
+                        "children": null,
+                        "parent": {
+                          "publicId": "bb2f5018-7254-4dd7-be35-78b388dd795b",
+                          "slug": "structural_materials",
+                          "name": "Конструкционные Материалы",
+                          "nameKz": "Құрылымдық Материалдар",
+                          "nameEng": null,
+                          "icon": "🏗️",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    },
+                    {
+                      "publicId": "1296b6f8-dc56-4108-8749-98b4508f2243",
+                      "slug": "roofing_roofing_felt",
+                      "name": "Рубероид",
+                      "nameKz": "Рубероид",
+                      "nameEng": null,
+                      "icon": "🔲",
+                      "children": null,
+                      "parent": {
+                        "publicId": "37938890-4f43-4c4c-adbc-4e449c9723e7",
+                        "slug": "roofing_materials",
+                        "name": "Кровельные материалы",
+                        "nameKz": "Шатыр материалдары",
+                        "nameEng": null,
+                        "icon": "🏠",
+                        "children": null,
+                        "parent": {
+                          "publicId": "bb2f5018-7254-4dd7-be35-78b388dd795b",
+                          "slug": "structural_materials",
+                          "name": "Конструкционные Материалы",
+                          "nameKz": "Құрылымдық Материалдар",
+                          "nameEng": null,
+                          "icon": "🏗️",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    }
+                  ],
+                  "parent": {
+                    "publicId": "bb2f5018-7254-4dd7-be35-78b388dd795b",
+                    "slug": "structural_materials",
+                    "name": "Конструкционные Материалы",
+                    "nameKz": "Құрылымдық Материалдар",
+                    "nameEng": null,
+                    "icon": "🏗️",
+                    "children": null,
+                    "parent": null
+                  }
+                }
+              ],
+              "parent": null
+            },
+            {
+              "publicId": "3af5502f-9b8f-48ae-9ccf-0eaad4719c28",
+              "slug": "insulation_materials",
+              "name": "Изоляционные Материалы",
+              "nameKz": "Оқшаулағыш Материалдар",
+              "nameEng": null,
+              "icon": "🧊",
+              "children": [
+                {
+                  "publicId": "20fa629a-1ab5-4d35-9584-ee836abf7b7b",
+                  "slug": "thermal_insulation",
+                  "name": "Теплоизоляция",
+                  "nameKz": "Жылу оқшаулағыш",
+                  "nameEng": null,
+                  "icon": "🌡️",
+                  "children": [
+                    {
+                      "publicId": "dd4a3a4a-a399-4869-a453-d57099da868f",
+                      "slug": "thermal_mineral_wool",
+                      "name": "Минеральная вата",
+                      "nameKz": "Минералды мақта",
+                      "nameEng": null,
+                      "icon": "🧶",
+                      "children": null,
+                      "parent": {
+                        "publicId": "20fa629a-1ab5-4d35-9584-ee836abf7b7b",
+                        "slug": "thermal_insulation",
+                        "name": "Теплоизоляция",
+                        "nameKz": "Жылу оқшаулағыш",
+                        "nameEng": null,
+                        "icon": "🌡️",
+                        "children": null,
+                        "parent": {
+                          "publicId": "3af5502f-9b8f-48ae-9ccf-0eaad4719c28",
+                          "slug": "insulation_materials",
+                          "name": "Изоляционные Материалы",
+                          "nameKz": "Оқшаулағыш Материалдар",
+                          "nameEng": null,
+                          "icon": "🧊",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    },
+                    {
+                      "publicId": "e725372f-d814-407e-ab29-04f81ffdf82e",
+                      "slug": "thermal_foam",
+                      "name": "Пенопласт",
+                      "nameKz": "Пенопласт",
+                      "nameEng": null,
+                      "icon": "⬜",
+                      "children": null,
+                      "parent": {
+                        "publicId": "20fa629a-1ab5-4d35-9584-ee836abf7b7b",
+                        "slug": "thermal_insulation",
+                        "name": "Теплоизоляция",
+                        "nameKz": "Жылу оқшаулағыш",
+                        "nameEng": null,
+                        "icon": "🌡️",
+                        "children": null,
+                        "parent": {
+                          "publicId": "3af5502f-9b8f-48ae-9ccf-0eaad4719c28",
+                          "slug": "insulation_materials",
+                          "name": "Изоляционные Материалы",
+                          "nameKz": "Оқшаулағыш Материалдар",
+                          "nameEng": null,
+                          "icon": "🧊",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    },
+                    {
+                      "publicId": "f1fda445-df61-4358-a7ec-826b60a89b41",
+                      "slug": "thermal_extruded",
+                      "name": "Экструдированный пенополистирол",
+                      "nameKz": "Экструдталған пенополистирол",
+                      "nameEng": null,
+                      "icon": "🔲",
+                      "children": null,
+                      "parent": {
+                        "publicId": "20fa629a-1ab5-4d35-9584-ee836abf7b7b",
+                        "slug": "thermal_insulation",
+                        "name": "Теплоизоляция",
+                        "nameKz": "Жылу оқшаулағыш",
+                        "nameEng": null,
+                        "icon": "🌡️",
+                        "children": null,
+                        "parent": {
+                          "publicId": "3af5502f-9b8f-48ae-9ccf-0eaad4719c28",
+                          "slug": "insulation_materials",
+                          "name": "Изоляционные Материалы",
+                          "nameKz": "Оқшаулағыш Материалдар",
+                          "nameEng": null,
+                          "icon": "🧊",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    }
+                  ],
+                  "parent": {
+                    "publicId": "3af5502f-9b8f-48ae-9ccf-0eaad4719c28",
+                    "slug": "insulation_materials",
+                    "name": "Изоляционные Материалы",
+                    "nameKz": "Оқшаулағыш Материалдар",
+                    "nameEng": null,
+                    "icon": "🧊",
+                    "children": null,
+                    "parent": null
+                  }
+                },
+                {
+                  "publicId": "f958b6d5-a8b0-45d0-b1c0-2d43cf5306cf",
+                  "slug": "waterproofing",
+                  "name": "Гидроизоляция",
+                  "nameKz": "Гидрооқшаулағыш",
+                  "nameEng": null,
+                  "icon": "💧",
+                  "children": [
+                    {
+                      "publicId": "69beb709-63ca-4edf-baeb-921743f21e6a",
+                      "slug": "waterproofing_films",
+                      "name": "Плёнки",
+                      "nameKz": "Үлбірлер",
+                      "nameEng": null,
+                      "icon": "📄",
+                      "children": null,
+                      "parent": {
+                        "publicId": "f958b6d5-a8b0-45d0-b1c0-2d43cf5306cf",
+                        "slug": "waterproofing",
+                        "name": "Гидроизоляция",
+                        "nameKz": "Гидрооқшаулағыш",
+                        "nameEng": null,
+                        "icon": "💧",
+                        "children": null,
+                        "parent": {
+                          "publicId": "3af5502f-9b8f-48ae-9ccf-0eaad4719c28",
+                          "slug": "insulation_materials",
+                          "name": "Изоляционные Материалы",
+                          "nameKz": "Оқшаулағыш Материалдар",
+                          "nameEng": null,
+                          "icon": "🧊",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    },
+                    {
+                      "publicId": "93a9e7a1-01a2-4dd9-9ab7-e534bf326bbd",
+                      "slug": "waterproofing_mastics",
+                      "name": "Мастики",
+                      "nameKz": "Мастикалар",
+                      "nameEng": null,
+                      "icon": "🧴",
+                      "children": null,
+                      "parent": {
+                        "publicId": "f958b6d5-a8b0-45d0-b1c0-2d43cf5306cf",
+                        "slug": "waterproofing",
+                        "name": "Гидроизоляция",
+                        "nameKz": "Гидрооқшаулағыш",
+                        "nameEng": null,
+                        "icon": "💧",
+                        "children": null,
+                        "parent": {
+                          "publicId": "3af5502f-9b8f-48ae-9ccf-0eaad4719c28",
+                          "slug": "insulation_materials",
+                          "name": "Изоляционные Материалы",
+                          "nameKz": "Оқшаулағыш Материалдар",
+                          "nameEng": null,
+                          "icon": "🧊",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    },
+                    {
+                      "publicId": "e00082b0-2193-46ee-b989-c8ea9cac19b5",
+                      "slug": "waterproofing_roll",
+                      "name": "Рулонные материалы",
+                      "nameKz": "Орамды материалдар",
+                      "nameEng": null,
+                      "icon": "📜",
+                      "children": null,
+                      "parent": {
+                        "publicId": "f958b6d5-a8b0-45d0-b1c0-2d43cf5306cf",
+                        "slug": "waterproofing",
+                        "name": "Гидроизоляция",
+                        "nameKz": "Гидрооқшаулағыш",
+                        "nameEng": null,
+                        "icon": "💧",
+                        "children": null,
+                        "parent": {
+                          "publicId": "3af5502f-9b8f-48ae-9ccf-0eaad4719c28",
+                          "slug": "insulation_materials",
+                          "name": "Изоляционные Материалы",
+                          "nameKz": "Оқшаулағыш Материалдар",
+                          "nameEng": null,
+                          "icon": "🧊",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    }
+                  ],
+                  "parent": {
+                    "publicId": "3af5502f-9b8f-48ae-9ccf-0eaad4719c28",
+                    "slug": "insulation_materials",
+                    "name": "Изоляционные Материалы",
+                    "nameKz": "Оқшаулағыш Материалдар",
+                    "nameEng": null,
+                    "icon": "🧊",
+                    "children": null,
+                    "parent": null
+                  }
+                },
+                {
+                  "publicId": "ea378995-7123-4ccc-9319-350c2a9ef274",
+                  "slug": "sound_insulation",
+                  "name": "Звукоизоляционные плиты и мембраны",
+                  "nameKz": "Дыбыс оқшаулағыш плиталар мен мембраналар",
+                  "nameEng": null,
+                  "icon": "🔇",
+                  "children": null,
+                  "parent": {
+                    "publicId": "3af5502f-9b8f-48ae-9ccf-0eaad4719c28",
+                    "slug": "insulation_materials",
+                    "name": "Изоляционные Материалы",
+                    "nameKz": "Оқшаулағыш Материалдар",
+                    "nameEng": null,
+                    "icon": "🧊",
+                    "children": null,
+                    "parent": null
+                  }
+                }
+              ],
+              "parent": null
+            },
+            {
+              "publicId": "dabf9b12-90e4-4d92-94a4-2f136901e23d",
+              "slug": "engineering_communications",
+              "name": "Элементы Инженерии и Коммуникаций",
+              "nameKz": "Инженерлік және Коммуникация Элементтері",
+              "nameEng": null,
+              "icon": "🔌",
+              "children": [
+                {
+                  "publicId": "741c6fe8-9f4f-4872-954c-35bdfc71d339",
+                  "slug": "plumbing_supplies",
+                  "name": "Сантехника",
+                  "nameKz": "Сантехника",
+                  "nameEng": null,
+                  "icon": "🚰",
+                  "children": [
+                    {
+                      "publicId": "72786dd6-4b3e-40b3-a1ac-6cee531f7d2f",
+                      "slug": "plumbing_pipes",
+                      "name": "Трубы, Фитинги",
+                      "nameKz": "Құбырлар, Фитингтер",
+                      "nameEng": null,
+                      "icon": "🔧",
+                      "children": null,
+                      "parent": {
+                        "publicId": "741c6fe8-9f4f-4872-954c-35bdfc71d339",
+                        "slug": "plumbing_supplies",
+                        "name": "Сантехника",
+                        "nameKz": "Сантехника",
+                        "nameEng": null,
+                        "icon": "🚰",
+                        "children": null,
+                        "parent": {
+                          "publicId": "dabf9b12-90e4-4d92-94a4-2f136901e23d",
+                          "slug": "engineering_communications",
+                          "name": "Элементы Инженерии и Коммуникаций",
+                          "nameKz": "Инженерлік және Коммуникация Элементтері",
+                          "nameEng": null,
+                          "icon": "🔌",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    },
+                    {
+                      "publicId": "6ab490a8-724c-484d-943a-7d191d3b39db",
+                      "slug": "plumbing_fixtures",
+                      "name": "Краны, Сифоны",
+                      "nameKz": "Крандар, Сифондар",
+                      "nameEng": null,
+                      "icon": "🚿",
+                      "children": null,
+                      "parent": {
+                        "publicId": "741c6fe8-9f4f-4872-954c-35bdfc71d339",
+                        "slug": "plumbing_supplies",
+                        "name": "Сантехника",
+                        "nameKz": "Сантехника",
+                        "nameEng": null,
+                        "icon": "🚰",
+                        "children": null,
+                        "parent": {
+                          "publicId": "dabf9b12-90e4-4d92-94a4-2f136901e23d",
+                          "slug": "engineering_communications",
+                          "name": "Элементы Инженерии и Коммуникаций",
+                          "nameKz": "Инженерлік және Коммуникация Элементтері",
+                          "nameEng": null,
+                          "icon": "🔌",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    }
+                  ],
+                  "parent": {
+                    "publicId": "dabf9b12-90e4-4d92-94a4-2f136901e23d",
+                    "slug": "engineering_communications",
+                    "name": "Элементы Инженерии и Коммуникаций",
+                    "nameKz": "Инженерлік және Коммуникация Элементтері",
+                    "nameEng": null,
+                    "icon": "🔌",
+                    "children": null,
+                    "parent": null
+                  }
+                },
+                {
+                  "publicId": "394cdd97-3a68-4593-a6ea-d9156e51f562",
+                  "slug": "electrical_supplies",
+                  "name": "Электрика",
+                  "nameKz": "Электрлік жабдықтар",
+                  "nameEng": null,
+                  "icon": "⚡",
+                  "children": [
+                    {
+                      "publicId": "e3d25528-36c6-411e-a97d-27f6aaa4852c",
+                      "slug": "electrical_cables",
+                      "name": "Кабель, Провода",
+                      "nameKz": "Кабельдер, Сымдар",
+                      "nameEng": null,
+                      "icon": "🔌",
+                      "children": null,
+                      "parent": {
+                        "publicId": "394cdd97-3a68-4593-a6ea-d9156e51f562",
+                        "slug": "electrical_supplies",
+                        "name": "Электрика",
+                        "nameKz": "Электрлік жабдықтар",
+                        "nameEng": null,
+                        "icon": "⚡",
+                        "children": null,
+                        "parent": {
+                          "publicId": "dabf9b12-90e4-4d92-94a4-2f136901e23d",
+                          "slug": "engineering_communications",
+                          "name": "Элементы Инженерии и Коммуникаций",
+                          "nameKz": "Инженерлік және Коммуникация Элементтері",
+                          "nameEng": null,
+                          "icon": "🔌",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    },
+                    {
+                      "publicId": "702dde70-aa2e-4c41-83a2-d85b1563a23a",
+                      "slug": "electrical_outlets",
+                      "name": "Розетки, Выключатели, Коробки",
+                      "nameKz": "Розеткалар, Ажыратқыштар, Қораптар",
+                      "nameEng": null,
+                      "icon": "🔘",
+                      "children": null,
+                      "parent": {
+                        "publicId": "394cdd97-3a68-4593-a6ea-d9156e51f562",
+                        "slug": "electrical_supplies",
+                        "name": "Электрика",
+                        "nameKz": "Электрлік жабдықтар",
+                        "nameEng": null,
+                        "icon": "⚡",
+                        "children": null,
+                        "parent": {
+                          "publicId": "dabf9b12-90e4-4d92-94a4-2f136901e23d",
+                          "slug": "engineering_communications",
+                          "name": "Элементы Инженерии и Коммуникаций",
+                          "nameKz": "Инженерлік және Коммуникация Элементтері",
+                          "nameEng": null,
+                          "icon": "🔌",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    }
+                  ],
+                  "parent": {
+                    "publicId": "dabf9b12-90e4-4d92-94a4-2f136901e23d",
+                    "slug": "engineering_communications",
+                    "name": "Элементы Инженерии и Коммуникаций",
+                    "nameKz": "Инженерлік және Коммуникация Элементтері",
+                    "nameEng": null,
+                    "icon": "🔌",
+                    "children": null,
+                    "parent": null
+                  }
+                },
+                {
+                  "publicId": "7d841b44-d5b3-4b4b-9f19-a6a232037241",
+                  "slug": "ventilation_supplies",
+                  "name": "Вентиляция",
+                  "nameKz": "Желдету",
+                  "nameEng": null,
+                  "icon": "💨",
+                  "children": [
+                    {
+                      "publicId": "62df25d9-f759-4341-be91-3debd82cc422",
+                      "slug": "ventilation_ducts",
+                      "name": "Воздуховоды, Решетки, Фитинги",
+                      "nameKz": "Ауа жолдары, Торлар, Фитингтер",
+                      "nameEng": null,
+                      "icon": "🌬️",
+                      "children": null,
+                      "parent": {
+                        "publicId": "7d841b44-d5b3-4b4b-9f19-a6a232037241",
+                        "slug": "ventilation_supplies",
+                        "name": "Вентиляция",
+                        "nameKz": "Желдету",
+                        "nameEng": null,
+                        "icon": "💨",
+                        "children": null,
+                        "parent": {
+                          "publicId": "dabf9b12-90e4-4d92-94a4-2f136901e23d",
+                          "slug": "engineering_communications",
+                          "name": "Элементы Инженерии и Коммуникаций",
+                          "nameKz": "Инженерлік және Коммуникация Элементтері",
+                          "nameEng": null,
+                          "icon": "🔌",
+                          "children": null,
+                          "parent": null
+                        }
+                      }
+                    }
+                  ],
+                  "parent": {
+                    "publicId": "dabf9b12-90e4-4d92-94a4-2f136901e23d",
+                    "slug": "engineering_communications",
+                    "name": "Элементы Инженерии и Коммуникаций",
+                    "nameKz": "Инженерлік және Коммуникация Элементтері",
+                    "nameEng": null,
+                    "icon": "🔌",
+                    "children": null,
+                    "parent": null
+                  }
+                },
+                {
+                  "publicId": "12715d47-6753-434c-b34f-bd18ff463e8a",
+                  "slug": "windows_doors",
+                  "name": "Оконные и дверные блоки",
+                  "nameKz": "Терезе және есік блоктары",
+                  "nameEng": null,
+                  "icon": "🚪",
+                  "children": null,
+                  "parent": {
+                    "publicId": "dabf9b12-90e4-4d92-94a4-2f136901e23d",
+                    "slug": "engineering_communications",
+                    "name": "Элементы Инженерии и Коммуникаций",
+                    "nameKz": "Инженерлік және Коммуникация Элементтері",
+                    "nameEng": null,
+                    "icon": "🔌",
+                    "children": null,
+                    "parent": null
+                  }
+                }
+              ],
+              "parent": null
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "categories",
       "item": [
         {

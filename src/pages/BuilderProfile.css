@@ -1,6 +1,7 @@
 .builder-profile-page {
   padding: var(--spacing-8) 0;
   min-height: calc(100vh - 80px);
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
 .profile-avatar-section {
@@ -8,6 +9,201 @@
   justify-content: flex-start;
   padding: 0;
   margin-bottom: var(--spacing-6);
+}
+
+/* Tab Navigation */
+.profile-tabs {
+  display: flex;
+  gap: var(--spacing-3);
+  justify-content: center;
+  margin-bottom: var(--spacing-6);
+  background: var(--color-neutral-50);
+  padding: var(--spacing-2);
+  border-radius: var(--radius-lg);
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.profile-tab {
+  background: transparent;
+  border: none;
+  padding: var(--spacing-3) var(--spacing-6);
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: var(--radius-md);
+  white-space: nowrap;
+}
+
+.profile-tab:hover {
+  color: var(--color-text-primary);
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.profile-tab.active {
+  color: var(--color-primary);
+  font-weight: 600;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Tab Content */
+.tab-content-wrapper {
+  padding: var(--spacing-2);
+}
+
+.tab-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-12);
+  gap: var(--spacing-4);
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid var(--color-neutral-200);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-12) 0;
+}
+
+.empty-state-icon {
+  font-size: 4rem;
+  margin-bottom: var(--spacing-3);
+}
+
+.empty-state h3 {
+  margin: 0 0 var(--spacing-2) 0;
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.empty-state p {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+/* Contracts Grid */
+.contracts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: var(--spacing-4);
+}
+
+.contract-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.contract-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.contract-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-4);
+}
+
+.contract-header h3 {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+}
+
+.contract-details {
+  margin-bottom: var(--spacing-4);
+}
+
+.contract-details .detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--spacing-2) 0;
+  border-bottom: 1px solid var(--color-neutral-100);
+}
+
+.contract-details .detail-row:last-child {
+  border-bottom: none;
+}
+
+.status-badge.active {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.status-badge.completed {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.status-badge.cancelled {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.status-badge.pending {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.completion-status {
+  padding: var(--spacing-3);
+  background-color: var(--color-neutral-50);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-3);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: var(--font-size-sm);
+}
+
+.status-icon {
+  font-size: var(--font-size-lg);
+}
+
+.contract-actions {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+.btn {
+  padding: var(--spacing-2) var(--spacing-4);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--color-primary-dark);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .profile-header {
@@ -186,6 +382,32 @@
     min-height: calc(100vh - 160px);
   }
 
+  .profile-tabs {
+    gap: var(--spacing-2);
+    overflow-x: auto;
+    width: 100%;
+    padding: var(--spacing-2);
+  }
+
+  .profile-tab {
+    flex-shrink: 0;
+    padding: var(--spacing-2) var(--spacing-4);
+    font-size: var(--font-size-sm);
+  }
+
+  .contracts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contract-actions {
+    flex-direction: column;
+  }
+
+  .contract-actions button,
+  .btn {
+    width: 100%;
+  }
+
   .profile-header {
     margin-bottom: var(--spacing-4);
   }
@@ -277,5 +499,148 @@
 
   .checkbox-label {
     font-size: var(--font-size-sm);
+  }
+}
+
+/* Category Management Styles */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-4);
+}
+
+.section-header h3 {
+  margin: 0;
+}
+
+.categories-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.category-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: var(--spacing-4);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  background-color: var(--color-neutral-50);
+}
+
+.category-info {
+  flex: 1;
+}
+
+.category-info h4 {
+  margin: 0 0 var(--spacing-2) 0;
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.category-price {
+  margin: 0 0 var(--spacing-1) 0;
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.category-description {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.add-category-form {
+  margin-top: var(--spacing-4);
+  padding: var(--spacing-4);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  background-color: var(--color-neutral-25);
+}
+
+.add-category-form h4 {
+  margin: 0 0 var(--spacing-4) 0;
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.add-category-form form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.rating-value {
+  font-weight: 700;
+  color: var(--color-primary);
+  font-size: var(--font-size-lg);
+}
+
+/* Delete Account Section */
+.delete-section {
+  max-width: 800px;
+  margin: 0 auto;
+  margin-bottom: var(--spacing-4);
+  border: 1px solid var(--color-neutral-200);
+  background-color: var(--color-neutral-25);
+}
+
+.delete-content {
+  padding: var(--spacing-3);
+}
+
+.delete-link-text {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.delete-link-button {
+  background: none;
+  border: none;
+  color: #dc2626;
+  font-size: var(--font-size-sm);
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 4px;
+  transition: color 0.2s ease;
+}
+
+.delete-link-button:hover {
+  color: #991b1b;
+  text-decoration: none;
+}
+
+/* Mobile responsive for categories */
+@media (max-width: 768px) {
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-3);
+  }
+  
+  .section-header button {
+    width: 100%;
+  }
+  
+  .category-item {
+    flex-direction: column;
+    gap: var(--spacing-3);
+  }
+  
+  .category-item button {
+    width: 100%;
+  }
+
+  .delete-section {
+    margin-bottom: var(--spacing-3);
   }
 }

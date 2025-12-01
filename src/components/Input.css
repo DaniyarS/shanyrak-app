@@ -27,6 +27,8 @@
   padding: var(--spacing-2) var(--spacing-3);
   transition: all 0.2s ease;
   width: 100%;
+  min-height: 42px;
+  box-sizing: border-box;
 }
 
 select.input {

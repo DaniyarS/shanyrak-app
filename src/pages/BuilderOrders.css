@@ -1,6 +1,7 @@
 .builder-orders-page {
   padding: var(--spacing-8) 0;
   min-height: calc(100vh - 80px);
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
 .orders-header {
@@ -22,37 +23,307 @@
   margin-bottom: var(--spacing-4);
 }
 
+/* COMPLETELY REMADE SEARCH FORM - PERFECT ALIGNMENT */
 .search-form {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr auto;
-  gap: var(--spacing-4);
-  align-items: flex-end;
+  display: flex;
+  gap: 20px;
+  align-items: baseline;
+  justify-content: flex-start;
+  padding: 0;
+  margin: 0;
 }
 
+/* STEP 1: Reset all form field containers to identical structure */
 .search-form > * {
+  flex: 1;
   min-width: 0;
 }
 
+.search-form .input-wrapper,
+.search-form .select-wrapper,
 .search-form .cascading-category-select {
-  width: 100%;
+  position: relative;
+  margin: 0;
+  padding-top: 20px; /* Space for label */
 }
 
-.search-form button {
-  align-self: flex-end;
+/* STEP 2: Position all labels absolutely at the top */
+.search-form .input-label,
+.search-form .select-label,
+.search-form .cascading-category-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: flex-end;
+  line-height: 1;
+}
+
+/* STEP 3: Position all controls at exact same baseline */
+.search-form .input,
+.search-form .select-control,
+.search-form .cascading-category-input {
+  position: relative;
+  top: 0;
   height: 44px;
-  margin-top: auto;
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  padding: 0 12px;
+  font-size: 14px;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  margin: 0;
 }
 
+/* STEP 4: Style individual controls */
+.search-form .input {
+  outline: none;
+}
+
+.search-form .input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.search-form .select-control {
+  cursor: pointer;
+  justify-content: space-between;
+  user-select: none;
+}
+
+.search-form .select-control:hover {
+  border-color: #9ca3af;
+}
+
+.search-form .cascading-category-input {
+  cursor: pointer;
+  justify-content: space-between;
+  user-select: none;
+}
+
+.search-form .cascading-category-input:hover {
+  border-color: #9ca3af;
+}
+
+/* Fix cascading category dropdown styling */
+.search-form .cascading-category-dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  background-color: var(--color-background, #ffffff);
+  border: 1px solid var(--color-border, #d1d5db);
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+  max-height: 400px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.search-form .category-breadcrumb {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: var(--color-background-secondary, #f9fafb);
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+  font-size: 0.875rem;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.search-form .breadcrumb-item {
+  background: none;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  color: var(--color-primary, #3b82f6);
+  cursor: pointer;
+  font-size: 0.875rem;
+  border-radius: 0.25rem;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.search-form .breadcrumb-item:hover {
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.search-form .breadcrumb-separator {
+  color: var(--color-text-secondary, #9ca3af);
+  padding: 0 0.25rem;
+}
+
+.search-form .category-list {
+  overflow-y: auto;
+  max-height: 320px;
+}
+
+.search-form .category-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  border-bottom: 1px solid var(--color-border-light, #f3f4f6);
+}
+
+.search-form .category-item:last-child {
+  border-bottom: none;
+}
+
+.search-form .category-item:hover {
+  background-color: var(--color-background-secondary, #f9fafb);
+}
+
+.search-form .category-item.parent {
+  font-weight: 500;
+  color: var(--color-text-primary, #1f2937);
+}
+
+.search-form .category-item.leaf {
+  color: var(--color-text-primary, #374151);
+  padding-left: 1.5rem;
+}
+
+.search-form .category-item.leaf:hover {
+  background-color: rgba(59, 130, 246, 0.05);
+  color: var(--color-primary, #3b82f6);
+}
+
+.search-form .category-name {
+  flex: 1;
+  font-size: 0.9375rem;
+}
+
+.search-form .category-arrow {
+  margin-left: 0.5rem;
+  color: var(--color-text-secondary, #9ca3af);
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* Builder's Categories Section in dropdown */
+.search-form .category-item.builder-section {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 197, 253, 0.1) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 0.5rem;
+  margin: 0.25rem;
+  font-weight: 600;
+  color: var(--color-primary, #3b82f6);
+}
+
+.search-form .category-item.builder-section:hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(147, 197, 253, 0.15) 100%);
+  border-color: rgba(59, 130, 246, 0.3);
+  transform: none;
+}
+
+.search-form .category-item.builder-category {
+  background: rgba(59, 130, 246, 0.05);
+  border-left: 3px solid var(--color-primary, #3b82f6);
+  color: var(--color-primary, #3b82f6);
+  font-weight: 500;
+}
+
+.search-form .category-item.builder-category:hover {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+/* STEP 5: Search button aligned to baseline */
+.search-form button {
+  flex: 0 0 auto;
+  height: 44px;
+  padding: 0 24px;
+  margin: 0;
+  margin-top: 20px; /* Same as padding-top of form fields */
+  border: none;
+  border-radius: 6px;
+  background: #3b82f6;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.search-form button:hover {
+  background: #2563eb;
+}
+
+.search-form button:active {
+  background: #1d4ed8;
+}
+
+/* Orders Grid - Masonry with Fixed Vertical Spacing */
 .orders-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   gap: var(--spacing-6);
+  align-items: start;
+  grid-auto-rows: min-content;
+  align-content: start;
+}
+
+/* Ensure grid items wrap content height */
+.orders-grid > * {
+  height: fit-content;
+  align-self: start;
+  margin: 0;
+}
+
+/* Modern browsers with masonry support and fixed spacing */
+@supports (grid-template-rows: masonry) {
+  .orders-grid {
+    grid-template-rows: masonry;
+    grid-row-gap: var(--spacing-6);
+  }
+  
+  .orders-grid .order-card {
+    height: fit-content;
+    min-height: auto;
+    margin: 0 0 var(--spacing-6) 0;
+  }
+}
+
+/* Fallback with CSS columns and fixed vertical spacing */
+@supports not (grid-template-rows: masonry) {
+  .orders-grid {
+    display: block;
+    columns: auto;
+    column-width: 400px;
+    column-gap: var(--spacing-6);
+    column-fill: balance;
+  }
+  
+  .orders-grid .order-card {
+    display: inline-block;
+    width: 100%;
+    margin: 0 0 var(--spacing-6) 0;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    height: auto;
+    vertical-align: top;
+  }
 }
 
 .order-card {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-4);
+  height: fit-content;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -131,6 +402,69 @@
   font-weight: 600;
 }
 
+/* Order Photos Grid */
+.order-photos {
+  margin: var(--spacing-4) 0;
+}
+
+.photo-grid {
+  display: flex;
+  gap: var(--spacing-2);
+  align-items: flex-start;
+}
+
+.photo-item {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.photo-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.photo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.photo-image:hover {
+  opacity: 0.8;
+}
+
+/* Stack effect for 3+ photos */
+.photo-grid.stacked .photo-item:nth-child(2) {
+  transform: translateX(-8px) translateZ(1px);
+  z-index: 1;
+}
+
+.photo-grid.stacked .photo-item:nth-child(3).has-stack {
+  transform: translateX(-16px) translateZ(2px);
+  z-index: 2;
+}
+
+.photo-stack-indicator {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  backdrop-filter: blur(2px);
+}
+
 .order-actions {
   display: flex;
   gap: var(--spacing-2);
@@ -153,6 +487,33 @@
   text-align: center;
   color: var(--color-text-secondary);
   padding: var(--spacing-8);
+}
+
+/* Fix empty message card in grid layout */
+.orders-grid .card:has(.empty-message),
+.orders-grid > .card:only-child {
+  grid-column: 1 / -1;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Fallback for browsers without :has() support */
+.orders-grid > .card:first-child:last-child {
+  grid-column: 1 / -1;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Fix for CSS columns fallback */
+@supports not (grid-template-rows: masonry) {
+  .orders-grid .card:has(.empty-message),
+  .orders-grid > .card:only-child,
+  .orders-grid > .card:first-child:last-child {
+    column-span: all;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto var(--spacing-6) auto;
+  }
 }
 
 .error-message {
@@ -261,9 +622,21 @@
 
 @media (max-width: 1024px) {
   .search-form {
-    grid-template-columns: 1fr 1fr;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .search-form > * {
+    flex: 1 1 calc(50% - 8px);
+    min-width: 250px;
+  }
+  
+  .search-form button {
+    flex: 1 1 100%;
+    margin-top: 16px;
   }
 }
+
 
 @media (max-width: 768px) {
   .builder-orders-page {
@@ -288,12 +661,44 @@
   }
 
   .search-form {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .search-form > * {
+    flex: none;
+    width: 100%;
+  }
+  
+  .search-form button {
+    margin-top: 0;
   }
 
   .orders-grid {
     grid-template-columns: 1fr;
     gap: var(--spacing-4);
+  }
+  
+  @supports (grid-template-rows: masonry) {
+    .orders-grid {
+      grid-row-gap: var(--spacing-4);
+    }
+    
+    .orders-grid .order-card {
+      margin: 0 0 var(--spacing-4) 0;
+    }
+  }
+  
+  @supports not (grid-template-rows: masonry) {
+    .orders-grid {
+      column-width: 100%;
+      columns: 1;
+      column-gap: 0;
+    }
+    
+    .orders-grid .order-card {
+      margin: 0 0 var(--spacing-4) 0;
+    }
   }
 
   .order-header {
@@ -311,6 +716,19 @@
 
   .order-actions button {
     width: 100%;
+  }
+
+  .photo-item {
+    width: 50px;
+    height: 50px;
+  }
+
+  .photo-grid.stacked .photo-item:nth-child(2) {
+    transform: translateX(-6px) translateZ(1px);
+  }
+
+  .photo-grid.stacked .photo-item:nth-child(3).has-stack {
+    transform: translateX(-12px) translateZ(2px);
   }
 
   .offer-form .form-row {

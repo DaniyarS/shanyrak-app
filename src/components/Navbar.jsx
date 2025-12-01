@@ -99,13 +99,6 @@ const Navbar = () => {
                       >
                         {t('navbar.myOffers')}
                       </Link>
-                      <Link
-                        to="/contracts"
-                        className={`navbar-link ${isActive('/contracts') ? 'active' : ''}`}
-                        onClick={(e) => handleNavClick(e, '/contracts')}
-                      >
-                        {t('navbar.contracts')}
-                      </Link>
                     </>
                   )}
                 </div>

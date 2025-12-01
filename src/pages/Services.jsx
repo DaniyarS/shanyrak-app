@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { container } from '../infrastructure/di/ServiceContainer';
+import BuilderSearchForm from '../components/BuilderSearchForm';
+import BuildersList from '../components/BuildersList';
 import './Services.css';
 
 const Services = () => {
@@ -11,24 +13,64 @@ const Services = () => {
   const [loading, setLoading] = useState(true);
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const [hoveredSubCategory, setHoveredSubCategory] = useState(null);
+  
+  // Builders section state
+  const [builders, setBuilders] = useState([]);
+  const [buildersLoading, setBuildersLoading] = useState(false);
+  const [builderFilters, setBuilderFilters] = useState({});
+  const [cities, setCities] = useState([]);
 
   useEffect(() => {
-    loadCategoryTree();
+    loadInitialData();
   }, []);
 
-  const loadCategoryTree = async () => {
+  const loadInitialData = async () => {
     try {
       setLoading(true);
+      
       const getCategoryTreeUseCase = container.getGetCategoryTreeUseCase();
-      const result = await getCategoryTreeUseCase.execute(false);
+      const getCitiesUseCase = container.getGetCitiesUseCase();
+      const searchBuildersUseCase = container.getSearchBuildersUseCase();
+      
+      const [categoryResult, citiesResult, buildersResult] = await Promise.all([
+        getCategoryTreeUseCase.execute(false),
+        getCitiesUseCase.execute(false),
+        searchBuildersUseCase.execute({ page: 0, size: 6 }) // Load first 6 builders
+      ]);
 
-      if (result.success) {
-        setCategories(result.categories);
+      if (categoryResult.success) {
+        setCategories(categoryResult.categories);
+      }
+      
+      if (citiesResult.success) {
+        setCities(citiesResult.cities);
+      }
+      
+      if (buildersResult.success) {
+        setBuilders(buildersResult.builders || []);
       }
     } catch (error) {
-      console.error('Failed to load category tree:', error);
+      console.error('Failed to load initial data:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleBuilderSearch = async (filters) => {
+    try {
+      setBuildersLoading(true);
+      setBuilderFilters(filters);
+      
+      const searchBuildersUseCase = container.getSearchBuildersUseCase();
+      const result = await searchBuildersUseCase.execute({ ...filters, page: 0, size: 20 });
+      
+      if (result.success) {
+        setBuilders(result.builders || []);
+      }
+    } catch (error) {
+      console.error('Builder search failed:', error);
+    } finally {
+      setBuildersLoading(false);
     }
   };
 
@@ -62,9 +104,9 @@ const Services = () => {
     return (
       <div className="services-page">
         <div className="container">
-          <div className="services-header">
-            <h1>{t('services.title')}</h1>
-            <p className="services-subtitle">{t('services.subtitle')}</p>
+          <div className="builders-section-header">
+            <h1>{t('services.findBuilders')}</h1>
+            <p className="services-subtitle">{t('services.buildersDescription')}</p>
           </div>
           <div className="loading-state">
             <div className="spinner"></div>
@@ -78,6 +120,26 @@ const Services = () => {
   return (
     <div className="services-page">
       <div className="container">
+        {/* Builders Section */}
+        <div className="builders-section">
+          <div className="builders-section-header">
+            <h1>{t('services.findBuilders')}</h1>
+            <p className="services-subtitle">{t('services.buildersDescription')}</p>
+          </div>
+          
+          <BuilderSearchForm
+            categories={categories}
+            cities={cities}
+            onSearch={handleBuilderSearch}
+            loading={buildersLoading}
+          />
+          
+          <BuildersList
+            builders={builders}
+            loading={buildersLoading}
+          />
+        </div>
+
         <div className="services-header">
           <h1>{t('services.title')}</h1>
           <p className="services-subtitle">{t('services.subtitle')}</p>

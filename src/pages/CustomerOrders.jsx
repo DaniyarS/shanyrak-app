@@ -48,7 +48,7 @@ const CustomerOrders = () => {
     areaM2: '',
     floor: '',
   });
-  const [requestingPhone, setRequestingPhone] = useState(false);
+  const [requestingPhoneOffers, setRequestingPhoneOffers] = useState(new Set());
   const [builderContacts, setBuilderContacts] = useState({});
   const [confirmingDealOffer, setConfirmingDealOffer] = useState(null);
 
@@ -438,9 +438,9 @@ const CustomerOrders = () => {
   };
 
   const handleRequestPhone = async (offerId) => {
-    if (!selectedOrder || requestingPhone) return;
+    if (!selectedOrder || requestingPhoneOffers.has(offerId)) return;
 
-    setRequestingPhone(true);
+    setRequestingPhoneOffers(prev => new Set([...prev, offerId]));
     try {
       const requestPhoneUseCase = container.getRequestBuilderPhoneUseCase();
       const result = await requestPhoneUseCase.execute(selectedOrder.id, offerId);
@@ -453,8 +453,6 @@ const CustomerOrders = () => {
 
         setSelectedOrder(prev => ({ ...prev, status: OrderStatus.IN_PROGRESS }));
 
-        fetchInitialData();
-
         alert(t('orders.phoneRequested'));
       } else {
         alert(result.errors?.submit || 'Failed to request phone');
@@ -463,7 +461,11 @@ const CustomerOrders = () => {
       console.error('Error requesting phone:', error);
       alert(error.response?.data?.message || 'Failed to request phone');
     } finally {
-      setRequestingPhone(false);
+      setRequestingPhoneOffers(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(offerId);
+        return newSet;
+      });
     }
   };
 
@@ -947,16 +949,51 @@ const CustomerOrders = () => {
                   <p className="empty-message">{t('orders.noOffers')}</p>
                 ) : (
                   offers.map((offer) => {
+                    // Helper function to translate unit types from English API response to current locale
                     const getUnitLabel = (unit) => {
-                      const unitMap = {
+                      if (!unit) return '';
+                      
+                      const unitTranslationMap = {
+                        // Area-based units (API returns these)
                         'm2': t('offers.perM2'),
                         'areaM2': t('offers.perM2'),
-                        'unit': t('offers.perUnit'),
+                        'aream2': t('offers.perM2'),
+                        'sqm': t('offers.perM2'),
+                        'meter2': t('offers.perM2'),
+                        'square_meter': t('offers.perM2'),
+                        'square meter': t('offers.perM2'),
+                        'permetersquare': t('orders.units.perMeterSquare'),
+                        'permeter²': t('orders.units.perMeterSquare'),
+                        'perMeterSquare': t('orders.units.perMeterSquare'),
+                        
+                        // Time-based units
                         'hour': t('offers.perHour'),
+                        'hr': t('offers.perHour'),
+                        'hours': t('offers.perHour'),
                         'day': t('offers.perDay'),
+                        'daily': t('offers.perDay'),
+                        'days': t('offers.perDay'),
+                        
+                        // Quantity-based units
+                        'unit': t('offers.perUnit'),
+                        'piece': t('offers.perItem'),
+                        'pieces': t('offers.perItem'),
+                        'pcs': t('offers.perItem'),
+                        'item': t('offers.perItem'),
+                        'items': t('offers.perItem'),
+                        'each': t('offers.perItem'),
+                        'peritem': t('orders.units.perItem'),
+                        'perItem': t('orders.units.perItem'),
+                        
+                        // Fixed price
                         'fixed': '',
+                        'total': t('orders.units.total'),
+                        'lump_sum': t('offers.fixedPrice'),
+                        'flat_rate': t('offers.fixedPrice'),
                       };
-                      return unitMap[unit] || unit;
+                      
+                      // Check both original case and lowercase
+                      return unitTranslationMap[unit] || unitTranslationMap[unit.toLowerCase()] || unit;
                     };
 
                     const getDaysLabel = (days) => {
@@ -1035,9 +1072,15 @@ const CustomerOrders = () => {
                             <button
                               className="btn btn-primary"
                               onClick={() => handleRequestPhone(offer.id)}
-                              disabled={requestingPhone}
+                              disabled={requestingPhoneOffers.has(offer.id)}
+                              style={{ position: 'relative' }}
                             >
-                              {requestingPhone ? t('common.loading') : t('orders.requestPhone')}
+                              {requestingPhoneOffers.has(offer.id) && (
+                                <div className="button-progress-bar">
+                                  <div className="progress-bar-fill"></div>
+                                </div>
+                              )}
+                              {requestingPhoneOffers.has(offer.id) ? t('common.loading') : t('orders.requestPhone')}
                             </button>
                           </div>
                         )}
