@@ -23,6 +23,8 @@ export const kk = {
     createdAt: 'Жасалды',
     error: 'Қате',
     view: 'Көру',
+    reset: 'Тазарту',
+    searching: 'Іздеу...',
   },
 
   // Navbar
@@ -555,6 +557,36 @@ export const kk = {
     qualityGuaranteeDescription: 'Барлық қызмет көрсетушілер сапалы жұмысты қамтамасыз ету үшін нақты тұтынушылармен тексерілген және бағаланған.',
     support: 'Тұтынушыларды қолдау',
     supportDescription: 'Біздің қолдау тобы қызмет көрсету процесінде сізге көмектесу үшін қол жетімді.',
+    findBuilders: 'Кәсіби шеберлерді табыңыз',
+    buildersDescription: 'Жобалық қажеттіліктеріңіз үшін білікті шеберлерді іздеңіз және байланысыңыз.',
+  },
+
+  // Builders
+  builders: {
+    searchBuilders: 'Шеберлерді іздеу',
+    searchPlaceholder: 'Аты-жөні, мамандығы бойынша іздеу...',
+    allCities: 'Барлық қалалар',
+    allCategories: 'Барлық санаттар',
+    minRating: 'Минималды рейтинг',
+    anyRating: 'Кез келген рейтинг',
+    priceFrom: 'Бағасы',
+    priceTo: 'Бағасы дейін',
+    availability: 'Қол жетімділік',
+    anyAvailability: 'Кез келген қол жетімділік',
+    availableNow: 'Қазір қол жетімді',
+    notAvailable: 'Қол жетімсіз',
+    foundBuilders: '{{count}} шебер табылды',
+    noBuildersFound: 'Шеберлер табылмады',
+    noBuildersDescription: 'Көбірек шеберлерді табу үшін іздеу критерийлерін өзгертіп көріңіз.',
+    viewProfile: 'Профильді көру',
+    services: 'Қызметтер',
+    loadMore: 'Көбірек жүктеу',
+    myCategories: 'Менің санаттарым',
+    myCategoriesDescription: 'Сіз қызмет көрсететін санаттар',
+    builderProfile: 'Шебер профилі',
+    contactInfo: 'Байланыс ақпараты',
+    builderNotFound: 'Шебер табылмады',
+    contactBuilder: 'Шебермен байланысу',
   },
 
   // Profile

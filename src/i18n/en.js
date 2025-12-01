@@ -23,6 +23,8 @@ export const en = {
     createdAt: 'Created',
     error: 'Error',
     view: 'View',
+    reset: 'Reset',
+    searching: 'Searching...',
   },
 
   // Navbar
@@ -554,6 +556,36 @@ export const en = {
     qualityGuaranteeDescription: 'All service providers are verified and rated by real customers to ensure quality work.',
     support: 'Customer Support',
     supportDescription: 'Our support team is available to help you throughout your service experience.',
+    findBuilders: 'Find Professional Builders',
+    buildersDescription: 'Search and connect with qualified builders for your project needs.',
+  },
+
+  // Builders
+  builders: {
+    searchBuilders: 'Search Builders',
+    searchPlaceholder: 'Search by name, specialization...',
+    allCities: 'All Cities',
+    allCategories: 'All Categories',
+    minRating: 'Minimum Rating',
+    anyRating: 'Any Rating',
+    priceFrom: 'Price From',
+    priceTo: 'Price To',
+    availability: 'Availability',
+    anyAvailability: 'Any Availability',
+    availableNow: 'Available Now',
+    notAvailable: 'Not Available',
+    foundBuilders: 'Found {{count}} builders',
+    noBuildersFound: 'No Builders Found',
+    noBuildersDescription: 'Try adjusting your search criteria to find more builders.',
+    viewProfile: 'View Profile',
+    services: 'Services',
+    loadMore: 'Load More',
+    myCategories: 'My Categories',
+    myCategoriesDescription: 'Categories you provide services for',
+    builderProfile: 'Builder Profile',
+    contactInfo: 'Contact Information',
+    builderNotFound: 'Builder not found',
+    contactBuilder: 'Contact Builder',
   },
 
   // Profile

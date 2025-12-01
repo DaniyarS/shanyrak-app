@@ -1,6 +1,7 @@
 .builder-orders-page {
   padding: var(--spacing-8) 0;
   min-height: calc(100vh - 80px);
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
 .orders-header {
@@ -140,16 +141,63 @@
   background: #1d4ed8;
 }
 
+/* Orders Grid - Masonry with Fixed Vertical Spacing */
 .orders-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   gap: var(--spacing-6);
+  align-items: start;
+  grid-auto-rows: min-content;
+  align-content: start;
+}
+
+/* Ensure grid items wrap content height */
+.orders-grid > * {
+  height: fit-content;
+  align-self: start;
+  margin: 0;
+}
+
+/* Modern browsers with masonry support and fixed spacing */
+@supports (grid-template-rows: masonry) {
+  .orders-grid {
+    grid-template-rows: masonry;
+    grid-row-gap: var(--spacing-6);
+  }
+  
+  .orders-grid .order-card {
+    height: fit-content;
+    min-height: auto;
+    margin: 0 0 var(--spacing-6) 0;
+  }
+}
+
+/* Fallback with CSS columns and fixed vertical spacing */
+@supports not (grid-template-rows: masonry) {
+  .orders-grid {
+    display: block;
+    columns: auto;
+    column-width: 400px;
+    column-gap: var(--spacing-6);
+    column-fill: balance;
+  }
+  
+  .orders-grid .order-card {
+    display: inline-block;
+    width: 100%;
+    margin: 0 0 var(--spacing-6) 0;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    height: auto;
+    vertical-align: top;
+  }
 }
 
 .order-card {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-4);
+  height: fit-content;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -373,6 +421,7 @@
   }
 }
 
+
 @media (max-width: 768px) {
   .builder-orders-page {
     padding: var(--spacing-4) 0;
@@ -412,6 +461,28 @@
   .orders-grid {
     grid-template-columns: 1fr;
     gap: var(--spacing-4);
+  }
+  
+  @supports (grid-template-rows: masonry) {
+    .orders-grid {
+      grid-row-gap: var(--spacing-4);
+    }
+    
+    .orders-grid .order-card {
+      margin: 0 0 var(--spacing-4) 0;
+    }
+  }
+  
+  @supports not (grid-template-rows: masonry) {
+    .orders-grid {
+      column-width: 100%;
+      columns: 1;
+      column-gap: 0;
+    }
+    
+    .orders-grid .order-card {
+      margin: 0 0 var(--spacing-4) 0;
+    }
   }
 
   .order-header {

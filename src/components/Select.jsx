@@ -13,6 +13,7 @@ const Select = ({
   required = false,
   disabled = false,
   className = '',
+  controlId,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -85,14 +86,14 @@ const Select = ({
   return (
     <div className={`select-wrapper ${className}`} ref={selectRef}>
       {label && (
-        <label htmlFor={`select-${name}`} className="select-label">
+        <label htmlFor={controlId || `select-${name}`} className="select-label">
           {label}
           {required && <span className="select-required">*</span>}
         </label>
       )}
 
       <div
-        id={`select-${name}`}
+        id={controlId || `select-${name}`}
         className={`select-control ${error ? 'select-error' : ''} ${
           disabled ? 'select-disabled' : ''
         } ${isOpen ? 'select-open' : ''}`}
@@ -196,6 +197,7 @@ Select.propTypes = {
   required: PropTypes.bool,
   disabled: PropTypes.bool,
   className: PropTypes.string,
+  controlId: PropTypes.string,
 };
 
 export default Select;

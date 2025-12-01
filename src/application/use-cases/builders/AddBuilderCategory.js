@@ -14,7 +14,7 @@ export class AddBuilderCategory {
         return { success: false, errors: { builderId: 'Builder ID is required' } };
       }
 
-      if (!categoryData.categoryPublicId) {
+      if (!categoryData.category?.publicId) {
         return { success: false, errors: { categoryPublicId: 'Category ID is required' } };
       }
 

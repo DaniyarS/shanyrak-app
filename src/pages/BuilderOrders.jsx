@@ -17,6 +17,7 @@ const BuilderOrders = () => {
   const [categories, setCategories] = useState([]);
   const [cities, setCities] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [builderData, setBuilderData] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showOfferForm, setShowOfferForm] = useState(false);
 
@@ -92,11 +93,13 @@ const BuilderOrders = () => {
       const getCategoryTreeUseCase = container.getGetCategoryTreeUseCase();
       const getCitiesUseCase = container.getGetCitiesUseCase();
       const searchOrdersUseCase = container.getSearchOrdersUseCase();
+      const getBuilderUseCase = container.getGetBuilderUseCase();
 
-      const [categoryTreeResult, citiesResult, ordersResult] = await Promise.all([
+      const [categoryTreeResult, citiesResult, ordersResult, builderResult] = await Promise.all([
         getCategoryTreeUseCase.execute(false),
         getCitiesUseCase.execute(false),
         searchOrdersUseCase.execute(),
+        getBuilderUseCase.execute(),
       ]);
 
       // Fetch builder's offers to check which orders already have offers
@@ -105,7 +108,18 @@ const BuilderOrders = () => {
         (builderOffers?.content || []).map(item => item.order?.uuid || item.order?.publicId || item.order?.id)
       );
 
-      setCategories(categoryTreeResult.success ? categoryTreeResult.categories : []);
+      // Set builder data
+      if (builderResult.success) {
+        setBuilderData(builderResult.builder);
+      }
+
+      // Process categories to prioritize builder's categories
+      const processedCategories = processCategoriesWithBuilderPriority(
+        categoryTreeResult.success ? categoryTreeResult.categories : [],
+        builderResult.success ? builderResult.builder : null
+      );
+
+      setCategories(processedCategories);
       setCities(citiesResult.success ? citiesResult.cities : []);
       setOrders(ordersResult.orders || []);
       setOrdersWithOffers(offerOrderIds);
@@ -116,12 +130,66 @@ const BuilderOrders = () => {
     }
   };
 
+  const processCategoriesWithBuilderPriority = (allCategories, builder) => {
+    if (!builder || !builder.priceList || builder.priceList.length === 0) {
+      return allCategories;
+    }
+
+    // Extract builder's category IDs from priceList
+    const builderCategoryIds = new Set(
+      builder.priceList
+        .map(item => item.category?.id)
+        .filter(Boolean)
+    );
+
+    if (builderCategoryIds.size === 0) {
+      return allCategories;
+    }
+
+    // Find builder's categories from the full category tree
+    const builderCategories = [];
+    const findBuilderCategories = (categories) => {
+      categories.forEach(category => {
+        if (builderCategoryIds.has(category.id)) {
+          builderCategories.push({
+            ...category,
+            isBuilderCategory: true
+          });
+        }
+        if (category.children && category.children.length > 0) {
+          findBuilderCategories(category.children);
+        }
+      });
+    };
+
+    findBuilderCategories(allCategories);
+
+    if (builderCategories.length === 0) {
+      return allCategories;
+    }
+
+    // Create a special "My Categories" section at the top
+    const myCategories = {
+      id: 'builder-categories',
+      name: t('builders.myCategories'),
+      emoji: '⭐',
+      description: t('builders.myCategoriesDescription'),
+      children: builderCategories,
+      isBuilderSection: true,
+      isLeafCategory: () => false
+    };
+
+    return [myCategories, ...allCategories];
+  };
+
   const handleSearchChange = (e) => {
     const { name, value } = e.target;
     setSearchFilters((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleCategoryChange = (categoryId) => {
+  const handleCategoryChange = (eventOrId) => {
+    // Handle both event object and direct ID value
+    const categoryId = eventOrId?.target?.value || eventOrId;
     setSearchFilters((prev) => ({ ...prev, categoryPublicId: categoryId }));
   };
 

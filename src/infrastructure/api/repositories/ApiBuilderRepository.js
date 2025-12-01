@@ -101,7 +101,7 @@ export class ApiBuilderRepository extends IBuilderRepository {
     try {
       const response = await api.post(`/api/v1/builders/${builderId}/category`, {
         category: {
-          publicId: categoryData.categoryPublicId
+          publicId: categoryData.category.publicId
         },
         price: categoryData.price,
         description: categoryData.description
