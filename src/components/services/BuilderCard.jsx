@@ -73,16 +73,11 @@ const BuilderCard = ({ builder, onClick }) => {
       </div>
 
       <div className="builder-card-body">
-        {builder.aboutMe && (
-          <p className="builder-about">{builder.aboutMe}</p>
-        )}
+        <p className="builder-about">
+          {builder.aboutMe || 'Builder did not add description yet'}
+        </p>
 
         <div className="builder-details">
-          <div className="detail-item">
-            <span className="detail-label">{t('services.phone')}:</span>
-            <span className="detail-value">{builder.phone}</span>
-          </div>
-
           {builder.city && (
             <div className="detail-item">
               <span className="detail-label">{t('services.city')}:</span>
@@ -108,6 +103,25 @@ const BuilderCard = ({ builder, onClick }) => {
             </div>
           )}
         </div>
+
+        {/* Category and Price Badges */}
+        {builder.priceList && builder.priceList.length > 0 && (
+          <div className="builder-services">
+            <div className="services-badges">
+              {builder.priceList.slice(0, 3).map((service, index) => (
+                <span key={index} className="category-badge">
+                  {service.category?.icon} {service.category?.name}
+                  <span className="price-text">от {service.price} ₸</span>
+                </span>
+              ))}
+              {builder.priceList.length > 3 && (
+                <div className="more-services">
+                  +{builder.priceList.length - 3} услуг
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

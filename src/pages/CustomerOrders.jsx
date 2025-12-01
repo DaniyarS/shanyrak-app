@@ -48,7 +48,7 @@ const CustomerOrders = () => {
     areaM2: '',
     floor: '',
   });
-  const [requestingPhone, setRequestingPhone] = useState(false);
+  const [requestingPhoneOffers, setRequestingPhoneOffers] = useState(new Set());
   const [builderContacts, setBuilderContacts] = useState({});
   const [confirmingDealOffer, setConfirmingDealOffer] = useState(null);
 
@@ -438,9 +438,9 @@ const CustomerOrders = () => {
   };
 
   const handleRequestPhone = async (offerId) => {
-    if (!selectedOrder || requestingPhone) return;
+    if (!selectedOrder || requestingPhoneOffers.has(offerId)) return;
 
-    setRequestingPhone(true);
+    setRequestingPhoneOffers(prev => new Set([...prev, offerId]));
     try {
       const requestPhoneUseCase = container.getRequestBuilderPhoneUseCase();
       const result = await requestPhoneUseCase.execute(selectedOrder.id, offerId);
@@ -453,8 +453,6 @@ const CustomerOrders = () => {
 
         setSelectedOrder(prev => ({ ...prev, status: OrderStatus.IN_PROGRESS }));
 
-        fetchInitialData();
-
         alert(t('orders.phoneRequested'));
       } else {
         alert(result.errors?.submit || 'Failed to request phone');
@@ -463,7 +461,11 @@ const CustomerOrders = () => {
       console.error('Error requesting phone:', error);
       alert(error.response?.data?.message || 'Failed to request phone');
     } finally {
-      setRequestingPhone(false);
+      setRequestingPhoneOffers(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(offerId);
+        return newSet;
+      });
     }
   };
 
@@ -1070,9 +1072,15 @@ const CustomerOrders = () => {
                             <button
                               className="btn btn-primary"
                               onClick={() => handleRequestPhone(offer.id)}
-                              disabled={requestingPhone}
+                              disabled={requestingPhoneOffers.has(offer.id)}
+                              style={{ position: 'relative' }}
                             >
-                              {requestingPhone ? t('common.loading') : t('orders.requestPhone')}
+                              {requestingPhoneOffers.has(offer.id) && (
+                                <div className="button-progress-bar">
+                                  <div className="progress-bar-fill"></div>
+                                </div>
+                              )}
+                              {requestingPhoneOffers.has(offer.id) ? t('common.loading') : t('orders.requestPhone')}
                             </button>
                           </div>
                         )}

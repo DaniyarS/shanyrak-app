@@ -880,7 +880,7 @@ updateBuilderCategory should be available from builder's profile page:
 ### Query Parameters
 
 - `linkType`
-- `linkPublicId` - order's public
+- `linkPublicId` - order's public id
 
 ---
 

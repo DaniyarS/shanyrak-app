@@ -23,6 +23,8 @@ export const ru = {
     createdAt: 'Создано',
     error: 'Ошибка',
     view: 'Просмотр',
+    reset: 'Сбросить',
+    searching: 'Поиск...',
   },
 
   // Navbar
@@ -554,6 +556,36 @@ export const ru = {
     qualityGuaranteeDescription: 'Все поставщики услуг проверены и оценены реальными клиентами для обеспечения качественной работы.',
     support: 'Поддержка клиентов',
     supportDescription: 'Наша служба поддержки доступна, чтобы помочь вам на протяжении всего процесса получения услуги.',
+    findBuilders: 'Найдите профессиональных мастеров',
+    buildersDescription: 'Ищите и связывайтесь с квалифицированными мастерами для ваших проектов.',
+  },
+
+  // Builders
+  builders: {
+    searchBuilders: 'Поиск мастеров',
+    searchPlaceholder: 'Поиск по имени, специализации...',
+    allCities: 'Все города',
+    allCategories: 'Все категории',
+    minRating: 'Минимальный рейтинг',
+    anyRating: 'Любой рейтинг',
+    priceFrom: 'Цена от',
+    priceTo: 'Цена до',
+    availability: 'Доступность',
+    anyAvailability: 'Любая доступность',
+    availableNow: 'Доступен сейчас',
+    notAvailable: 'Недоступен',
+    foundBuilders: 'Найдено {{count}} мастеров',
+    noBuildersFound: 'Мастера не найдены',
+    noBuildersDescription: 'Попробуйте изменить критерии поиска, чтобы найти больше мастеров.',
+    viewProfile: 'Посмотреть профиль',
+    services: 'Услуги',
+    loadMore: 'Загрузить еще',
+    myCategories: 'Мои категории',
+    myCategoriesDescription: 'Категории, по которым вы предоставляете услуги',
+    builderProfile: 'Профиль мастера',
+    contactInfo: 'Контактная информация',
+    builderNotFound: 'Мастер не найден',
+    contactBuilder: 'Связаться с мастером',
   },
 
   // Profile

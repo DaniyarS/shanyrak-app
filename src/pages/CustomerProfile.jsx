@@ -401,22 +401,20 @@ const CustomerProfile = () => {
         </div>
       </Card>
 
-      <Card className="delete-section">
-        <div className="delete-content">
-          <div>
-            <p className="delete-link-text">
-              Need to delete your account? 
-              <button 
-                type="button"
-                className="delete-link-button"
-                onClick={() => setShowDeleteDialog(true)}
-              >
-                Click here
-              </button>
-            </p>
-          </div>
+      <div className="delete-content">
+        <div>
+          <p className="delete-link-text">
+            Need to delete your account? 
+            <button 
+              type="button"
+              className="delete-link-button"
+              onClick={() => setShowDeleteDialog(true)}
+            >
+              Click here
+            </button>
+          </p>
         </div>
-      </Card>
+      </div>
 
       <DeleteAccountDialog
         isOpen={showDeleteDialog}

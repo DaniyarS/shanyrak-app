@@ -8,6 +8,7 @@ import Card from '../components/Card';
 import Input from '../components/Input';
 import Select from '../components/Select';
 import CascadingCategorySelect from '../components/CascadingCategorySelect';
+import ImageSlider from '../components/ImageSlider';
 import './BuilderOrders.css';
 
 const BuilderOrders = () => {
@@ -17,6 +18,7 @@ const BuilderOrders = () => {
   const [categories, setCategories] = useState([]);
   const [cities, setCities] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [builderData, setBuilderData] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showOfferForm, setShowOfferForm] = useState(false);
 
@@ -80,6 +82,12 @@ const BuilderOrders = () => {
   });
   const [errors, setErrors] = useState({});
   const [ordersWithOffers, setOrdersWithOffers] = useState(new Set());
+  const [orderPhotos, setOrderPhotos] = useState(new Map()); // Map of orderId -> photos array
+  
+  // Image slider state
+  const [isSliderOpen, setIsSliderOpen] = useState(false);
+  const [sliderPhotos, setSliderPhotos] = useState([]);
+  const [sliderInitialIndex, setSliderInitialIndex] = useState(0);
 
   useEffect(() => {
     fetchInitialData();
@@ -92,11 +100,13 @@ const BuilderOrders = () => {
       const getCategoryTreeUseCase = container.getGetCategoryTreeUseCase();
       const getCitiesUseCase = container.getGetCitiesUseCase();
       const searchOrdersUseCase = container.getSearchOrdersUseCase();
+      const getBuilderUseCase = container.getGetBuilderUseCase();
 
-      const [categoryTreeResult, citiesResult, ordersResult] = await Promise.all([
+      const [categoryTreeResult, citiesResult, ordersResult, builderResult] = await Promise.all([
         getCategoryTreeUseCase.execute(false),
         getCitiesUseCase.execute(false),
         searchOrdersUseCase.execute(),
+        getBuilderUseCase.execute(),
       ]);
 
       // Fetch builder's offers to check which orders already have offers
@@ -105,14 +115,108 @@ const BuilderOrders = () => {
         (builderOffers?.content || []).map(item => item.order?.uuid || item.order?.publicId || item.order?.id)
       );
 
-      setCategories(categoryTreeResult.success ? categoryTreeResult.categories : []);
+      // Set builder data
+      if (builderResult.success) {
+        setBuilderData(builderResult.builder);
+      }
+
+      // Process categories to prioritize builder's categories
+      const processedCategories = processCategoriesWithBuilderPriority(
+        categoryTreeResult.success ? categoryTreeResult.categories : [],
+        builderResult.success ? builderResult.builder : null
+      );
+
+      setCategories(processedCategories);
       setCities(citiesResult.success ? citiesResult.cities : []);
-      setOrders(ordersResult.orders || []);
+      const loadedOrders = ordersResult.orders || [];
+      setOrders(loadedOrders);
       setOrdersWithOffers(offerOrderIds);
+
+      // Fetch photos for all orders
+      if (loadedOrders.length > 0) {
+        fetchOrderPhotos(loadedOrders);
+      }
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const processCategoriesWithBuilderPriority = (allCategories, builder) => {
+    if (!builder || !builder.priceList || builder.priceList.length === 0) {
+      return allCategories;
+    }
+
+    // Extract builder's category IDs from priceList
+    const builderCategoryIds = new Set(
+      builder.priceList
+        .map(item => item.category?.id)
+        .filter(Boolean)
+    );
+
+    if (builderCategoryIds.size === 0) {
+      return allCategories;
+    }
+
+    // Find builder's categories from the full category tree
+    const builderCategories = [];
+    const findBuilderCategories = (categories) => {
+      categories.forEach(category => {
+        if (builderCategoryIds.has(category.id)) {
+          builderCategories.push({
+            ...category,
+            isBuilderCategory: true
+          });
+        }
+        if (category.children && category.children.length > 0) {
+          findBuilderCategories(category.children);
+        }
+      });
+    };
+
+    findBuilderCategories(allCategories);
+
+    if (builderCategories.length === 0) {
+      return allCategories;
+    }
+
+    // Create a special "My Categories" section at the top
+    const myCategories = {
+      id: 'builder-categories',
+      name: t('builders.myCategories'),
+      emoji: '⭐',
+      description: t('builders.myCategoriesDescription'),
+      children: builderCategories,
+      isBuilderSection: true,
+      isLeafCategory: () => false
+    };
+
+    return [myCategories, ...allCategories];
+  };
+
+  const fetchOrderPhotos = async (orders) => {
+    try {
+      const getOrderPhotosUseCase = container.getGetOrderPhotosUseCase();
+      const photosMap = new Map();
+
+      // Fetch photos for each order (could be optimized with Promise.all)
+      await Promise.all(
+        orders.map(async (order) => {
+          try {
+            const result = await getOrderPhotosUseCase.execute(order.id);
+            if (result.success && result.photos.length > 0) {
+              photosMap.set(order.id, result.photos);
+            }
+          } catch (error) {
+            console.error(`Error fetching photos for order ${order.id}:`, error);
+          }
+        })
+      );
+
+      setOrderPhotos(photosMap);
+    } catch (error) {
+      console.error('Error fetching order photos:', error);
     }
   };
 
@@ -121,7 +225,9 @@ const BuilderOrders = () => {
     setSearchFilters((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleCategoryChange = (categoryId) => {
+  const handleCategoryChange = (eventOrId) => {
+    // Handle both event object and direct ID value
+    const categoryId = eventOrId?.target?.value || eventOrId;
     setSearchFilters((prev) => ({ ...prev, categoryPublicId: categoryId }));
   };
 
@@ -132,12 +238,41 @@ const BuilderOrders = () => {
       const searchOrdersUseCase = container.getSearchOrdersUseCase();
       const result = await searchOrdersUseCase.execute(searchFilters);
 
-      setOrders(result.orders || []);
+      const searchedOrders = result.orders || [];
+      setOrders(searchedOrders);
+
+      // Fetch photos for searched orders
+      if (searchedOrders.length > 0) {
+        fetchOrderPhotos(searchedOrders);
+      } else {
+        // Clear photos if no orders found
+        setOrderPhotos(new Map());
+      }
     } catch (error) {
       console.error('Error searching orders:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handlePhotoClick = (photos, clickedIndex) => {
+    // Validate photos array and clicked index
+    if (!photos || !Array.isArray(photos) || photos.length === 0) {
+      console.error('handlePhotoClick: Invalid photos array', photos);
+      return;
+    }
+    
+    const safeIndex = Math.max(0, Math.min(clickedIndex, photos.length - 1));
+    
+    setSliderPhotos(photos);
+    setSliderInitialIndex(safeIndex);
+    setIsSliderOpen(true);
+  };
+
+  const closeImageSlider = () => {
+    setIsSliderOpen(false);
+    setSliderPhotos([]);
+    setSliderInitialIndex(0);
   };
 
   const handleMakeOffer = (order) => {
@@ -280,6 +415,41 @@ const BuilderOrders = () => {
                   </span>
                 </div>
                 <p className="order-description">{order.description}</p>
+                
+                {/* Order Photos */}
+                {(() => {
+                  const photos = orderPhotos.get(order.id);
+                  // Validate photos array and ensure each photo has required properties
+                  const validPhotos = photos && Array.isArray(photos) 
+                    ? photos.filter(photo => photo && photo.url && photo.id) 
+                    : [];
+                  
+                  return validPhotos.length > 0 && (
+                    <div className="order-photos">
+                      <div className={`photo-grid ${validPhotos.length > 3 ? 'stacked' : ''}`}>
+                        {validPhotos.slice(0, 3).map((photo, index) => (
+                          <div 
+                            key={photo.id} 
+                            className={`photo-item ${index === 2 && validPhotos.length > 3 ? 'has-stack' : ''}`}
+                          >
+                            <img 
+                              src={photo.url} 
+                              alt={`Order photo ${index + 1}`}
+                              className="photo-image"
+                              onClick={() => handlePhotoClick(validPhotos, index)}
+                            />
+                            {index === 2 && validPhotos.length > 3 && (
+                              <div className="photo-stack-indicator">
+                                +{validPhotos.length - 3}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })()}
+                
                 <div className="order-details">
                   {order.realEstate && (
                     <>
@@ -431,6 +601,14 @@ const BuilderOrders = () => {
             </Card>
           </div>
         )}
+
+        {/* Image Slider Modal */}
+        <ImageSlider
+          isOpen={isSliderOpen}
+          photos={sliderPhotos}
+          initialIndex={sliderInitialIndex}
+          onClose={closeImageSlider}
+        />
       </div>
     </div>
   );

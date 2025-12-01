@@ -109,7 +109,7 @@
 /* Dashboard Section */
 .dashboard-section {
   padding: var(--spacing-12) 0;
-  background-color: var(--color-bg);
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
 .dashboard-header {
@@ -283,7 +283,7 @@
 /* Quick Actions Section */
 .quick-actions-section {
   padding: var(--spacing-12) 0;
-  background-color: var(--color-bg-paper);
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
 .quick-actions-section h2 {
