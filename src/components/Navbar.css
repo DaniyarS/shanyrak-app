@@ -289,12 +289,6 @@
 }
 
 @media (max-width: 768px) {
-  .navbar {
-    display: none;
-  }
-
-  /* Alternatively, show simplified navbar with only logo and language selector */
-  /* Uncomment this section if you want to keep a minimal navbar on mobile
   .navbar-content {
     justify-content: space-between;
     padding: 12px 0;
@@ -361,33 +355,54 @@
   .navbar-right {
     position: static;
     gap: var(--spacing-2);
+    display: flex;
+    align-items: center;
   }
 
   .navbar-user-name {
     display: none;
   }
 
-  .language-dropdown-trigger {
-    padding: var(--spacing-1) var(--spacing-2);
-  }
-
-  .language-code {
+  /* Hide desktop language dropdown on mobile */
+  .language-dropdown {
     display: none;
   }
 
-  .dropdown-arrow {
-    font-size: 0.5rem;
+  /* Show mobile language picker for all users */
+  .navbar .mobile-language-picker {
+    display: block !important;
   }
 
-  .language-dropdown-menu {
-    min-width: 140px;
+  /* Show mobile menu button for all users */
+  .navbar .mobile-menu-button {
+    display: flex !important;
   }
 
-  .language-dropdown-item {
-    padding: var(--spacing-2) var(--spacing-3);
-    font-size: var(--font-size-sm);
+  /* Make mobile language picker take priority in layout */
+  .mobile-language-picker {
+    order: 1;
   }
-  */
+
+  .auth-links {
+    order: 2;
+    margin-right: var(--spacing-2);
+    gap: var(--spacing-2);
+  }
+
+  .mobile-menu-button {
+    order: 3;
+  }
+
+  .navbar-auth-link {
+    padding: var(--spacing-1) var(--spacing-2);
+    font-size: var(--font-size-xs);
+  }
+
+  /* Adjust navbar-right layout for mobile */
+  .navbar-right {
+    gap: var(--spacing-3);
+    justify-content: flex-end;
+  }
 }
 
 /* Auth Links for Unauthorized Users */
@@ -431,15 +446,208 @@
   text-decoration: none;
 }
 
-/* Mobile adjustments for auth links */
-@media (max-width: 768px) {
-  .auth-links {
-    margin-right: var(--spacing-2);
-    gap: var(--spacing-2);
+/* Mobile Language Picker */
+.mobile-language-picker {
+  position: relative;
+  display: none;
+  z-index: 1000;
+}
+
+
+.mobile-language-trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-1) var(--spacing-2);
+  background-color: var(--color-bg-default);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  min-width: 40px;
+  height: 32px;
+  justify-content: center;
+}
+
+.mobile-language-trigger:hover {
+  background-color: var(--color-neutral-50);
+  border-color: var(--color-primary);
+}
+
+.mobile-language-flag {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.mobile-dropdown-arrow {
+  font-size: 0.5rem;
+  color: var(--color-text-secondary);
+  transition: transform 0.2s ease;
+}
+
+.mobile-language-trigger:hover .mobile-dropdown-arrow {
+  color: var(--color-primary);
+}
+
+.mobile-language-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  min-width: 140px;
+  background-color: white;
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  z-index: 1000;
+  animation: dropdownSlideDown 0.2s ease;
+}
+
+.mobile-language-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  width: 100%;
+  padding: var(--spacing-2) var(--spacing-3);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  text-align: left;
+}
+
+.mobile-language-item:hover {
+  background-color: var(--color-neutral-50);
+}
+
+.mobile-language-item.active {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.mobile-language-item .mobile-language-flag {
+  font-size: 1.1rem;
+}
+
+.mobile-language-name {
+  flex: 1;
+  font-size: var(--font-size-sm);
+}
+
+/* Mobile Menu Button */
+.mobile-menu-button {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 24px;
+  height: 18px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1001;
+}
+
+
+.hamburger-line {
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-primary);
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+/* Mobile Menu */
+.mobile-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: white;
+  border-top: 1px solid var(--color-neutral-200);
+  box-shadow: var(--shadow-lg);
+  animation: slideDown 0.3s ease;
+  z-index: 1000;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
   }
-  
-  .navbar-auth-link {
-    padding: var(--spacing-1) var(--spacing-2);
-    font-size: var(--font-size-xs);
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
+
+.mobile-menu-links {
+  padding: var(--spacing-4) var(--spacing-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.mobile-menu-link {
+  color: var(--color-text-primary);
+  text-decoration: none;
+  font-weight: 500;
+  padding: var(--spacing-3) 0;
+  border-bottom: 1px solid var(--color-neutral-100);
+  transition: color 0.2s ease;
+}
+
+.mobile-menu-link:hover {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.mobile-menu-link.active {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.mobile-menu-auth {
+  margin-top: var(--spacing-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.mobile-menu-auth-link {
+  text-decoration: none;
+  padding: var(--spacing-3) var(--spacing-4);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.mobile-menu-auth-link:not(.primary) {
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-neutral-200);
+  background-color: var(--color-bg-default);
+}
+
+.mobile-menu-auth-link:not(.primary):hover {
+  color: var(--color-primary);
+  background-color: rgba(59, 130, 246, 0.1);
+  text-decoration: none;
+}
+
+.mobile-menu-auth-link.primary {
+  background-color: var(--color-primary);
+  color: white;
+  border: 1px solid var(--color-primary);
+}
+
+.mobile-menu-auth-link.primary:hover {
+  background-color: var(--color-primary-dark, #2563eb);
+  text-decoration: none;
+}
+

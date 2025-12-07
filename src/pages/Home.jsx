@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -13,10 +13,16 @@ const Home = () => {
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showcaseBuilders, setShowcaseBuilders] = useState([]);
+  const [showcaseBuildersLoading, setShowcaseBuildersLoading] = useState(false);
+  const [showcaseBuilderAvatars, setShowcaseBuilderAvatars] = useState(new Map());
 
   useEffect(() => {
     if (isAuthenticated && user) {
       fetchDashboardData();
+    } else {
+      // Load showcase builders for unauthorized users
+      fetchShowcaseBuilders();
     }
   }, [isAuthenticated, user]);
 
@@ -48,6 +54,59 @@ const Home = () => {
       setLoading(false);
     }
   };
+
+  const fetchShowcaseBuilderAvatars = useCallback(async (buildersArray) => {
+    try {
+      const avatarsMap = new Map();
+      const baseUrl = 'https://api.shanyrak.group';
+      
+      await Promise.all(
+        buildersArray.map(async (builder) => {
+          if (builder.id) {
+            try {
+              const avatarUrl = `${baseUrl}/api/v1/files?linkType=USER_AVATAR&linkPublicId=${builder.id}`;
+              const response = await fetch(avatarUrl, { method: 'HEAD' });
+              if (response.ok) {
+                avatarsMap.set(builder.id, avatarUrl);
+              }
+            } catch (error) {
+              console.warn(`Failed to fetch avatar for builder ${builder.id}:`, error);
+            }
+          }
+        })
+      );
+      
+      setShowcaseBuilderAvatars(avatarsMap);
+    } catch (error) {
+      console.error('Error fetching showcase builder avatars:', error);
+    }
+  }, []);
+
+  const fetchShowcaseBuilders = useCallback(async () => {
+    try {
+      setShowcaseBuildersLoading(true);
+      
+      const searchBuildersUseCase = container.getSearchBuildersUseCase();
+      const result = await searchBuildersUseCase.execute({ 
+        page: 0, 
+        size: 6 // Show 6 builders in showcase
+      });
+      
+      if (result.success) {
+        const builders = result.builders || [];
+        setShowcaseBuilders(builders);
+        
+        // Fetch avatars for builders
+        if (builders.length > 0) {
+          fetchShowcaseBuilderAvatars(builders);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching showcase builders:', error);
+    } finally {
+      setShowcaseBuildersLoading(false);
+    }
+  }, [fetchShowcaseBuilderAvatars]);
 
   const renderAuthenticatedContent = () => {
     if (user.role === 'CUSTOMER') {
@@ -431,6 +490,92 @@ const Home = () => {
         renderAuthenticatedContent()
       ) : (
         <>
+          <section className="services-showcase">
+            <div className="container">
+              <div className="services-showcase-content">
+                <h2 className="services-showcase-title">{t('home.exploreServices')}</h2>
+                <p className="services-showcase-subtitle">{t('home.exploreServicesDescription')}</p>
+                
+                {showcaseBuildersLoading ? (
+                  <div className="showcase-builders-loading">
+                    <div className="spinner"></div>
+                    <p>{t('common.loading')}</p>
+                  </div>
+                ) : showcaseBuilders.length === 0 ? (
+                  <div className="showcase-builders-empty">
+                    <div className="empty-icon">👷‍♂️</div>
+                    <p>{t('home.noBuildersAvailable')}</p>
+                  </div>
+                ) : (
+                  <div className="showcase-builders-grid">
+                    {showcaseBuilders.map((builder) => (
+                      <div key={builder.id} className="showcase-builder-card">
+                        <div className="showcase-builder-avatar">
+                          {showcaseBuilderAvatars.has(builder.id) ? (
+                            <img 
+                              src={showcaseBuilderAvatars.get(builder.id)} 
+                              alt={`${builder.firstName} ${builder.lastName}`}
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                                e.target.nextSibling.style.display = 'flex';
+                              }}
+                            />
+                          ) : null}
+                          <div className="showcase-builder-avatar-fallback" style={{display: showcaseBuilderAvatars.has(builder.id) ? 'none' : 'flex'}}>
+                            {builder.firstName ? builder.firstName.charAt(0) : '👤'}
+                            {builder.lastName ? builder.lastName.charAt(0) : ''}
+                          </div>
+                        </div>
+                        
+                        <div className="showcase-builder-info">
+                          <h3 className="showcase-builder-name">
+                            {builder.firstName && builder.lastName 
+                              ? `${builder.firstName} ${builder.lastName}`
+                              : builder.phone || 'Builder'
+                            }
+                          </h3>
+                          
+                          {builder.bio && (
+                            <p className="showcase-builder-bio">{builder.bio}</p>
+                          )}
+                          
+                          <div className="showcase-builder-meta">
+                            {builder.rating && (
+                              <div className="showcase-builder-rating">
+                                <span className="rating-stars">⭐</span>
+                                <span>{builder.rating}</span>
+                              </div>
+                            )}
+                            
+                            {builder.experienceYears && (
+                              <div className="showcase-builder-experience">
+                                <span className="experience-icon">🏗️</span>
+                                <span>{builder.experienceYears} {t('home.yearsExperience')}</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div className="services-showcase-actions">
+                  <Link to="/services">
+                    <Button variant="primary" size="large">
+                      {t('home.browseServices')}
+                    </Button>
+                  </Link>
+                  <Link to="/services?view=builders">
+                    <Button variant="outline" size="large">
+                      {t('home.viewAllBuilders')}
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </section>
+
           <section className="features">
             <div className="container">
               <h2 className="features-title">{t('home.howItWorks')}</h2>

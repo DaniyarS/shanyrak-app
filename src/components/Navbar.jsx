@@ -9,6 +9,7 @@ const Navbar = () => {
   const { language, changeLanguage, t } = useLanguage();
   const location = useLocation();
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const isActive = (path) => {
     if (path === '/') {
@@ -35,6 +36,7 @@ const Navbar = () => {
       e.preventDefault();
       window.location.reload();
     }
+    setIsMobileMenuOpen(false);
   };
 
   return (
@@ -141,6 +143,43 @@ const Navbar = () => {
                       </div>
                     )}
                   </div>
+
+                  {/* Mobile Language Picker for authenticated users */}
+                  <div className="mobile-language-picker">
+                    <button
+                      className="mobile-language-trigger"
+                      onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
+                      onBlur={() => setTimeout(() => setIsLanguageDropdownOpen(false), 200)}
+                    >
+                      <span className="mobile-language-flag">{currentLanguage?.flag}</span>
+                      <span className="mobile-dropdown-arrow">▼</span>
+                    </button>
+                    {isLanguageDropdownOpen && (
+                      <div className="mobile-language-menu">
+                        {languages.map((lang) => (
+                          <button
+                            key={lang.code}
+                            className={`mobile-language-item ${language === lang.code ? 'active' : ''}`}
+                            onClick={() => handleLanguageChange(lang.code)}
+                          >
+                            <span className="mobile-language-flag">{lang.flag}</span>
+                            <span className="mobile-language-name">{lang.name}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Mobile Menu Button for authenticated users */}
+                  <button 
+                    className="mobile-menu-button"
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    aria-label="Toggle mobile menu"
+                  >
+                    <span className="hamburger-line"></span>
+                    <span className="hamburger-line"></span>
+                    <span className="hamburger-line"></span>
+                  </button>
                 </div>
               </>
             ) : (
@@ -199,11 +238,147 @@ const Navbar = () => {
                       </div>
                     )}
                   </div>
+
+                  {/* Mobile Language Picker for unauthorized users */}
+                  <div className="mobile-language-picker">
+                    <button
+                      className="mobile-language-trigger"
+                      onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
+                      onBlur={() => setTimeout(() => setIsLanguageDropdownOpen(false), 200)}
+                    >
+                      <span className="mobile-language-flag">{currentLanguage?.flag}</span>
+                      <span className="mobile-dropdown-arrow">▼</span>
+                    </button>
+                    {isLanguageDropdownOpen && (
+                      <div className="mobile-language-menu">
+                        {languages.map((lang) => (
+                          <button
+                            key={lang.code}
+                            className={`mobile-language-item ${language === lang.code ? 'active' : ''}`}
+                            onClick={() => handleLanguageChange(lang.code)}
+                          >
+                            <span className="mobile-language-flag">{lang.flag}</span>
+                            <span className="mobile-language-name">{lang.name}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Mobile Menu Button for unauthorized users */}
+                  <button 
+                    className="mobile-menu-button"
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    aria-label="Toggle mobile menu"
+                  >
+                    <span className="hamburger-line"></span>
+                    <span className="hamburger-line"></span>
+                    <span className="hamburger-line"></span>
+                  </button>
                 </div>
               </>
             )}
           </div>
         </div>
+
+        {/* Mobile Menu for authenticated users */}
+        {isAuthenticated && isMobileMenuOpen && (
+          <div className="mobile-menu">
+            <div className="mobile-menu-links">
+              <Link
+                to="/"
+                className={`mobile-menu-link ${isActive('/') ? 'active' : ''}`}
+                onClick={(e) => handleNavClick(e, '/')}
+              >
+                {t('navbar.home')}
+              </Link>
+              
+              {user?.role === 'CUSTOMER' && (
+                <>
+                  <Link
+                    to="/services"
+                    className={`mobile-menu-link ${isActive('/services') ? 'active' : ''}`}
+                    onClick={(e) => handleNavClick(e, '/services')}
+                  >
+                    {t('navbar.services')}
+                  </Link>
+                  <Link
+                    to="/my-orders"
+                    className={`mobile-menu-link ${isActive('/my-orders') ? 'active' : ''}`}
+                    onClick={(e) => handleNavClick(e, '/my-orders')}
+                  >
+                    {t('navbar.myOrders')}
+                  </Link>
+                </>
+              )}
+              
+              {user?.role === 'BUILDER' && (
+                <>
+                  <Link
+                    to="/orders"
+                    className={`mobile-menu-link ${isActive('/orders') ? 'active' : ''}`}
+                    onClick={(e) => handleNavClick(e, '/orders')}
+                  >
+                    {t('navbar.orders')}
+                  </Link>
+                  <Link
+                    to="/offers"
+                    className={`mobile-menu-link ${isActive('/offers') ? 'active' : ''}`}
+                    onClick={(e) => handleNavClick(e, '/offers')}
+                  >
+                    {t('navbar.myOffers')}
+                  </Link>
+                </>
+              )}
+              
+              <Link
+                to="/profile"
+                className={`mobile-menu-link ${isActive('/profile') ? 'active' : ''}`}
+                onClick={(e) => handleNavClick(e, '/profile')}
+              >
+                {t('navbar.profile')}
+              </Link>
+            </div>
+          </div>
+        )}
+
+        {/* Mobile Menu - Only for unauthorized users */}
+        {!isAuthenticated && isMobileMenuOpen && (
+          <div className="mobile-menu">
+            <div className="mobile-menu-links">
+              <Link
+                to="/"
+                className={`mobile-menu-link ${isActive('/') ? 'active' : ''}`}
+                onClick={(e) => handleNavClick(e, '/')}
+              >
+                {t('navbar.home')}
+              </Link>
+              <Link
+                to="/services"
+                className={`mobile-menu-link ${isActive('/services') ? 'active' : ''}`}
+                onClick={(e) => handleNavClick(e, '/services')}
+              >
+                {t('navbar.services')}
+              </Link>
+              <div className="mobile-menu-auth">
+                <Link 
+                  to="/login" 
+                  className="mobile-menu-auth-link"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {t('auth.login')}
+                </Link>
+                <Link 
+                  to="/register" 
+                  className="mobile-menu-auth-link primary"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {t('auth.register')}
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   );

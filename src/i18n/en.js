@@ -79,6 +79,20 @@ export const en = {
     completedJobs: 'Completed Jobs',
     serviceCategories: 'Service Categories',
     averageRating: 'Average Rating',
+    
+    exploreServices: 'Explore Our Services',
+    exploreServicesDescription: 'Discover qualified professionals and browse service categories to find exactly what you need for your property.',
+    findExperts: 'Find Expert Builders',
+    findExpertsDescription: 'Connect with verified builders and contractors in your area for quality service.',
+    browseCategories: 'Browse Categories',
+    browseCategoriesDescription: 'Explore our wide range of service categories from plumbing to construction.',
+    verifiedBuilders: 'Verified Professionals',
+    verifiedBuildersDescription: 'All our builders are verified and rated by previous customers.',
+    browseServices: 'Browse Services',
+    viewBuilders: 'View Builders',
+    viewAllBuilders: 'View All Builders',
+    noBuildersAvailable: 'No builders available at the moment',
+    yearsExperience: 'years experience',
   },
 
   // Auth

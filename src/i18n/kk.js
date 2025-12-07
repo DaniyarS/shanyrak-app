@@ -79,6 +79,20 @@ export const kk = {
     completedJobs: 'Аяқталған жұмыстар',
     serviceCategories: 'Қызмет санаттары',
     averageRating: 'Орташа рейтинг',
+    
+    exploreServices: 'Біздің қызметтерімізбен танысыңыз',
+    exploreServicesDescription: 'Жылжымайыңыз үшін қажетті нәрсені табу үшін білікті мамандарды тап және қызмет категорияларын қараңыз.',
+    findExperts: 'Сарапшы құрылысшыларды табыңыз',
+    findExpertsDescription: 'Сапалы қызмет үшін өңіріңіздегі тексерілген құрылысшылар мен подрядшылармен байланысыңыз.',
+    browseCategories: 'Категорияларды қараңыз',
+    browseCategoriesDescription: 'Сантехникадан құрылысқа дейінгі біздің кең қызмет категорияларымызды зерттеңіз.',
+    verifiedBuilders: 'Тексерілген мамандар',
+    verifiedBuildersDescription: 'Біздің барлық құрылысшыларымыз тексерілген және бұрынғы клиенттермен бағаланған.',
+    browseServices: 'Қызметтерді қарау',
+    viewBuilders: 'Құрылысшыларды көру',
+    viewAllBuilders: 'Барлық құрылысшыларды көру',
+    noBuildersAvailable: 'Казіргі моментте құрылысшылар жоқ',
+    yearsExperience: 'жыл тәжірибе',
   },
 
   // Auth
