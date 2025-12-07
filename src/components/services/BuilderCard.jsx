@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import './BuilderCard.css';
 
-const BuilderCard = ({ builder, onClick }) => {
+const BuilderCard = ({ builder, onClick, avatarUrl }) => {
   const { t } = useLanguage();
   const [avatarLoading, setAvatarLoading] = useState(true);
 
@@ -43,11 +43,11 @@ const BuilderCard = ({ builder, onClick }) => {
     <div className="builder-card" onClick={onClick}>
       <div className="builder-card-header">
         <div className="builder-avatar">
-          {builder.avatarLink ? (
+          {avatarUrl ? (
             <>
               {avatarLoading && <div className="builder-avatar-shimmer"></div>}
               <img
-                src={builder.avatarLink}
+                src={avatarUrl}
                 alt={builder.getDisplayName()}
                 className={avatarLoading ? 'loading' : 'loaded'}
                 onLoad={() => setAvatarLoading(false)}

@@ -204,6 +204,12 @@ export const ru = {
     otpInvalid: 'Код должен содержать 4 цифры',
     otpSendFailed: 'Не удалось отправить код',
     resetPasswordFailed: 'Не удалось сбросить пароль',
+    checkingPhone: 'Проверка номера телефона...',
+    phoneAvailable: 'Номер телефона доступен',
+    phoneNotAvailable: 'Этот номер телефона уже зарегистрирован',
+    phoneNoWhatsapp: 'Требуется аккаунт WhatsApp',
+    whatsappRequired: 'WhatsApp необходим для уведомлений и верификации',
+    whatsappExplanation: 'Мы используем WhatsApp для отправки OTP-кодов и важных уведомлений о ваших заказах и предложениях',
   },
 
   // Privacy Policy

@@ -205,6 +205,12 @@ export const kk = {
     otpInvalid: 'Код 4 саннан тұруы керек',
     otpSendFailed: 'Кодты жіберу сәтсіз аяқталды',
     resetPasswordFailed: 'Құпия сөзді қалпына келтіру сәтсіз аяқталды',
+    checkingPhone: 'Телефон номері тексерілуде...',
+    phoneAvailable: 'Телефон номері қолжетімді',
+    phoneNotAvailable: 'Бұл телефон номері әлдеқашан тіркелген',
+    phoneNoWhatsapp: 'WhatsApp аккаунты қажет',
+    whatsappRequired: 'WhatsApp хабарландырулар мен растау үшін керек',
+    whatsappExplanation: 'Біз сіздің тапсырыстарыңыз бен ұсыныстарыңыз туралы OTP кодтарын және маңызды хабарландыруларды жіберу үшін WhatsApp қолданамыз',
   },
 
   // Privacy Policy

@@ -204,6 +204,12 @@ export const en = {
     otpInvalid: 'Verification code must be 4 digits',
     otpSendFailed: 'Failed to send verification code',
     resetPasswordFailed: 'Failed to reset password',
+    checkingPhone: 'Checking phone number...',
+    phoneAvailable: 'Phone number is available',
+    phoneNotAvailable: 'This phone number is already registered',
+    phoneNoWhatsapp: 'WhatsApp account required',
+    whatsappRequired: 'WhatsApp is required for notifications and verification',
+    whatsappExplanation: 'We use WhatsApp to send OTP codes and important notifications about your orders and offers',
   },
 
   // Privacy Policy

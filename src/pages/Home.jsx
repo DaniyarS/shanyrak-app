@@ -87,6 +87,7 @@ const Home = () => {
                       const unitTranslationMap = {
                         // Area-based units (API returns these)
                         'm2': t('offers.perM2'),
+                        'perM2': t('offers.perM2'),
                         'areaM2': t('offers.perM2'),
                         'aream2': t('offers.perM2'),
                         'sqm': t('offers.perM2'),
@@ -101,12 +102,15 @@ const Home = () => {
                         'hour': t('offers.perHour'),
                         'hr': t('offers.perHour'),
                         'hours': t('offers.perHour'),
+                        'perHour': t('offers.perHour'),
                         'day': t('offers.perDay'),
                         'daily': t('offers.perDay'),
                         'days': t('offers.perDay'),
+                        'perDay': t('offers.perDay'),
                         
                         // Quantity-based units
                         'unit': t('offers.perUnit'),
+                        'perUnit': t('offers.perUnit'),
                         'piece': t('offers.perItem'),
                         'pieces': t('offers.perItem'),
                         'pcs': t('offers.perItem'),
@@ -270,6 +274,7 @@ const Home = () => {
                       const unitTranslationMap = {
                         // Area-based units (API returns these)
                         'm2': t('offers.perM2'),
+                        'perM2': t('offers.perM2'),
                         'areaM2': t('offers.perM2'),
                         'aream2': t('offers.perM2'),
                         'sqm': t('offers.perM2'),
@@ -284,12 +289,15 @@ const Home = () => {
                         'hour': t('offers.perHour'),
                         'hr': t('offers.perHour'),
                         'hours': t('offers.perHour'),
+                        'perHour': t('offers.perHour'),
                         'day': t('offers.perDay'),
                         'daily': t('offers.perDay'),
                         'days': t('offers.perDay'),
+                        'perDay': t('offers.perDay'),
                         
                         // Quantity-based units
                         'unit': t('offers.perUnit'),
+                        'perUnit': t('offers.perUnit'),
                         'piece': t('offers.perItem'),
                         'pieces': t('offers.perItem'),
                         'pcs': t('offers.perItem'),

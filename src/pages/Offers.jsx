@@ -38,12 +38,16 @@ const Offers = () => {
   const getUnitText = (unit) => {
     const units = {
       m2: t('offers.perM2'),
+      perM2: t('offers.perM2'),
       unit: t('offers.perUnit'),
+      perUnit: t('offers.perUnit'),
       hour: t('offers.perHour'),
+      perHour: t('offers.perHour'),
       day: t('offers.perDay'),
+      perDay: t('offers.perDay'),
       fixed: t('offers.fixedPrice'),
     };
-    return units[unit] || unit;
+    return units[unit] || units[unit?.toLowerCase()] || unit;
   };
 
   const getOfferStatusBadge = (status) => {

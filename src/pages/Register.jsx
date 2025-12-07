@@ -68,6 +68,12 @@ const Register = () => {
   const [otpSent, setOtpSent] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const [otpExpiresIn, setOtpExpiresIn] = useState(300);
+  const [phoneValidation, setPhoneValidation] = useState({
+    checked: false,
+    available: null,
+    hasWhatsapp: null,
+    loading: false
+  });
 
   // Countdown timer for OTP resend
   useEffect(() => {
@@ -123,12 +129,59 @@ const Register = () => {
     }
   };
 
+  const validatePhone = async (phone) => {
+    if (!phone || phone.length !== 11) return;
+    
+    setPhoneValidation(prev => ({ ...prev, loading: true }));
+    
+    try {
+      const result = await authService.checkPhone(phone);
+      setPhoneValidation({
+        checked: true,
+        available: result.available,
+        hasWhatsapp: result.hasWhatsapp,
+        loading: false
+      });
+      
+      // Clear any existing phone validation errors
+      if (errors.phone && (result.available === false || result.hasWhatsapp === false)) {
+        // Let the error show from validation result
+      } else if (result.available && result.hasWhatsapp) {
+        setErrors(prev => ({ ...prev, phone: '' }));
+      }
+    } catch (error) {
+      console.error('Phone validation error:', error);
+      setPhoneValidation({
+        checked: false,
+        available: null,
+        hasWhatsapp: null,
+        loading: false
+      });
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
+    
+    // Reset validation state when phone changes
+    if (name === 'phone') {
+      setPhoneValidation({
+        checked: false,
+        available: null,
+        hasWhatsapp: null,
+        loading: false
+      });
+      
+      // Validate phone after a short delay to allow user to finish typing
+      if (value && value.length === 11) {
+        setTimeout(() => validatePhone(value), 500);
+      }
+    }
+    
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
@@ -265,6 +318,10 @@ const Register = () => {
       newErrors.phone = t('validation.phoneRequired');
     } else if (!/^7\d{10}$/.test(formData.phone)) {
       newErrors.phone = t('validation.phoneInvalid');
+    } else if (phoneValidation.checked && phoneValidation.available === false) {
+      newErrors.phone = t('validation.phoneNotAvailable');
+    } else if (phoneValidation.checked && phoneValidation.hasWhatsapp === false) {
+      newErrors.phone = t('validation.phoneNoWhatsapp');
     }
 
     if (!formData.password) {
@@ -370,7 +427,7 @@ const Register = () => {
     if (!validateStep3()) return;
 
     setLoading(true);
-    const { confirmPassword, ...userData } = formData;
+    const { confirmPassword: _confirmPassword, ...userData } = formData;
     const result = await register(userData);
     setLoading(false);
 
@@ -594,13 +651,48 @@ const Register = () => {
                 required
               />
 
-              <PhoneInput
-                label={t('auth.phoneNumber')}
-                value={formData.phone}
-                onChange={handleChange}
-                error={errors.phone}
-                required
-              />
+              <div className="phone-input-section">
+                <PhoneInput
+                  label={t('auth.phoneNumber')}
+                  value={formData.phone}
+                  onChange={handleChange}
+                  error={errors.phone}
+                  required
+                />
+                
+                {/* Phone validation status */}
+                {phoneValidation.loading && (
+                  <div className="phone-validation-status">
+                    <span className="status-indicator loading">⏳</span>
+                    <span>{t('validation.checkingPhone')}</span>
+                  </div>
+                )}
+                
+                {phoneValidation.checked && phoneValidation.available && phoneValidation.hasWhatsapp && (
+                  <div className="phone-validation-status success">
+                    <span className="status-indicator">✓</span>
+                    <span>{t('validation.phoneAvailable')}</span>
+                  </div>
+                )}
+                
+                {phoneValidation.checked && !phoneValidation.available && (
+                  <div className="phone-validation-status error">
+                    <span className="status-indicator">✕</span>
+                    <span>{t('validation.phoneNotAvailable')}</span>
+                  </div>
+                )}
+                
+                {phoneValidation.checked && phoneValidation.available && !phoneValidation.hasWhatsapp && (
+                  <div className="phone-validation-status error">
+                    <span className="status-indicator">✕</span>
+                    <span>{t('validation.phoneNoWhatsapp')}</span>
+                    <span className="whatsapp-explanation">
+                      <span className="explanation-icon" title={t('validation.whatsappExplanation')}>ℹ️</span>
+                      {t('validation.whatsappRequired')}
+                    </span>
+                  </div>
+                )}
+              </div>
 
               <Input
                 label={t('auth.password')}

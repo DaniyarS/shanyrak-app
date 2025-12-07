@@ -268,3 +268,17 @@
 .category-item.builder-category:hover {
   background: rgba(59, 130, 246, 0.1);
 }
+
+/* Clear option styles */
+.category-item.clear-option {
+  font-weight: 600;
+  color: var(--color-text-secondary, #6b7280);
+  font-style: italic;
+  padding-left: 1rem;
+  border-bottom: 2px solid var(--color-border-light, #f3f4f6);
+}
+
+.category-item.clear-option:hover {
+  background-color: rgba(107, 114, 128, 0.1);
+  color: var(--color-text-primary, #374151);
+}

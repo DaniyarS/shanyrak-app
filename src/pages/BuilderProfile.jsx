@@ -11,6 +11,7 @@ import AvatarUpload from '../components/AvatarUpload';
 import PortfolioGallery from '../components/PortfolioGallery';
 import CascadingCategorySelect from '../components/CascadingCategorySelect';
 import DeleteAccountDialog from '../components/DeleteAccountDialog';
+import AddCategoryModal from '../components/AddCategoryModal';
 import './BuilderProfile.css';
 
 const BuilderProfile = () => {
@@ -23,16 +24,9 @@ const BuilderProfile = () => {
   const [builderData, setBuilderData] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState('');
   const [portfolioPhotos, setPortfolioPhotos] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [showAddCategory, setShowAddCategory] = useState(false);
+  const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [addingCategory, setAddingCategory] = useState(false);
   const [deletingCategory, setDeletingCategory] = useState(null);
-  const [addCategoryForm, setAddCategoryForm] = useState({
-    categoryPublicId: '',
-    price: '',
-    description: ''
-  });
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -55,7 +49,6 @@ const BuilderProfile = () => {
   useEffect(() => {
     fetchBuilderProfile();
     fetchAvatar();
-    fetchCategories();
   }, []);
 
   useEffect(() => {
@@ -126,18 +119,6 @@ const BuilderProfile = () => {
     }
   };
 
-  const fetchCategories = async () => {
-    try {
-      const getCategoryTreeUseCase = container.getGetCategoryTreeUseCase();
-      const result = await getCategoryTreeUseCase.execute();
-
-      if (result.success) {
-        setCategories(result.categories);
-      }
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-    }
-  };
 
   const handleAvatarUpdate = (newAvatarUrl) => {
     setAvatarUrl(newAvatarUrl);
@@ -155,105 +136,16 @@ const BuilderProfile = () => {
     setPortfolioPhotos(portfolioPhotos.filter(photo => photo.id !== photoId));
   };
 
-  const handleAddCategoryFormChange = (e) => {
-    const { name, value } = e.target;
-    setAddCategoryForm(prev => ({
-      ...prev,
-      [name]: value
-    }));
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
-    }
-  };
-
-  const handleCategorySelect = (eventOrId) => {
-    // Handle both event object and direct ID value
-    const categoryId = eventOrId?.target?.value || eventOrId;
-    
-    setAddCategoryForm(prev => ({
-      ...prev,
-      categoryPublicId: categoryId
-    }));
-    
-    // Clear category-related error immediately
-    if (categoryId) {
-      setErrors(prev => {
-        const newErrors = { ...prev };
-        delete newErrors.categoryPublicId;
-        return newErrors;
-      });
-    }
-  };
-
-  const handleAddCategory = async (e) => {
-    e.preventDefault();
-
-    if (!addCategoryForm.categoryPublicId) {
-      setErrors(prev => ({ ...prev, categoryPublicId: 'Please select a category' }));
-      return;
-    }
-
-    if (!addCategoryForm.price || parseFloat(addCategoryForm.price) <= 0) {
-      setErrors(prev => ({ ...prev, price: 'Please enter a valid price' }));
-      return;
-    }
-
-    setAddingCategory(true);
-    try {
-      const addCategoryUseCase = container.getAddBuilderCategoryUseCase();
-      const result = await addCategoryUseCase.execute(builderData.id, {
-        category: {
-          publicId: addCategoryForm.categoryPublicId
-        },
-        price: addCategoryForm.price,
-        description: addCategoryForm.description
-      });
-
-      if (result.success) {
-        // If backend returns updated builder data, use it; otherwise update locally
-        if (result.builder && result.builder.priceList) {
-          setBuilderData(prevData => ({
-            ...prevData,
-            priceList: result.builder.priceList
-          }));
-        } else {
-          // Fallback: Create the new category locally
-          const findCategoryById = (cats, targetId) => {
-            for (const cat of cats) {
-              if (cat.id === targetId) return cat;
-              if (cat.children && cat.children.length > 0) {
-                const found = findCategoryById(cat.children, targetId);
-                if (found) return found;
-              }
-            }
-            return null;
-          };
-          
-          const selectedCategory = findCategoryById(categories, addCategoryForm.categoryPublicId);
-          const newCategory = {
-            id: Date.now(), // Temporary ID until next page refresh
-            category: selectedCategory,
-            price: parseFloat(addCategoryForm.price),
-            description: addCategoryForm.description
-          };
-          
-          setBuilderData(prevData => ({
-            ...prevData,
-            priceList: [...(prevData.priceList || []), newCategory]
-          }));
-        }
-        
-        setAddCategoryForm({ categoryPublicId: '', price: '', description: '' });
-        setShowAddCategory(false);
-        setErrors({}); // Clear all errors on success
-      } else {
-        setErrors(result.errors || { submit: t('profile.addCategoryFailed') });
-      }
-    } catch (error) {
-      console.error('Error adding category:', error);
-      setErrors({ submit: t('profile.addCategoryFailed') });
-    } finally {
-      setAddingCategory(false);
+  const handleAddCategorySuccess = (result) => {
+    // If backend returns updated builder data, use it; otherwise refresh the profile
+    if (result.builder && result.builder.priceList) {
+      setBuilderData(prevData => ({
+        ...prevData,
+        priceList: result.builder.priceList
+      }));
+    } else {
+      // Refresh the entire builder profile to get updated data
+      fetchBuilderProfile();
     }
   };
 
@@ -646,7 +538,7 @@ const BuilderProfile = () => {
                 <h3>{t('profile.serviceCategories')}</h3>
                 <Button
                   variant="outline"
-                  onClick={() => setShowAddCategory(true)}
+                  onClick={() => setShowAddCategoryModal(true)}
                 >
                   {t('profile.addCategory')}
                 </Button>
@@ -684,67 +576,6 @@ const BuilderProfile = () => {
                 <p>{t('profile.noCategoriesYet')}</p>
               )}
 
-              {/* Add Category Form */}
-              {showAddCategory && (
-                <div className="add-category-form">
-                  <h4>{t('profile.addNewCategory')}</h4>
-                  <form onSubmit={handleAddCategory}>
-                    <CascadingCategorySelect
-                      label={t('profile.selectCategory')}
-                      categories={categories}
-                      value={addCategoryForm.categoryPublicId}
-                      onChange={handleCategorySelect}
-                      error={errors.categoryPublicId}
-                      required
-                    />
-                    
-                    <Input
-                      label={t('profile.price')}
-                      name="price"
-                      type="number"
-                      step="0.01"
-                      value={addCategoryForm.price}
-                      onChange={handleAddCategoryFormChange}
-                      error={errors.price}
-                      required
-                    />
-                    
-                    <div className="input-wrapper">
-                      <label className="input-label">{t('profile.description')}</label>
-                      <textarea
-                        name="description"
-                        value={addCategoryForm.description}
-                        onChange={handleAddCategoryFormChange}
-                        placeholder={t('profile.categoryDescription')}
-                        className="input"
-                        rows="3"
-                      />
-                    </div>
-
-                    {errors.submit && (
-                      <div className="error-message">{errors.submit}</div>
-                    )}
-
-                    <div className="form-actions">
-                      <Button type="submit" variant="primary" disabled={addingCategory}>
-                        {addingCategory ? t('common.loading') : t('profile.addCategory')}
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        disabled={addingCategory}
-                        onClick={() => {
-                          setShowAddCategory(false);
-                          setAddCategoryForm({ categoryPublicId: '', price: '', description: '' });
-                          setErrors({}); // Clear all errors when canceling
-                        }}
-                      >
-                        {t('common.cancel')}
-                      </Button>
-                    </div>
-                  </form>
-                </div>
-              )}
             </div>
 
             {/* Portfolio Section */}
@@ -789,6 +620,13 @@ const BuilderProfile = () => {
           </p>
         </div>
       </div>
+
+      <AddCategoryModal
+        isOpen={showAddCategoryModal}
+        onClose={() => setShowAddCategoryModal(false)}
+        onSuccess={handleAddCategorySuccess}
+        builderData={builderData}
+      />
 
       <DeleteAccountDialog
         isOpen={showDeleteDialog}
