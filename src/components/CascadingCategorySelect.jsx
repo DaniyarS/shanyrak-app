@@ -17,6 +17,8 @@ const CascadingCategorySelect = ({
   inputId,
   className = '',
   disabled = false,
+  allowClear = false,
+  clearLabel = 'All Categories',
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentLevel, setCurrentLevel] = useState(categories);
@@ -121,6 +123,20 @@ const CascadingCategorySelect = ({
     }
   };
 
+  const handleClearSelection = () => {
+    const eventObject = {
+      target: {
+        name: 'categoryId',
+        value: '',
+      },
+    };
+    onChange(eventObject);
+    setSelectedPath('');
+    setIsOpen(false);
+    setCurrentLevel(categories);
+    setBreadcrumb([]);
+  };
+
   return (
     <div className={`cascading-category-select ${className}`} ref={dropdownRef}>
       {label && (
@@ -188,6 +204,16 @@ const CascadingCategorySelect = ({
 
           {/* Category list */}
           <div className="category-list">
+            {/* Show "All Categories" option at root level when allowClear is enabled */}
+            {allowClear && breadcrumb.length === 0 && (
+              <div
+                className="category-item leaf clear-option"
+                onClick={handleClearSelection}
+              >
+                <span className="category-name">{clearLabel}</span>
+              </div>
+            )}
+            
             {currentLevel.map((category, index) => {
               // Determine additional classes for builder categories
               let additionalClasses = '';
