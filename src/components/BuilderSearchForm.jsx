@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import Select from './Select';
-import CascadingCategorySelect from './CascadingCategorySelect';
 import Card from './Card';
 import './BuilderSearchForm.css';
 
@@ -17,26 +16,7 @@ const BuilderSearchForm = ({ categories, cities, onSearch, loading }) => {
     availability: ''
   });
 
-  // Auto-search when filters change
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      handleSearch();
-    }, 500); // Debounce search by 500ms
-
-    return () => clearTimeout(timer);
-  }, [filters]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFilters(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleCategoryChange = (eventOrId) => {
-    const categoryId = eventOrId?.target?.value || eventOrId;
-    setFilters(prev => ({ ...prev, categoryPublicId: categoryId }));
-  };
-
-  const handleSearch = () => {
+  const handleSearch = useCallback(() => {
     // Filter out empty values
     const activeFilters = Object.entries(filters).reduce((acc, [key, value]) => {
       if (value && value.toString().trim() !== '') {
@@ -46,6 +26,42 @@ const BuilderSearchForm = ({ categories, cities, onSearch, loading }) => {
     }, {});
 
     onSearch(activeFilters);
+  }, [filters, onSearch]);
+
+  // Auto-search when filters change
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      handleSearch();
+    }, 500); // Debounce search by 500ms
+
+    return () => clearTimeout(timer);
+  }, [filters, handleSearch]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFilters(prev => ({ ...prev, [name]: value }));
+  };
+
+  // Helper function to flatten category tree for dropdown
+  const flattenCategories = (categories, prefix = '') => {
+    let flattened = [];
+    
+    categories.forEach(category => {
+      // Add current category
+      const categoryName = prefix ? `${prefix} · ${category.name}` : category.name;
+      flattened.push({
+        value: category.id,
+        label: categoryName
+      });
+      
+      // Add children recursively
+      if (category.children && category.children.length > 0) {
+        const childCategories = flattenCategories(category.children, categoryName);
+        flattened = flattened.concat(childCategories);
+      }
+    });
+    
+    return flattened;
   };
 
   const handleReset = () => {
@@ -98,10 +114,13 @@ const BuilderSearchForm = ({ categories, cities, onSearch, loading }) => {
             name="city"
             value={filters.city}
             onChange={handleInputChange}
-            options={cities.map((city) => ({
-              value: city.getLocalizedName(language),
-              label: city.getLocalizedName(language),
-            }))}
+            options={[
+              { value: '', label: t('builders.allCities') },
+              ...cities.map((city) => ({
+                value: city.getLocalizedName(language),
+                label: city.getLocalizedName(language),
+              }))
+            ]}
             placeholder={t('builders.allCities')}
             disabled={loading}
             className="search-form-select"
@@ -112,14 +131,18 @@ const BuilderSearchForm = ({ categories, cities, onSearch, loading }) => {
         {/* Category */}
         <div className="form-field">
           <label htmlFor="search-form-category" className="form-label">{t('orders.category')}</label>
-          <CascadingCategorySelect
-            categories={categories}
+          <Select
+            name="categoryPublicId"
             value={filters.categoryPublicId}
-            onChange={handleCategoryChange}
+            onChange={handleInputChange}
+            options={[
+              { value: '', label: t('builders.allCategories') },
+              ...flattenCategories(categories)
+            ]}
             placeholder={t('builders.allCategories')}
             disabled={loading}
-            className="search-form-category"
-            inputId="search-form-category"
+            className="search-form-select"
+            controlId="search-form-category"
           />
         </div>
 

@@ -79,6 +79,20 @@ export const ru = {
     completedJobs: 'Выполненных работ',
     serviceCategories: 'Категорий услуг',
     averageRating: 'Средний рейтинг',
+    
+    exploreServices: 'Изучите наши услуги',
+    exploreServicesDescription: 'Найдите квалифицированных специалистов и просматривайте категории услуг, чтобы найти именно то, что нужно для вашей недвижимости.',
+    findExperts: 'Найти строителей',
+    findExpertsDescription: 'Свяжитесь с проверенными строителями и подрядчиками в вашем районе для качественного обслуживания.',
+    browseCategories: 'Обзор категорий',
+    browseCategoriesDescription: 'Изучите наш широкий спектр категорий услуг от сантехники до строительства.',
+    verifiedBuilders: 'Проверенные специалисты',
+    verifiedBuildersDescription: 'Все наши строители проверены и оценены предыдущими клиентами.',
+    browseServices: 'Просмотреть услуги',
+    viewBuilders: 'Посмотреть строителей',
+    viewAllBuilders: 'Посмотреть всех строителей',
+    noBuildersAvailable: 'На данный момент строители недоступны',
+    yearsExperience: 'лет опыта',
   },
 
   // Auth
@@ -134,6 +148,10 @@ export const ru = {
     passwordResetSuccess: 'Пароль успешно сброшен',
     redirectingToLogin: 'Перенаправление на вход...',
     backToLogin: 'Вернуться ко входу',
+    authRequired: 'Требуется авторизация',
+    authRequiredMessage: 'Пожалуйста, войдите или зарегистрируйтесь для доступа к этой функции',
+    authPromptDescription: 'Вы должны быть авторизованы для просмотра контактной информации строителя',
+    phoneNumberAuthRequired: 'Для просмотра номера телефона требуется вход в систему',
   },
 
   // Registration Flow
@@ -204,6 +222,12 @@ export const ru = {
     otpInvalid: 'Код должен содержать 4 цифры',
     otpSendFailed: 'Не удалось отправить код',
     resetPasswordFailed: 'Не удалось сбросить пароль',
+    checkingPhone: 'Проверка номера телефона...',
+    phoneAvailable: 'Номер телефона доступен',
+    phoneNotAvailable: 'Этот номер телефона уже зарегистрирован',
+    phoneNoWhatsapp: 'Требуется аккаунт WhatsApp',
+    whatsappRequired: 'WhatsApp необходим для уведомлений и верификации',
+    whatsappExplanation: 'Мы используем WhatsApp для отправки OTP-кодов и важных уведомлений о ваших заказах и предложениях',
   },
 
   // Privacy Policy

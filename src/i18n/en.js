@@ -79,6 +79,20 @@ export const en = {
     completedJobs: 'Completed Jobs',
     serviceCategories: 'Service Categories',
     averageRating: 'Average Rating',
+    
+    exploreServices: 'Explore Our Services',
+    exploreServicesDescription: 'Discover qualified professionals and browse service categories to find exactly what you need for your property.',
+    findExperts: 'Find Expert Builders',
+    findExpertsDescription: 'Connect with verified builders and contractors in your area for quality service.',
+    browseCategories: 'Browse Categories',
+    browseCategoriesDescription: 'Explore our wide range of service categories from plumbing to construction.',
+    verifiedBuilders: 'Verified Professionals',
+    verifiedBuildersDescription: 'All our builders are verified and rated by previous customers.',
+    browseServices: 'Browse Services',
+    viewBuilders: 'View Builders',
+    viewAllBuilders: 'View All Builders',
+    noBuildersAvailable: 'No builders available at the moment',
+    yearsExperience: 'years experience',
   },
 
   // Auth
@@ -134,6 +148,10 @@ export const en = {
     passwordResetSuccess: 'Password Reset Successful',
     redirectingToLogin: 'Redirecting to login...',
     backToLogin: 'Back to Login',
+    authRequired: 'Authentication Required',
+    authRequiredMessage: 'Please login or register to access this feature',
+    authPromptDescription: 'You need to be logged in to view builder contact information',
+    phoneNumberAuthRequired: 'Login required to view phone number',
   },
 
   // Registration Flow
@@ -204,6 +222,12 @@ export const en = {
     otpInvalid: 'Verification code must be 4 digits',
     otpSendFailed: 'Failed to send verification code',
     resetPasswordFailed: 'Failed to reset password',
+    checkingPhone: 'Checking phone number...',
+    phoneAvailable: 'Phone number is available',
+    phoneNotAvailable: 'This phone number is already registered',
+    phoneNoWhatsapp: 'WhatsApp account required',
+    whatsappRequired: 'WhatsApp is required for notifications and verification',
+    whatsappExplanation: 'We use WhatsApp to send OTP codes and important notifications about your orders and offers',
   },
 
   // Privacy Policy

@@ -271,3 +271,76 @@
     font-size: var(--font-size-sm);
   }
 }
+
+/* Auth Modal Specific Styles */
+.auth-modal {
+  max-width: 480px;
+}
+
+.auth-prompt {
+  text-align: center;
+  padding: var(--spacing-4) 0;
+}
+
+.auth-icon {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-4);
+  opacity: 0.8;
+}
+
+.auth-message {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-3) 0;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.auth-submessage {
+  color: var(--color-text-secondary);
+  margin: 0 0 var(--spacing-6) 0;
+  line-height: 1.6;
+}
+
+.auth-modal .modal-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-3);
+  padding: 0 var(--spacing-6);
+  margin-bottom: var(--spacing-4);
+}
+
+.auth-button {
+  width: 100%;
+  justify-content: center;
+}
+
+.auth-cancel {
+  padding: 0 var(--spacing-6) var(--spacing-6);
+  text-align: center;
+}
+
+.auth-cancel .button {
+  color: var(--color-text-secondary);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+  .auth-modal {
+    max-width: 95vw;
+    margin: var(--spacing-4);
+  }
+  
+  .auth-icon {
+    font-size: 2.5rem;
+  }
+  
+  .auth-message {
+    font-size: var(--font-size-base);
+  }
+  
+  .auth-modal .modal-actions {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-2);
+  }
+}

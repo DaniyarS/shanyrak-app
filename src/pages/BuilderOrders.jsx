@@ -7,7 +7,6 @@ import Button from '../components/Button';
 import Card from '../components/Card';
 import Input from '../components/Input';
 import Select from '../components/Select';
-import CascadingCategorySelect from '../components/CascadingCategorySelect';
 import ImageSlider from '../components/ImageSlider';
 import './BuilderOrders.css';
 
@@ -30,6 +29,7 @@ const BuilderOrders = () => {
     const unitTranslationMap = {
       // Area-based units (API returns these)
       'm2': t('offers.perM2'),
+      'perM2': t('offers.perM2'),
       'areaM2': t('offers.perM2'),
       'aream2': t('offers.perM2'),
       'sqm': t('offers.perM2'),
@@ -44,12 +44,15 @@ const BuilderOrders = () => {
       'hour': t('offers.perHour'),
       'hr': t('offers.perHour'),
       'hours': t('offers.perHour'),
+      'perHour': t('offers.perHour'),
       'day': t('offers.perDay'),
       'daily': t('offers.perDay'),
       'days': t('offers.perDay'),
+      'perDay': t('offers.perDay'),
       
       // Quantity-based units
       'unit': t('offers.perUnit'),
+      'perUnit': t('offers.perUnit'),
       'piece': t('offers.perItem'),
       'pieces': t('offers.perItem'),
       'pcs': t('offers.perItem'),
@@ -225,10 +228,27 @@ const BuilderOrders = () => {
     setSearchFilters((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleCategoryChange = (eventOrId) => {
-    // Handle both event object and direct ID value
-    const categoryId = eventOrId?.target?.value || eventOrId;
-    setSearchFilters((prev) => ({ ...prev, categoryPublicId: categoryId }));
+
+  // Helper function to flatten category tree for dropdown
+  const flattenCategories = (categories, prefix = '') => {
+    let flattened = [];
+    
+    categories.forEach(category => {
+      // Add current category
+      const categoryName = prefix ? `${prefix} · ${category.name}` : category.name;
+      flattened.push({
+        value: category.id,
+        label: categoryName
+      });
+      
+      // Add children recursively
+      if (category.children && category.children.length > 0) {
+        const childCategories = flattenCategories(category.children, categoryName);
+        flattened = flattened.concat(childCategories);
+      }
+    });
+    
+    return flattened;
   };
 
   const handleSearch = async () => {
@@ -378,17 +398,24 @@ const BuilderOrders = () => {
               name="city"
               value={searchFilters.city}
               onChange={handleSearchChange}
-              options={cities.map((city) => ({
-                value: city.getLocalizedName(language),
-                label: city.getLocalizedName(language),
-              }))}
+              options={[
+                { value: '', label: t('builders.allCities') },
+                ...cities.map((city) => ({
+                  value: city.getLocalizedName(language),
+                  label: city.getLocalizedName(language),
+                }))
+              ]}
               placeholder={t('orders.filterByCity') || t('estates.cityPlaceholder')}
             />
-            <CascadingCategorySelect
+            <Select
               label={t('orders.category')}
-              categories={categories}
+              name="categoryPublicId"
               value={searchFilters.categoryPublicId}
-              onChange={handleCategoryChange}
+              onChange={handleSearchChange}
+              options={[
+                { value: '', label: t('orders.allCategories') },
+                ...flattenCategories(categories)
+              ]}
               placeholder={t('orders.allCategories')}
             />
             <Button onClick={handleSearch}>{t('common.search')}</Button>
