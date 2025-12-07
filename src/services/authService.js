@@ -2,6 +2,12 @@ import api, { createRefreshAxios } from './api';
 import authLogger from '../utils/authLogger';
 
 const authService = {
+  // Check phone number availability and WhatsApp status
+  checkPhone: async (phone) => {
+    const response = await api.post('/api/v1/auth/check-phone', { phone });
+    return response.data;
+  },
+
   // Send OTP code to phone number
   sendOtp: async (phone) => {
     const response = await api.post('/api/v1/auth/send-otp', { phone });

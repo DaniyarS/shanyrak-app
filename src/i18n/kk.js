@@ -79,6 +79,20 @@ export const kk = {
     completedJobs: 'Аяқталған жұмыстар',
     serviceCategories: 'Қызмет санаттары',
     averageRating: 'Орташа рейтинг',
+    
+    exploreServices: 'Біздің қызметтерімізбен танысыңыз',
+    exploreServicesDescription: 'Жылжымайыңыз үшін қажетті нәрсені табу үшін білікті мамандарды тап және қызмет категорияларын қараңыз.',
+    findExperts: 'Сарапшы құрылысшыларды табыңыз',
+    findExpertsDescription: 'Сапалы қызмет үшін өңіріңіздегі тексерілген құрылысшылар мен подрядшылармен байланысыңыз.',
+    browseCategories: 'Категорияларды қараңыз',
+    browseCategoriesDescription: 'Сантехникадан құрылысқа дейінгі біздің кең қызмет категорияларымызды зерттеңіз.',
+    verifiedBuilders: 'Тексерілген мамандар',
+    verifiedBuildersDescription: 'Біздің барлық құрылысшыларымыз тексерілген және бұрынғы клиенттермен бағаланған.',
+    browseServices: 'Қызметтерді қарау',
+    viewBuilders: 'Құрылысшыларды көру',
+    viewAllBuilders: 'Барлық құрылысшыларды көру',
+    noBuildersAvailable: 'Казіргі моментте құрылысшылар жоқ',
+    yearsExperience: 'жыл тәжірибе',
   },
 
   // Auth
@@ -135,6 +149,10 @@ export const kk = {
     passwordResetSuccess: 'Құпия сөз сәтті қалпына келтірілді',
     redirectingToLogin: 'Кіруге бағыттау...',
     backToLogin: 'Кіруге оралу',
+    authRequired: 'Авторизация қажет',
+    authRequiredMessage: 'Осы мүмкіндікті пайдалану үшін кіріңіз немесе тіркеліңіз',
+    authPromptDescription: 'Құрылысшының байланыс ақпаратын көру үшін сіз жүйеге кірген болуыңыз керек',
+    phoneNumberAuthRequired: 'Телефон номерін көру үшін жүйеге кіру қажет',
   },
 
   // Registration Flow
@@ -205,6 +223,12 @@ export const kk = {
     otpInvalid: 'Код 4 саннан тұруы керек',
     otpSendFailed: 'Кодты жіберу сәтсіз аяқталды',
     resetPasswordFailed: 'Құпия сөзді қалпына келтіру сәтсіз аяқталды',
+    checkingPhone: 'Телефон номері тексерілуде...',
+    phoneAvailable: 'Телефон номері қолжетімді',
+    phoneNotAvailable: 'Бұл телефон номері әлдеқашан тіркелген',
+    phoneNoWhatsapp: 'WhatsApp аккаунты қажет',
+    whatsappRequired: 'WhatsApp хабарландырулар мен растау үшін керек',
+    whatsappExplanation: 'Біз сіздің тапсырыстарыңыз бен ұсыныстарыңыз туралы OTP кодтарын және маңызды хабарландыруларды жіберу үшін WhatsApp қолданамыз',
   },
 
   // Privacy Policy
