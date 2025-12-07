@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { container } from '../infrastructure/di/ServiceContainer';
@@ -21,11 +21,37 @@ const Services = () => {
   const [cities, setCities] = useState([]);
   const [builderAvatars, setBuilderAvatars] = useState(new Map()); // Map of builderId -> avatarUrl
 
-  useEffect(() => {
-    loadInitialData();
+  const fetchBuilderAvatars = useCallback(async (buildersArray) => {
+    try {
+      const avatarsMap = new Map();
+      const baseUrl = 'https://api.shanyrak.group';
+      
+      await Promise.all(
+        buildersArray.map(async (builder) => {
+          if (builder.id) {
+            try {
+              // Use the proper files API endpoint with query parameters
+              const avatarUrl = `${baseUrl}/api/v1/files?linkType=USER_AVATAR&linkPublicId=${builder.id}`;
+              
+              // Test if the avatar URL is accessible
+              const response = await fetch(avatarUrl, { method: 'HEAD' });
+              if (response.ok) {
+                avatarsMap.set(builder.id, avatarUrl);
+              }
+            } catch (error) {
+              console.warn(`Failed to fetch avatar for builder ${builder.id}:`, error);
+            }
+          }
+        })
+      );
+      
+      setBuilderAvatars(avatarsMap);
+    } catch (error) {
+      console.error('Error fetching builder avatars:', error);
+    }
   }, []);
 
-  const loadInitialData = async () => {
+  const loadInitialData = useCallback(async () => {
     try {
       setLoading(true);
       
@@ -61,39 +87,9 @@ const Services = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [fetchBuilderAvatars]);
 
-  const fetchBuilderAvatars = async (buildersArray) => {
-    try {
-      const avatarsMap = new Map();
-      const baseUrl = 'https://api.shanyrak.group';
-      
-      await Promise.all(
-        buildersArray.map(async (builder) => {
-          if (builder.id) {
-            try {
-              // Use the proper files API endpoint with query parameters
-              const avatarUrl = `${baseUrl}/api/v1/files?linkType=USER_AVATAR&linkPublicId=${builder.id}`;
-              
-              // Test if the avatar URL is accessible
-              const response = await fetch(avatarUrl, { method: 'HEAD' });
-              if (response.ok) {
-                avatarsMap.set(builder.id, avatarUrl);
-              }
-            } catch (error) {
-              console.warn(`Failed to fetch avatar for builder ${builder.id}:`, error);
-            }
-          }
-        })
-      );
-      
-      setBuilderAvatars(avatarsMap);
-    } catch (error) {
-      console.error('Error fetching builder avatars:', error);
-    }
-  };
-
-  const handleBuilderSearch = async (filters) => {
+  const handleBuilderSearch = useCallback(async (filters) => {
     try {
       setBuildersLoading(true);
       setBuilderFilters(filters);
@@ -115,7 +111,11 @@ const Services = () => {
     } finally {
       setBuildersLoading(false);
     }
-  };
+  }, [fetchBuilderAvatars]);
+
+  useEffect(() => {
+    loadInitialData();
+  }, [loadInitialData]);
 
   const handleCategoryClick = (category) => {
     // If it's a leaf category (no children), navigate to builders page

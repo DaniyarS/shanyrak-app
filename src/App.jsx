@@ -36,14 +36,7 @@ function App() {
               <Route path="/unauthorized" element={<Unauthorized />} />
 
             {/* Protected routes with role-based access control */}
-            <Route
-              path="/services"
-              element={
-                <PrivateRoute allowedRoles={['CUSTOMER']}>
-                  <Services />
-                </PrivateRoute>
-              }
-            />
+            <Route path="/services" element={<Services />} />
             <Route
               path="/estates"
               element={

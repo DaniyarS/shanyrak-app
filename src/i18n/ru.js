@@ -134,6 +134,10 @@ export const ru = {
     passwordResetSuccess: 'Пароль успешно сброшен',
     redirectingToLogin: 'Перенаправление на вход...',
     backToLogin: 'Вернуться ко входу',
+    authRequired: 'Требуется авторизация',
+    authRequiredMessage: 'Пожалуйста, войдите или зарегистрируйтесь для доступа к этой функции',
+    authPromptDescription: 'Вы должны быть авторизованы для просмотра контактной информации строителя',
+    phoneNumberAuthRequired: 'Для просмотра номера телефона требуется вход в систему',
   },
 
   // Registration Flow

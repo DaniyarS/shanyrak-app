@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
 import { container } from '../infrastructure/di/ServiceContainer';
 import Button from './Button';
+import AuthModal from './AuthModal';
 import './BuilderProfileDialog.css';
 
 const BuilderProfileDialog = ({ isOpen, onClose, builderId }) => {
   const { t } = useLanguage();
+  const { isAuthenticated } = useAuth();
   const [builder, setBuilder] = useState(null);
   const [loading, setLoading] = useState(false);
   const [portfolioPhotos, setPortfolioPhotos] = useState([]);
@@ -13,6 +16,7 @@ const BuilderProfileDialog = ({ isOpen, onClose, builderId }) => {
   const [showContacts, setShowContacts] = useState(false);
   const [contactsLoading, setContactsLoading] = useState(false);
   const [contactInfo, setContactInfo] = useState(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   useEffect(() => {
     if (isOpen && builderId) {
@@ -76,6 +80,12 @@ const BuilderProfileDialog = ({ isOpen, onClose, builderId }) => {
   };
 
   const fetchContactInfo = async () => {
+    // Check if user is authenticated
+    if (!isAuthenticated) {
+      setShowAuthModal(true);
+      return;
+    }
+
     try {
       setContactsLoading(true);
       const getBuilderUseCase = container.getGetBuilderUseCase();
@@ -321,6 +331,14 @@ const BuilderProfileDialog = ({ isOpen, onClose, builderId }) => {
           </div>
         </div>
       )}
+
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        message={t('auth.phoneNumberAuthRequired')}
+        redirectAfterAuth="/services"
+      />
     </>
   );
 };

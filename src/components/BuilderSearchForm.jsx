@@ -16,6 +16,18 @@ const BuilderSearchForm = ({ categories, cities, onSearch, loading }) => {
     availability: ''
   });
 
+  const handleSearch = useCallback(() => {
+    // Filter out empty values
+    const activeFilters = Object.entries(filters).reduce((acc, [key, value]) => {
+      if (value && value.toString().trim() !== '') {
+        acc[key] = value;
+      }
+      return acc;
+    }, {});
+
+    onSearch(activeFilters);
+  }, [filters, onSearch]);
+
   // Auto-search when filters change
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -36,7 +48,7 @@ const BuilderSearchForm = ({ categories, cities, onSearch, loading }) => {
     
     categories.forEach(category => {
       // Add current category
-      const categoryName = prefix ? `${prefix} > ${category.name}` : category.name;
+      const categoryName = prefix ? `${prefix} · ${category.name}` : category.name;
       flattened.push({
         value: category.id,
         label: categoryName
@@ -51,18 +63,6 @@ const BuilderSearchForm = ({ categories, cities, onSearch, loading }) => {
     
     return flattened;
   };
-
-  const handleSearch = useCallback(() => {
-    // Filter out empty values
-    const activeFilters = Object.entries(filters).reduce((acc, [key, value]) => {
-      if (value && value.toString().trim() !== '') {
-        acc[key] = value;
-      }
-      return acc;
-    }, {});
-
-    onSearch(activeFilters);
-  }, [filters, onSearch]);
 
   const handleReset = () => {
     setFilters({

@@ -134,6 +134,10 @@ export const en = {
     passwordResetSuccess: 'Password Reset Successful',
     redirectingToLogin: 'Redirecting to login...',
     backToLogin: 'Back to Login',
+    authRequired: 'Authentication Required',
+    authRequiredMessage: 'Please login or register to access this feature',
+    authPromptDescription: 'You need to be logged in to view builder contact information',
+    phoneNumberAuthRequired: 'Login required to view phone number',
   },
 
   // Registration Flow

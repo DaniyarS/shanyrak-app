@@ -135,6 +135,10 @@ export const kk = {
     passwordResetSuccess: 'Құпия сөз сәтті қалпына келтірілді',
     redirectingToLogin: 'Кіруге бағыттау...',
     backToLogin: 'Кіруге оралу',
+    authRequired: 'Авторизация қажет',
+    authRequiredMessage: 'Осы мүмкіндікті пайдалану үшін кіріңіз немесе тіркеліңіз',
+    authPromptDescription: 'Құрылысшының байланыс ақпаратын көру үшін сіз жүйеге кірген болуыңыз керек',
+    phoneNumberAuthRequired: 'Телефон номерін көру үшін жүйеге кіру қажет',
   },
 
   // Registration Flow

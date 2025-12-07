@@ -1,13 +1,12 @@
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import './Navbar.css';
 
 const Navbar = () => {
-  const { user, logout, isAuthenticated } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const { language, changeLanguage, t } = useLanguage();
-  const navigate = useNavigate();
   const location = useLocation();
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
 
@@ -154,9 +153,26 @@ const Navbar = () => {
                   >
                     {t('navbar.home')}
                   </Link>
+                  <Link
+                    to="/services"
+                    className={`navbar-link ${isActive('/services') ? 'active' : ''}`}
+                    onClick={(e) => handleNavClick(e, '/services')}
+                  >
+                    {t('navbar.services')}
+                  </Link>
                 </div>
 
                 <div className="navbar-right">
+                  {/* Auth Links for non-authenticated users */}
+                  <div className="auth-links">
+                    <Link to="/login" className="navbar-auth-link">
+                      {t('auth.login')}
+                    </Link>
+                    <Link to="/register" className="navbar-auth-link primary">
+                      {t('auth.register')}
+                    </Link>
+                  </div>
+
                   {/* Language Dropdown for non-authenticated users */}
                   <div className="language-dropdown">
                     <button

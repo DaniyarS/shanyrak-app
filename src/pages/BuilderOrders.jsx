@@ -235,7 +235,7 @@ const BuilderOrders = () => {
     
     categories.forEach(category => {
       // Add current category
-      const categoryName = prefix ? `${prefix} > ${category.name}` : category.name;
+      const categoryName = prefix ? `${prefix} · ${category.name}` : category.name;
       flattened.push({
         value: category.id,
         label: categoryName
