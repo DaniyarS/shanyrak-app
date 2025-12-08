@@ -610,6 +610,8 @@ export const ru = {
     contactInfo: 'Контактная информация',
     builderNotFound: 'Мастер не найден',
     contactBuilder: 'Связаться с мастером',
+    verified: 'Подтвержден',
+    recommended: 'Рекомендуется',
   },
 
   // Profile

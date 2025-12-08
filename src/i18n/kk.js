@@ -611,6 +611,8 @@ export const kk = {
     contactInfo: 'Байланыс ақпараты',
     builderNotFound: 'Шебер табылмады',
     contactBuilder: 'Шебермен байланысу',
+    verified: 'Тексерілген',
+    recommended: 'Ұсынылады',
   },
 
   // Profile

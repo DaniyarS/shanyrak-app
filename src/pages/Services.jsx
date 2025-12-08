@@ -19,37 +19,6 @@ const Services = () => {
   const [buildersLoading, setBuildersLoading] = useState(false);
   const [, setBuilderFilters] = useState({});
   const [cities, setCities] = useState([]);
-  const [builderAvatars, setBuilderAvatars] = useState(new Map()); // Map of builderId -> avatarUrl
-
-  const fetchBuilderAvatars = useCallback(async (buildersArray) => {
-    try {
-      const avatarsMap = new Map();
-      const baseUrl = 'https://api.shanyrak.group';
-      
-      await Promise.all(
-        buildersArray.map(async (builder) => {
-          if (builder.id) {
-            try {
-              // Use the proper files API endpoint with query parameters
-              const avatarUrl = `${baseUrl}/api/v1/files?linkType=USER_AVATAR&linkPublicId=${builder.id}`;
-              
-              // Test if the avatar URL is accessible
-              const response = await fetch(avatarUrl, { method: 'HEAD' });
-              if (response.ok) {
-                avatarsMap.set(builder.id, avatarUrl);
-              }
-            } catch (error) {
-              console.warn(`Failed to fetch avatar for builder ${builder.id}:`, error);
-            }
-          }
-        })
-      );
-      
-      setBuilderAvatars(avatarsMap);
-    } catch (error) {
-      console.error('Error fetching builder avatars:', error);
-    }
-  }, []);
 
   const loadInitialData = useCallback(async () => {
     try {
@@ -76,18 +45,13 @@ const Services = () => {
       if (buildersResult.success) {
         const loadedBuilders = buildersResult.builders || [];
         setBuilders(loadedBuilders);
-        
-        // Fetch avatars for builders
-        if (loadedBuilders.length > 0) {
-          fetchBuilderAvatars(loadedBuilders);
-        }
       }
     } catch (error) {
       console.error('Failed to load initial data:', error);
     } finally {
       setLoading(false);
     }
-  }, [fetchBuilderAvatars]);
+  }, []);
 
   const handleBuilderSearch = useCallback(async (filters) => {
     try {
@@ -100,18 +64,13 @@ const Services = () => {
       if (result.success) {
         const searchedBuilders = result.builders || [];
         setBuilders(searchedBuilders);
-        
-        // Fetch avatars for searched builders
-        if (searchedBuilders.length > 0) {
-          fetchBuilderAvatars(searchedBuilders);
-        }
       }
     } catch (error) {
       console.error('Builder search failed:', error);
     } finally {
       setBuildersLoading(false);
     }
-  }, [fetchBuilderAvatars]);
+  }, []);
 
   useEffect(() => {
     loadInitialData();
@@ -180,7 +139,6 @@ const Services = () => {
           <BuildersList
             builders={builders}
             loading={buildersLoading}
-            builderAvatars={builderAvatars}
           />
         </div>
 

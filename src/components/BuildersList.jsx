@@ -4,7 +4,7 @@ import BuilderCard from './services/BuilderCard';
 import BuilderProfileDialog from './BuilderProfileDialog';
 import './BuildersList.css';
 
-const BuildersList = ({ builders, loading, builderAvatars }) => {
+const BuildersList = ({ builders, loading }) => {
   const { t } = useLanguage();
   const [selectedBuilderId, setSelectedBuilderId] = useState(null);
   const [showDialog, setShowDialog] = useState(false);
@@ -63,7 +63,7 @@ const BuildersList = ({ builders, loading, builderAvatars }) => {
           <BuilderCard
             key={builder.id}
             builder={builder}
-            avatarUrl={builderAvatars?.get(builder.id)}
+            avatarUrl={builder.avatarLink}
             onClick={() => handleBuilderClick(builder)}
           />
         ))}
