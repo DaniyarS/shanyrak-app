@@ -119,16 +119,6 @@ const BuilderProfileDialog = ({ isOpen, onClose, builderId }) => {
     setSelectedPortfolioImage(null);
   };
 
-  const getPortfolioImageUrl = (photo) => {
-    const baseUrl = 'https://api.shanyrak.group';
-    return `${baseUrl}/api/v1/files?linkType=BUILDER_PORTFOLIO&linkPublicId=${photo.id || photo.publicId}`;
-  };
-
-  const getBuilderAvatarUrl = (builderId) => {
-    const baseUrl = 'https://api.shanyrak.group';
-    return `${baseUrl}/api/v1/files?linkType=USER_AVATAR&linkPublicId=${builderId}`;
-  };
-
   if (!isOpen) return null;
 
   return (
@@ -159,9 +149,9 @@ const BuilderProfileDialog = ({ isOpen, onClose, builderId }) => {
                 {/* Builder Header */}
                 <div className="builder-header">
                   <div className="builder-avatar-large">
-                    {builder.id ? (
-                      <img 
-                        src={getBuilderAvatarUrl(builder.id)} 
+                    {builder.avatarLink ? (
+                      <img
+                        src={builder.avatarLink}
                         alt={builder.fullName}
                         className="avatar-image-large"
                         onError={(e) => {
@@ -170,7 +160,7 @@ const BuilderProfileDialog = ({ isOpen, onClose, builderId }) => {
                         }}
                       />
                     ) : null}
-                    <div className="avatar-placeholder-large" style={{ display: builder.id ? 'none' : 'flex' }}>
+                    <div className="avatar-placeholder-large" style={{ display: builder.avatarLink ? 'none' : 'flex' }}>
                       {(builder.fullName || builder.firstName || 'B').charAt(0).toUpperCase()}
                     </div>
                   </div>
@@ -271,13 +261,13 @@ const BuilderProfileDialog = ({ isOpen, onClose, builderId }) => {
                     <h4>{t('profile.portfolio')}</h4>
                     <div className="portfolio-grid">
                       {portfolioPhotos.map((photo, index) => (
-                        <div 
-                          key={photo.id || index} 
+                        <div
+                          key={photo.id || index}
                           className="portfolio-item"
                           onClick={() => handlePortfolioImageClick(photo)}
                         >
                           <img
-                            src={getPortfolioImageUrl(photo)}
+                            src={photo.url}
                             alt={`Portfolio ${index + 1}`}
                             className="portfolio-image"
                           />
@@ -316,7 +306,7 @@ const BuilderProfileDialog = ({ isOpen, onClose, builderId }) => {
       {selectedPortfolioImage && (
         <div className="portfolio-modal-overlay" onClick={closePortfolioImage}>
           <div className="portfolio-modal-content">
-            <button 
+            <button
               className="portfolio-close-button"
               onClick={closePortfolioImage}
               aria-label={t('common.close')}
@@ -324,7 +314,7 @@ const BuilderProfileDialog = ({ isOpen, onClose, builderId }) => {
               ✕
             </button>
             <img
-              src={getPortfolioImageUrl(selectedPortfolioImage)}
+              src={selectedPortfolioImage.url}
               alt="Portfolio"
               className="portfolio-modal-image"
             />

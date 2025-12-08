@@ -42,28 +42,41 @@ const BuilderCard = ({ builder, onClick, avatarUrl }) => {
   return (
     <div className="builder-card" onClick={onClick}>
       <div className="builder-card-header">
-        <div className="builder-avatar">
-          {avatarUrl ? (
-            <>
-              {avatarLoading && <div className="builder-avatar-shimmer"></div>}
-              <img
-                src={avatarUrl}
-                alt={builder.getDisplayName()}
-                className={avatarLoading ? 'loading' : 'loaded'}
-                onLoad={() => setAvatarLoading(false)}
-                onError={() => setAvatarLoading(false)}
-              />
-            </>
-          ) : (
-            <div className="avatar-placeholder">
-              {builder.getDisplayName().charAt(0).toUpperCase()}
+        <div className={`builder-avatar-wrapper ${builder.isRecommended() ? 'recommended' : ''}`}>
+          <div className="builder-avatar">
+            {avatarUrl ? (
+              <>
+                {avatarLoading && <div className="builder-avatar-shimmer"></div>}
+                <img
+                  src={avatarUrl}
+                  alt={builder.getDisplayName()}
+                  className={avatarLoading ? 'loading' : 'loaded'}
+                  onLoad={() => setAvatarLoading(false)}
+                  onError={() => setAvatarLoading(false)}
+                />
+              </>
+            ) : (
+              <div className="avatar-placeholder">
+                {builder.getDisplayName().charAt(0).toUpperCase()}
+              </div>
+            )}
+          </div>
+          {builder.isRecommended() && (
+            <div className="recommended-badge" title={t('builders.recommended')}>
+              👍
             </div>
           )}
         </div>
         <div className="builder-info">
           <div className="builder-name-row">
             <h3 className="builder-name">{builder.getDisplayName()}</h3>
-            <span className={`status-indicator ${builder.isAvailable() ? 'online' : 'offline'}`}></span>
+            {builder.isVerified() && (
+              <div className="verified-badge" title={t('builders.verified')}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+            )}
           </div>
           <div className="builder-rating">
             {renderStars(builder.ratingAvg)}

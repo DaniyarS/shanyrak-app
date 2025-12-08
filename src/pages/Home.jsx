@@ -5,6 +5,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { container } from '../infrastructure/di/ServiceContainer';
 import Button from '../components/Button';
 import Card from '../components/Card';
+import BuilderCard from '../components/services/BuilderCard';
 import './Home.css';
 
 const Home = () => {
@@ -15,7 +16,6 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [showcaseBuilders, setShowcaseBuilders] = useState([]);
   const [showcaseBuildersLoading, setShowcaseBuildersLoading] = useState(false);
-  const [showcaseBuilderAvatars, setShowcaseBuilderAvatars] = useState(new Map());
 
   useEffect(() => {
     if (isAuthenticated && user) {
@@ -55,58 +55,26 @@ const Home = () => {
     }
   };
 
-  const fetchShowcaseBuilderAvatars = useCallback(async (buildersArray) => {
-    try {
-      const avatarsMap = new Map();
-      const baseUrl = 'https://api.shanyrak.group';
-      
-      await Promise.all(
-        buildersArray.map(async (builder) => {
-          if (builder.id) {
-            try {
-              const avatarUrl = `${baseUrl}/api/v1/files?linkType=USER_AVATAR&linkPublicId=${builder.id}`;
-              const response = await fetch(avatarUrl, { method: 'HEAD' });
-              if (response.ok) {
-                avatarsMap.set(builder.id, avatarUrl);
-              }
-            } catch (error) {
-              console.warn(`Failed to fetch avatar for builder ${builder.id}:`, error);
-            }
-          }
-        })
-      );
-      
-      setShowcaseBuilderAvatars(avatarsMap);
-    } catch (error) {
-      console.error('Error fetching showcase builder avatars:', error);
-    }
-  }, []);
-
   const fetchShowcaseBuilders = useCallback(async () => {
     try {
       setShowcaseBuildersLoading(true);
       
       const searchBuildersUseCase = container.getSearchBuildersUseCase();
-      const result = await searchBuildersUseCase.execute({ 
-        page: 0, 
-        size: 6 // Show 6 builders in showcase
+      const result = await searchBuildersUseCase.execute({
+        page: 0,
+        size: 6 // Show 3 builders in showcase
       });
       
       if (result.success) {
         const builders = result.builders || [];
         setShowcaseBuilders(builders);
-        
-        // Fetch avatars for builders
-        if (builders.length > 0) {
-          fetchShowcaseBuilderAvatars(builders);
-        }
       }
     } catch (error) {
       console.error('Error fetching showcase builders:', error);
     } finally {
       setShowcaseBuildersLoading(false);
     }
-  }, [fetchShowcaseBuilderAvatars]);
+  }, []);
 
   const renderAuthenticatedContent = () => {
     if (user.role === 'CUSTOMER') {
@@ -507,56 +475,18 @@ const Home = () => {
                     <p>{t('home.noBuildersAvailable')}</p>
                   </div>
                 ) : (
-                  <div className="showcase-builders-grid">
-                    {showcaseBuilders.map((builder) => (
-                      <div key={builder.id} className="showcase-builder-card">
-                        <div className="showcase-builder-avatar">
-                          {showcaseBuilderAvatars.has(builder.id) ? (
-                            <img 
-                              src={showcaseBuilderAvatars.get(builder.id)} 
-                              alt={`${builder.firstName} ${builder.lastName}`}
-                              onError={(e) => {
-                                e.target.style.display = 'none';
-                                e.target.nextSibling.style.display = 'flex';
-                              }}
-                            />
-                          ) : null}
-                          <div className="showcase-builder-avatar-fallback" style={{display: showcaseBuilderAvatars.has(builder.id) ? 'none' : 'flex'}}>
-                            {builder.firstName ? builder.firstName.charAt(0) : '👤'}
-                            {builder.lastName ? builder.lastName.charAt(0) : ''}
-                          </div>
+                  <div className="showcase-builders-scroll-container">
+                    <div className="showcase-builders-scroll">
+                      {showcaseBuilders.map((builder) => (
+                        <div key={builder.id} className="showcase-builder-card-wrapper">
+                          <BuilderCard
+                            builder={builder}
+                            avatarUrl={builder.avatarLink}
+                            onClick={() => navigate('/services?view=builders')}
+                          />
                         </div>
-                        
-                        <div className="showcase-builder-info">
-                          <h3 className="showcase-builder-name">
-                            {builder.firstName && builder.lastName 
-                              ? `${builder.firstName} ${builder.lastName}`
-                              : builder.phone || 'Builder'
-                            }
-                          </h3>
-                          
-                          {builder.bio && (
-                            <p className="showcase-builder-bio">{builder.bio}</p>
-                          )}
-                          
-                          <div className="showcase-builder-meta">
-                            {builder.rating && (
-                              <div className="showcase-builder-rating">
-                                <span className="rating-stars">⭐</span>
-                                <span>{builder.rating}</span>
-                              </div>
-                            )}
-                            
-                            {builder.experienceYears && (
-                              <div className="showcase-builder-experience">
-                                <span className="experience-icon">🏗️</span>
-                                <span>{builder.experienceYears} {t('home.yearsExperience')}</span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 )}
 

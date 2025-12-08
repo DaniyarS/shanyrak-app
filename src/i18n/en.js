@@ -610,6 +610,8 @@ export const en = {
     contactInfo: 'Contact Information',
     builderNotFound: 'Builder not found',
     contactBuilder: 'Contact Builder',
+    verified: 'Verified',
+    recommended: 'Recommended',
   },
 
   // Profile

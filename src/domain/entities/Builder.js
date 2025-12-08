@@ -19,6 +19,8 @@ export class Builder {
     jobsDone,
     available,
     priceList,
+    verified,
+    recommended,
   }) {
     this.id = id;
     this.fullName = fullName;
@@ -35,6 +37,8 @@ export class Builder {
     this.jobsDone = jobsDone || 0;
     this.available = available !== undefined ? available : true;
     this.priceList = priceList;
+    this.verified = verified || false;
+    this.recommended = recommended || false;
 
     Object.freeze(this);
   }
@@ -51,6 +55,20 @@ export class Builder {
    */
   isAvailable() {
     return this.available === true;
+  }
+
+  /**
+   * Check if builder is verified
+   */
+  isVerified() {
+    return this.verified === true;
+  }
+
+  /**
+   * Check if builder is recommended
+   */
+  isRecommended() {
+    return this.recommended === true;
   }
 
   /**

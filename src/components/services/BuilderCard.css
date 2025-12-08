@@ -24,6 +24,16 @@
   border-bottom: 1px solid var(--color-neutral-200);
 }
 
+.builder-avatar-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.builder-avatar-wrapper.recommended .builder-avatar {
+  border: 3px solid #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
 .builder-avatar {
   flex-shrink: 0;
   position: relative;
@@ -36,7 +46,7 @@
   height: 64px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid var(--color-primary-light);
+  border: 2px solid var(--color-neutral-200);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -60,7 +70,7 @@
   );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
-  border: 2px solid var(--color-primary-light);
+  border: 2px solid var(--color-neutral-200);
 }
 
 @keyframes shimmer {
@@ -70,6 +80,23 @@
   100% {
     background-position: 200% 0;
   }
+}
+
+.recommended-badge {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 24px;
+  height: 24px;
+  background: #10b981;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  border: 2px solid white;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  z-index: 1;
 }
 
 .avatar-placeholder {
@@ -83,7 +110,7 @@
   justify-content: center;
   font-size: var(--font-size-2xl);
   font-weight: 600;
-  border: 2px solid var(--color-primary-light);
+  border: 2px solid var(--color-neutral-200);
 }
 
 .builder-info {
@@ -106,6 +133,21 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex: 1;
+}
+
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #1DA1F2;
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+
+.verified-badge svg {
+  fill: #1DA1F2;
+  filter: drop-shadow(0 1px 2px rgba(29, 161, 242, 0.3));
 }
 
 .status-indicator {
@@ -270,6 +312,19 @@
 
   .avatar-placeholder {
     font-size: var(--font-size-xl);
+  }
+
+  .recommended-badge {
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    bottom: -2px;
+    right: -2px;
+  }
+
+  .verified-badge svg {
+    width: 16px;
+    height: 16px;
   }
 
   .builder-name {
