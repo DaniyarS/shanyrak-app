@@ -1,208 +1,247 @@
-# Shanyrak - Property Service Marketplace
+# Shanyrak - Платформа для Сервисов Недвижимости
 
-A modern web application that helps property owners find skilled service providers based on ratings and experience. Property owners can post service requests for their properties, compare offers, and choose the best service provider for their needs.
+Shanyrak - это маркетплейс сервисов недвижимости, который соединяет владельцев собственности (клиентов) с поставщиками услуг (строителями/подрядчиками). Построен на React 19, Vite 7, следует принципам Clean Architecture и SOLID.
 
-## Features
+## 🚀 Быстрый Старт
 
-### For Property Owners (Customers)
-- **Property Management**: Add, edit, and manage multiple properties
-- **Service Orders**: Create detailed service requests with budget ranges
-- **Browse Offers**: Review and compare offers from service providers
-- **Contract Management**: Accept offers and create formal contracts
+### Предварительные Требования
 
-### For Service Providers
-- **Browse Orders**: Search and filter available service requests
-- **Submit Offers**: Provide competitive pricing and timelines
-- **Contract Creation**: Formalize agreements with customers
+Перед началом работы убедитесь, что у вас установлены следующие инструменты:
 
-### General Features
-- **User Authentication**: Secure login and registration system
-- **Role-based Access**: Different features for customers and service providers
-- **Category System**: Organize services by categories
-- **Search & Filters**: Find relevant orders by location, category, and budget
-- **Responsive Design**: Works seamlessly on desktop and mobile devices
+#### 1. Node.js и npm
+- **Версия**: Node.js 18+ или 20+ (рекомендуется LTS)
+- **Скачать**: https://nodejs.org/
+- **Проверка установки**:
+  ```bash
+  node --version
+  npm --version
+  ```
 
-## Technology Stack
+#### 2. Git
+- **Скачать**: https://git-scm.com/
+- **Проверка установки**:
+  ```bash
+  git --version
+  ```
 
-- **Frontend Framework**: React 19
-- **Build Tool**: Vite 7
-- **Routing**: React Router DOM
-- **HTTP Client**: Axios
-- **Styling**: CSS with CSS Variables (Design Tokens)
-- **State Management**: React Context API
+### Клонирование и Настройка Проекта
 
-## Project Structure
+#### Шаг 1: Клонирование репозитория
+```bash
+# Клонируйте репозиторий
+git clone https://github.com/DaniyarS/shanyrak-app.git
 
-```
-shanyrak-app/
-├── src/
-│   ├── components/         # Reusable UI components
-│   │   ├── Button.jsx
-│   │   ├── Input.jsx
-│   │   ├── Card.jsx
-│   │   ├── Navbar.jsx
-│   │   └── PrivateRoute.jsx
-│   ├── pages/             # Page components
-│   │   ├── Home.jsx
-│   │   ├── Login.jsx
-│   │   ├── Register.jsx
-│   │   ├── Estates.jsx
-│   │   ├── Orders.jsx
-│   │   └── Offers.jsx
-│   ├── services/          # API service layer
-│   │   ├── api.js
-│   │   ├── authService.js
-│   │   ├── categoryService.js
-│   │   ├── estateService.js
-│   │   ├── orderService.js
-│   │   ├── offerService.js
-│   │   └── contractService.js
-│   ├── context/           # React Context providers
-│   │   └── AuthContext.jsx
-│   ├── App.jsx            # Main application component
-│   └── main.jsx           # Application entry point
-├── design-tokens.json     # Design system tokens
-├── .env.example           # Environment variables template
-└── package.json           # Dependencies and scripts
+# Перейдите в директорию проекта
+cd shanyrak-app
 ```
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18+ and npm
-- Backend API server running (see API documentation)
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd shanyrak-app
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Configure environment variables**
-   ```bash
-   cp .env.example .env
-   ```
-
-   Edit `.env` and set your API base URL:
-   ```
-   VITE_API_BASE_URL=http://localhost:8080
-   ```
-
-4. **Start the development server**
-   ```bash
-   npm run dev
-   ```
-
-   The application will be available at `http://localhost:5173`
-
-### Available Scripts
-
-- `npm run dev` - Start development server with hot reload
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build locally
-- `npm run lint` - Run ESLint to check code quality
-
-## Usage Guide
-
-### Getting Started as a Customer
-
-1. **Register an account**
-   - Click "Register" in the navbar
-   - Fill in your details and select "Property Owner (Customer)" as your role
-   - Create a strong password
-
-2. **Add your properties**
-   - Navigate to "My Properties"
-   - Click "Add Property"
-   - Fill in property details (type, location, area, etc.)
-
-3. **Create a service order**
-   - Go to "Orders"
-   - Click "Create Order"
-   - Select the property and service category
-   - Describe the work needed and set your budget range
-
-4. **Review offers**
-   - Click "View Offers" on your order
-   - Compare pricing, timelines, and provider messages
-   - Accept an offer to create a contract
-
-### Getting Started as a Service Provider
-
-1. **Register an account**
-   - Click "Register" in the navbar
-   - Fill in your details and select "Service Provider" as your role
-
-2. **Browse available orders**
-   - Navigate to "Orders" to see all available service requests
-   - Use search filters to find relevant work
-
-3. **Submit an offer**
-   - Click "Make Offer" on an order
-   - Provide your pricing, timeline, and message
-   - Submit your competitive offer
-
-4. **Manage contracts**
-   - Track accepted offers and active contracts
-   - Communicate with customers through the platform
-
-## API Integration
-
-The application integrates with the Shanyrak backend API. See `clayde/API_DOCUMENTATION.md` for detailed API endpoints.
-
-### API Base URL Configuration
-
-Set the API base URL in your `.env` file:
-```
-VITE_API_BASE_URL=http://localhost:8080
+#### Шаг 2: Установка зависимостей
+```bash
+# Установите все зависимости проекта
+npm install
 ```
 
-### Authentication
+#### Шаг 3: Настройка переменных окружения
+```bash
+# Создайте файл .env в корне проекта
+touch .env
 
-The application uses JWT (JSON Web Token) authentication:
-- Tokens are stored in localStorage
-- Automatically included in API requests via axios interceptors
-- Expired tokens trigger automatic logout and redirect to login
+# Добавьте следующие переменные в .env файл:
+echo "VITE_API_BASE_URL=" >> .env
+```
 
-## Design System
+**Примечание**: Оставьте `VITE_API_BASE_URL` пустым для использования прокси Vite, который настроен на `http://185.197.194.111:8080`
 
-The application uses a comprehensive design system defined in `design-tokens.json`:
+#### Шаг 4: Запуск приложения
+```bash
+# Запустите development сервер
+npm run dev
+```
 
-- **Colors**: Primary, secondary, success, warning, error, and neutral palettes
-- **Typography**: Font families, sizes, and weights
-- **Spacing**: Consistent spacing scale
-- **Border Radius**: Rounded corner standards
-- **Shadows**: Elevation levels for depth
+Приложение будет доступно по адресу: http://localhost:5173
 
-All design tokens are exposed as CSS variables in `src/index.css` for easy theming.
+## 📁 Структура Проекта
 
-## Browser Support
+```
+src/
+├── domain/              # Бизнес-логика (независимая от фреймворков)
+│   ├── entities/        # Бизнес-объекты (Order, Estate, Offer, etc.)
+│   └── repositories/    # Интерфейсы репозиториев
+├── application/         # Оркестрация бизнес-логики
+│   └── use-cases/       # Одноцелевые операции
+├── infrastructure/     # Внешние зависимости
+│   ├── api/
+│   │   ├── mappers/    # Преобразование DTO ↔ Entity
+│   │   └── repositories/ # Конкретные API реализации
+│   └── di/
+│       └── ServiceContainer.js # Контейнер внедрения зависимостей
+├── pages/              # React компоненты страниц
+├── components/         # Переиспользуемые UI компоненты
+├── context/            # React Context (AuthContext, LanguageContext)
+├── i18n/              # Файлы переводов (kk/ru/en)
+└── services/          # Легаси сервисы (постепенно заменяются)
+```
 
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
+## 🛠 Доступные Команды
 
-## Contributing
+```bash
+# Запуск development сервера (http://localhost:5173)
+npm run dev
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+# Сборка production версии
+npm run build
 
-## License
+# Предварительный просмотр production сборки
+npm run preview
 
-This project is proprietary software. All rights reserved.
+# Проверка кода линтером
+npm run lint
+```
 
-## Support
+## 🌍 Поддержка Языков
 
-For issues, questions, or support, please contact the development team.
+Приложение поддерживает три языка:
+- **Казахский (kk)** - основной язык
+- **Русский (ru)** - вторичный язык
+- **Английский (en)** - международный язык
+
+Файлы переводов находятся в `src/i18n/`
+
+## 🏗 Архитектура
+
+Проект следует принципам **Clean Architecture** с четким разделением слоев:
+
+### Ключевые Принципы
+1. **Никогда не импортируйте конкретные репозитории напрямую** - всегда используйте ServiceContainer
+2. **Всегда используйте мапперы** для преобразования данных API
+3. **Используйте поле `.id`** на всех сущностях
+4. **Создавайте use cases** для новых бизнес-операций
+5. **Доменные сущности неизменяемы** - используйте `Object.freeze()`
+
+### Пример использования Dependency Injection
+```javascript
+// ✅ ПРАВИЛЬНО
+import { container } from '../infrastructure/di/ServiceContainer';
+
+const useCase = container.getSearchOrdersUseCase();
+const result = await useCase.execute(filters);
+
+// ❌ НЕПРАВИЛЬНО
+import { ApiOrderRepository } from '../infrastructure/api/repositories/ApiOrderRepository';
+```
+
+## 🔧 API и Аутентификация
+
+### Настройка API
+- **Базовый URL**: Настраивается через `VITE_API_BASE_URL` в `.env`
+- **Прокси**: Vite dev server проксирует `/api/*` запросы к `http://185.197.194.111:8080`
+- **Документация**: См. `clayde/API_DOCUMENTATION.md`
+
+### Аутентификация
+- **JWT токены**: access + refresh токены хранятся в localStorage
+- **Автообновление**: Автоматическое обновление токенов при 401 ошибках
+- **Сессии**: Обработка истечения сессий через кастомные события
+
+## 👥 Роли Пользователей
+
+### CUSTOMER (Клиент)
+- Создание и управление недвижимостью
+- Создание заказов на услуги и просмотр предложений
+- Принятие предложений и создание контрактов
+- Оценка выполненных работ
+
+### SERVICE_PROVIDER (Строитель)
+- Просмотр доступных заказов
+- Отправка предложений на заказы
+- Управление портфолио и профилем
+- Выполнение контрактов
+
+## 🎨 Дизайн-система
+
+Дизайн-токены определены в `design-tokens.json` и применены как CSS переменные:
+- **Цвета**: `--color-primary`, `--color-secondary`, etc.
+- **Типографика**: `--font-family-primary`, `--font-size-*`, etc.
+- **Отступы**: `--spacing-*` (xs, sm, md, lg, xl, 2xl, 3xl)
+- **Тени**: `--shadow-sm`, `--shadow-md`, `--shadow-lg`
+
+## 📱 Мобильная Версия
+
+Приложение полностью адаптировано для мобильных устройств:
+- **Responsive дизайн** для всех экранов
+- **Мобильная навигация** с гамбургер-меню
+- **Языковой переключатель** в мобильной панели
+- **Touch-friendly** интерфейс
+
+## 🔍 Устранение Неполадок
+
+### Проблемы с установкой
+```bash
+# Очистите npm кэш
+npm cache clean --force
+
+# Удалите node_modules и переустановите
+rm -rf node_modules package-lock.json
+npm install
+```
+
+### Проблемы с API
+- Проверьте настройку `VITE_API_BASE_URL` в `.env`
+- Убедитесь, что backend API доступен
+- Проверьте Network tab в DevTools
+
+### Проблемы с аутентификацией
+- Проверьте localStorage на наличие токенов
+- Убедитесь, что refresh токен действителен
+- Проверьте endpoint `/api/v1/auth/refresh`
+
+## 🚀 Деплой
+
+### Development
+```bash
+npm run dev
+```
+
+### Production
+```bash
+npm run build
+npm run preview
+```
+
+### Environment Variables
+Создайте соответствующие `.env` файлы для разных окружений:
+- `.env.local` - локальная разработка
+- `.env.staging` - staging окружение
+- `.env.production` - production окружение
+
+## 📚 Дополнительные Ресурсы
+
+- **Clean Architecture**: См. `CLEAN_ARCHITECTURE.md`
+- **API Документация**: `clayde/API_DOCUMENTATION.md`
+- **Postman Collection**: `clayde/postman-collection.json`
+- **Design Tokens**: `design-tokens.json`
+
+## 🤝 Contribution
+
+1. Создайте feature branch от `develop`
+2. Следуйте принципам Clean Architecture
+3. Добавьте переводы для всех трех языков
+4. Создайте Pull Request в `develop`
+
+### Git Workflow
+```bash
+git checkout develop
+git pull origin develop
+git checkout -b feature/your-feature-name
+# ... внесите изменения ...
+git add .
+git commit -m "feat: описание изменений"
+git push origin feature/your-feature-name
+```
+
+## 📝 Лицензия
+
+Этот проект разработан для Shanyrak Group.
+
+---
+
+**Важно**: Всегда проверяйте актуальность документации в `CLAUDE.md` для получения последних инструкций по разработке.
