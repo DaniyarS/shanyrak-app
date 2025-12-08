@@ -30,6 +30,8 @@ export class BuilderMapper {
       jobsDone: apiData.jobsDone || 0,
       available: apiData.available !== undefined ? apiData.available : true,
       priceList: apiData.priceList,
+      verified: apiData.verified || false,
+      recommended: apiData.recommended || false,
     });
   }
 
@@ -68,6 +70,8 @@ export class BuilderMapper {
       jobsDone: builder.jobsDone || 0,
       available: builder.available !== undefined ? builder.available : true,
       priceList: builder.priceList || null,
+      verified: builder.verified || false,
+      recommended: builder.recommended || false,
     };
   }
 }
