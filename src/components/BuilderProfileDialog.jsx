@@ -269,7 +269,7 @@ const BuilderProfileDialog = ({ isOpen, onClose, builderId }) => {
                           <img
                             src={photo.url}
                             alt={`Portfolio ${index + 1}`}
-                            className="portfolio-image"
+                            className="portfolio-image loaded"
                           />
                         </div>
                       ))}

@@ -27,21 +27,27 @@ const ConfirmDealModal = ({ offer, order, onClose, onSuccess }) => {
     setErrors({});
     setSubmitting(true);
 
+    console.log('ConfirmDealModal - handleSubmit called', { isConfirming, offerId: offer.id });
+
     try {
       let result;
 
       if (isConfirming) {
         // Use AcceptOffer use case
+        console.log('Accepting offer with data:', { offerId: offer.id, startDate: formData.startDate, endDate: formData.endDate });
         const acceptOfferUseCase = container.getAcceptOfferUseCase();
         const acceptData = {
           startDate: formData.startDate,
           endDate: formData.endDate,
         };
         result = await acceptOfferUseCase.execute(offer.id, acceptData);
+        console.log('Accept offer result:', result);
       } else {
         // Use RejectOffer use case
+        console.log('Rejecting offer:', offer.id);
         const rejectOfferUseCase = container.getRejectOfferUseCase();
         result = await rejectOfferUseCase.execute(offer.id);
+        console.log('Reject offer result:', result);
       }
 
       if (result.success) {

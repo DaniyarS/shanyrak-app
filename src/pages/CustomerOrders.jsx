@@ -302,9 +302,9 @@ const CustomerOrders = () => {
       let result;
       if (editingOrder) {
         // Update existing order
-        orderData.id = editingOrder.id;
         const updateOrderUseCase = container.getUpdateOrderUseCase();
         result = await updateOrderUseCase.execute(
+          editingOrder.id,
           orderData,
           formData.categoryId,
           formData.estateId
@@ -494,6 +494,7 @@ const CustomerOrders = () => {
   };
 
   const handleConfirmDealClick = (offer) => {
+    console.log('handleConfirmDealClick called', { offer, selectedOrder });
     setConfirmingDealOffer(offer);
   };
 
