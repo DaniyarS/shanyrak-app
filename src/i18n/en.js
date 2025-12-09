@@ -46,7 +46,7 @@ export const en = {
   home: {
     title: 'Welcome to Shanyrak',
     subtitle: 'Find skilled service providers based on ratings and experience',
-    description: 'Post service requests for your property or offer your services to help property owners. Shanyrak makes it easy to compare and choose qualified professionals for any job.',
+    description: 'Your trusted platform for property services',
     getStarted: 'Get Started',
     welcomeBack: 'Welcome back',
     browseOrders: 'Browse Orders',
@@ -612,6 +612,7 @@ export const en = {
     contactBuilder: 'Contact Builder',
     verified: 'Verified',
     recommended: 'Recommended',
+    available: 'Available',
   },
 
   // Profile
