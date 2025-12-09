@@ -364,4 +364,56 @@
   .price-text {
     font-size: var(--font-size-xs);
   }
+
+  .builder-portfolio-preview {
+    margin-top: var(--spacing-3);
+  }
+
+  .portfolio-preview-grid {
+    gap: var(--spacing-2);
+  }
+
+  .portfolio-preview-item {
+    height: 60px;
+  }
+}
+
+/* Portfolio Preview */
+.builder-portfolio-preview {
+  margin-top: var(--spacing-4);
+  padding-top: var(--spacing-4);
+  border-top: 1px solid var(--color-neutral-100);
+}
+
+.portfolio-preview-label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-2);
+}
+
+.portfolio-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-3);
+}
+
+.portfolio-preview-item {
+  aspect-ratio: 1;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 2px solid var(--color-neutral-200);
+  background-color: var(--color-background-secondary);
+  position: relative;
+}
+
+.portfolio-preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.2s ease;
+}
+
+.portfolio-preview-item:hover .portfolio-preview-image {
+  transform: scale(1.05);
 }
