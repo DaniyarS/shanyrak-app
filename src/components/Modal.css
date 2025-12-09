@@ -14,6 +14,13 @@
   overflow-y: auto;
 }
 
+/* Higher z-index for nested modals (like ConfirmDealModal) */
+.modal-overlay + .modal-overlay,
+.modal-overlay:last-of-type {
+  z-index: 1100;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
 /* Modal Content */
 .modal-content {
   background-color: white;

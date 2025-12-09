@@ -508,11 +508,11 @@
 
   .builder-dialog-container {
     max-height: 95vh;
+    padding-bottom: 80px; /* Space for fixed footer */
   }
 
   .builder-dialog-header,
-  .builder-dialog-content,
-  .builder-dialog-footer {
+  .builder-dialog-content {
     padding: var(--spacing-4);
   }
 
@@ -549,8 +549,18 @@
   }
 
   .builder-dialog-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--spacing-4);
     flex-direction: column;
     gap: var(--spacing-3);
+    background: white;
+    border-top: 1px solid var(--color-border-light);
+    border-radius: 0;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 10;
   }
 
   .builder-dialog-footer button {
