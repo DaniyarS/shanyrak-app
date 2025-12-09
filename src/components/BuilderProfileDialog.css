@@ -550,7 +550,7 @@
 
   .builder-dialog-footer {
     position: fixed;
-    bottom: 0;
+    bottom: 80px; /* Above bottom-nav which is 80px height */
     left: 0;
     right: 0;
     padding: var(--spacing-4);
@@ -560,7 +560,7 @@
     border-top: 1px solid var(--color-border-light);
     border-radius: 0;
     box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
-    z-index: 10;
+    z-index: 1100; /* Above bottom-nav which has z-index: 1000 */
   }
 
   .builder-dialog-footer button {
