@@ -25,7 +25,7 @@ const BuilderOrders = () => {
   // Helper function to translate unit types from English API response to current locale
   const getUnitLabel = (unit) => {
     if (!unit) return '';
-    
+
     const unitTranslationMap = {
       // Area-based units (API returns these)
       'm2': t('offers.perM2'),
@@ -39,7 +39,7 @@ const BuilderOrders = () => {
       'permetersquare': t('orders.units.perMeterSquare'),
       'permeter²': t('orders.units.perMeterSquare'),
       'perMeterSquare': t('orders.units.perMeterSquare'),
-      
+
       // Time-based units
       'hour': t('offers.perHour'),
       'hr': t('offers.perHour'),
@@ -49,7 +49,7 @@ const BuilderOrders = () => {
       'daily': t('offers.perDay'),
       'days': t('offers.perDay'),
       'perDay': t('offers.perDay'),
-      
+
       // Quantity-based units
       'unit': t('offers.perUnit'),
       'perUnit': t('offers.perUnit'),
@@ -61,16 +61,27 @@ const BuilderOrders = () => {
       'each': t('offers.perItem'),
       'peritem': t('orders.units.perItem'),
       'perItem': t('orders.units.perItem'),
-      
+
       // Fixed price
       'fixed': t('offers.fixedPrice'),
       'total': t('orders.units.total'),
       'lump_sum': t('offers.fixedPrice'),
       'flat_rate': t('offers.fixedPrice'),
     };
-    
+
     // Check both original case and lowercase
     return unitTranslationMap[unit] || unitTranslationMap[unit.toLowerCase()] || unit;
+  };
+
+  // Helper function to translate estate type
+  const getEstateTypeLabel = (kind) => {
+    const typeMap = {
+      'APARTMENT': t('estates.apartment'),
+      'HOUSE': t('estates.house'),
+      'OFFICE': t('estates.office'),
+      'COMMERCIAL': t('estates.commercial'),
+    };
+    return typeMap[kind] || kind;
   };
   const [offerFormData, setOfferFormData] = useState({
     price: '',
@@ -493,7 +504,7 @@ const BuilderOrders = () => {
                       </div>
                       <div className="order-detail-item">
                         <span className="detail-icon">🏠</span>
-                        <span><strong>{t('orders.property')}:</strong> {order.realEstate.kind} - {order.realEstate.areaM2} m²</span>
+                        <span><strong>{t('orders.property')}:</strong> {getEstateTypeLabel(order.realEstate.kind)} - {order.realEstate.areaM2} m²</span>
                       </div>
                     </>
                   )}
@@ -551,7 +562,7 @@ const BuilderOrders = () => {
                 {selectedOrder.realEstate && (
                   <>
                     <p><strong>{t('orders.location')}:</strong> {selectedOrder.realEstate.city}, {selectedOrder.realEstate.district}</p>
-                    <p><strong>{t('orders.property')}:</strong> {selectedOrder.realEstate.kind} - {selectedOrder.realEstate.areaM2} m²</p>
+                    <p><strong>{t('orders.property')}:</strong> {getEstateTypeLabel(selectedOrder.realEstate.kind)} - {selectedOrder.realEstate.areaM2} m²</p>
                   </>
                 )}
               </div>

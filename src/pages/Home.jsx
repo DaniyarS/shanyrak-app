@@ -365,7 +365,7 @@ const Home = () => {
                             </div>
                             <div className="order-detail-row">
                               <span className="detail-icon">🏠</span>
-                              <span>{order.realEstate.kind} - {order.realEstate.areaM2} m²</span>
+                              <span>{t(`estates.${order.realEstate.kind?.toLowerCase()}`) || order.realEstate.kind} - {order.realEstate.areaM2} m²</span>
                             </div>
                           </>
                         )}
