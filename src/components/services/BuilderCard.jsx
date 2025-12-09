@@ -6,37 +6,35 @@ const BuilderCard = ({ builder, onClick, avatarUrl }) => {
   const { t } = useLanguage();
   const [avatarLoading, setAvatarLoading] = useState(true);
 
-  const renderStars = (rating) => {
-    const stars = [];
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 >= 0.5;
+  const renderStarRating = (rating) => {
+    // Calculate fill percentage (rating is 0-5, convert to 0-100%)
+    const fillPercentage = Math.min(100, (rating / 5) * 100);
 
-    for (let i = 0; i < fullStars; i++) {
-      stars.push(
-        <span key={`full-${i}`} className="star filled">
-          ★
-        </span>
-      );
-    }
-
-    if (hasHalfStar) {
-      stars.push(
-        <span key="half" className="star half">
-          ★
-        </span>
-      );
-    }
-
-    const emptyStars = 5 - stars.length;
-    for (let i = 0; i < emptyStars; i++) {
-      stars.push(
-        <span key={`empty-${i}`} className="star empty">
-          ☆
-        </span>
-      );
-    }
-
-    return stars;
+    return (
+      <div className="single-star-rating">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          className="star-svg"
+        >
+          {/* Define gradient for partial fill */}
+          <defs>
+            <linearGradient id={`star-gradient-${builder.id}`}>
+              <stop offset={`${fillPercentage}%`} stopColor="var(--color-warning)" />
+              <stop offset={`${fillPercentage}%`} stopColor="var(--color-neutral-300)" />
+            </linearGradient>
+          </defs>
+          {/* Star path */}
+          <path
+            d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+            fill={`url(#star-gradient-${builder.id})`}
+            stroke="var(--color-warning)"
+            strokeWidth="1"
+          />
+        </svg>
+      </div>
+    );
   };
 
   return (
@@ -72,15 +70,21 @@ const BuilderCard = ({ builder, onClick, avatarUrl }) => {
             <h3 className="builder-name">{builder.getDisplayName()}</h3>
             {builder.isVerified() && (
               <div className="verified-badge" title={t('builders.verified')}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
               </div>
             )}
           </div>
           <div className="builder-rating">
-            {renderStars(builder.ratingAvg)}
+            {renderStarRating(builder.ratingAvg)}
             <span className="rating-value">{builder.getFormattedRating()}</span>
+            {builder.isAvailable() && (
+              <span className="availability-badge available" title={t('builders.available')}>
+                <span className="availability-dot"></span>
+                {t('builders.available')}
+              </span>
+            )}
           </div>
         </div>
       </div>

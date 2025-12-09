@@ -383,19 +383,13 @@
     order: 1;
   }
 
+  /* Hide auth links on mobile - they're in the mobile menu */
   .auth-links {
-    order: 2;
-    margin-right: var(--spacing-2);
-    gap: var(--spacing-2);
+    display: none !important;
   }
 
   .mobile-menu-button {
     order: 3;
-  }
-
-  .navbar-auth-link {
-    padding: var(--spacing-1) var(--spacing-2);
-    font-size: var(--font-size-xs);
   }
 
   /* Adjust navbar-right layout for mobile */

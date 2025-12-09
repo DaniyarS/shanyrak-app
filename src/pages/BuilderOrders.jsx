@@ -113,10 +113,17 @@ const BuilderOrders = () => {
       ]);
 
       // Fetch builder's offers to check which orders already have offers
-      const builderOffers = await offerService.getBuilderOffers({ size: 100 });
-      const offerOrderIds = new Set(
-        (builderOffers?.content || []).map(item => item.order?.uuid || item.order?.publicId || item.order?.id)
-      );
+      // Wrap in try-catch to prevent offers error from blocking orders display
+      let offerOrderIds = new Set();
+      try {
+        const builderOffers = await offerService.getBuilderOffers({ size: 100 });
+        offerOrderIds = new Set(
+          (builderOffers?.content || []).map(item => item.order?.uuid || item.order?.publicId || item.order?.id)
+        );
+      } catch (offersError) {
+        console.error('Error fetching builder offers (non-critical):', offersError);
+        // Continue without offer status - orders will still display
+      }
 
       // Set builder data
       if (builderResult.success) {
