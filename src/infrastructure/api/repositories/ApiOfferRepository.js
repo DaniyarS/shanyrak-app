@@ -68,4 +68,22 @@ export class ApiOfferRepository extends IOfferRepository {
     const response = await api.get(`/api/v1/offers/${offerId}/builder`);
     return response.data;
   }
+
+  /**
+   * Accept offer (customer accepts the offer)
+   * POST /api/v1/offers/{publicId}/accept
+   */
+  async accept(offerId, data) {
+    const response = await api.post(`/api/v1/offers/${offerId}/accept`, data);
+    return response.data;
+  }
+
+  /**
+   * Reject offer (customer rejects the offer)
+   * POST /api/v1/offers/{publicId}/reject
+   */
+  async reject(offerId) {
+    const response = await api.post(`/api/v1/offers/${offerId}/reject`);
+    return response.data;
+  }
 }
