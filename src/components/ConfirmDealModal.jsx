@@ -13,6 +13,8 @@ const ConfirmDealModal = ({ offer, order, onClose, onSuccess }) => {
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
 
+  console.log('ConfirmDealModal rendered', { offer, order });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -23,11 +25,13 @@ const ConfirmDealModal = ({ offer, order, onClose, onSuccess }) => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
     setErrors({});
     setSubmitting(true);
 
-    console.log('ConfirmDealModal - handleSubmit called', { isConfirming, offerId: offer.id });
+    console.log('ConfirmDealModal - handleSubmit called', { isConfirming, offerId: offer?.id, offerData: offer });
 
     try {
       let result;

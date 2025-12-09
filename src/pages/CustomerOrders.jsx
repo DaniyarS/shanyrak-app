@@ -944,16 +944,6 @@ const CustomerOrders = () => {
           )}
         </div>
 
-        {/* Confirm Deal Modal */}
-        {confirmingDealOffer && selectedOrder && (
-          <ConfirmDealModal
-            offer={confirmingDealOffer}
-            order={selectedOrder}
-            onClose={() => setConfirmingDealOffer(null)}
-            onSuccess={handleDealConfirmed}
-          />
-        )}
-
         {/* Offers Modal */}
         {selectedOrder && (
           <div className="modal-overlay" onClick={() => setSelectedOrder(null)}>
@@ -1141,6 +1131,16 @@ const CustomerOrders = () => {
               <Button onClick={() => setSelectedOrder(null)}>{t('common.close')}</Button>
             </Card>
           </div>
+        )}
+
+        {/* Confirm Deal Modal - rendered after offers modal for proper z-index */}
+        {confirmingDealOffer && selectedOrder && (
+          <ConfirmDealModal
+            offer={confirmingDealOffer}
+            order={selectedOrder}
+            onClose={() => setConfirmingDealOffer(null)}
+            onSuccess={handleDealConfirmed}
+          />
         )}
       </div>
     </div>
