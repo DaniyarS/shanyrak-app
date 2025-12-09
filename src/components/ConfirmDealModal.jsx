@@ -28,20 +28,21 @@ const ConfirmDealModal = ({ offer, order, onClose, onSuccess }) => {
     setSubmitting(true);
 
     try {
-      const confirmDealUseCase = container.getConfirmDealUseCase();
+      let result;
 
-      const dealData = {
-        offerPublicId: offer.id,
-        agreed: isConfirming,
-      };
-
-      // Add dates only if confirming
       if (isConfirming) {
-        dealData.startDate = formData.startDate;
-        dealData.endDate = formData.endDate;
+        // Use AcceptOffer use case
+        const acceptOfferUseCase = container.getAcceptOfferUseCase();
+        const acceptData = {
+          startDate: formData.startDate,
+          endDate: formData.endDate,
+        };
+        result = await acceptOfferUseCase.execute(offer.id, acceptData);
+      } else {
+        // Use RejectOffer use case
+        const rejectOfferUseCase = container.getRejectOfferUseCase();
+        result = await rejectOfferUseCase.execute(offer.id);
       }
-
-      const result = await confirmDealUseCase.execute(order.id, dealData);
 
       if (result.success) {
         alert(isConfirming ? t('orders.dealConfirmed') : t('orders.dealRejected'));
@@ -53,7 +54,7 @@ const ConfirmDealModal = ({ offer, order, onClose, onSuccess }) => {
         }
       }
     } catch (error) {
-      console.error('Error confirming deal:', error);
+      console.error('Error processing deal:', error);
       alert(error.response?.data?.message || 'Failed to process deal');
     } finally {
       setSubmitting(false);

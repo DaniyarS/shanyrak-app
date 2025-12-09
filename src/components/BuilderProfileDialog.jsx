@@ -88,13 +88,13 @@ const BuilderProfileDialog = ({ isOpen, onClose, builderId }) => {
 
     try {
       setContactsLoading(true);
-      const getBuilderUseCase = container.getGetBuilderUseCase();
-      const result = await getBuilderUseCase.execute(builderId);
+      const getBuilderPhoneUseCase = container.getGetBuilderPhoneUseCase();
+      const result = await getBuilderPhoneUseCase.execute(builderId);
 
       if (result.success) {
         setContactInfo({
-          phone: result.builder?.phone,
-          email: result.builder?.email
+          phone: result.phone,
+          email: builder?.email
         });
         setShowContacts(true);
       }
