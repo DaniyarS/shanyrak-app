@@ -103,6 +103,17 @@ const CustomerOrders = () => {
     }
   };
 
+  // Helper function to translate estate type
+  const getEstateTypeLabel = (kind) => {
+    const typeMap = {
+      'APARTMENT': t('estates.apartment'),
+      'HOUSE': t('estates.house'),
+      'OFFICE': t('estates.office'),
+      'COMMERCIAL': t('estates.commercial'),
+    };
+    return typeMap[kind] || kind;
+  };
+
   const fetchOfferCounts = async (ordersList) => {
     const offerRepo = container.getOfferRepository();
 
@@ -282,23 +293,36 @@ const CustomerOrders = () => {
         orderData.unit = formData.unit;
       }
 
-      console.log('Creating order with data:', {
+      console.log(editingOrder ? 'Updating order' : 'Creating order', 'with data:', {
         orderData,
         categoryId: formData.categoryId,
         estateId: formData.estateId,
       });
 
-      const createOrderUseCase = container.getCreateOrderUseCase();
-      const result = await createOrderUseCase.execute(
-        orderData,
-        formData.categoryId,
-        formData.estateId
-      );
+      let result;
+      if (editingOrder) {
+        // Update existing order
+        orderData.id = editingOrder.id;
+        const updateOrderUseCase = container.getUpdateOrderUseCase();
+        result = await updateOrderUseCase.execute(
+          orderData,
+          formData.categoryId,
+          formData.estateId
+        );
+      } else {
+        // Create new order
+        const createOrderUseCase = container.getCreateOrderUseCase();
+        result = await createOrderUseCase.execute(
+          orderData,
+          formData.categoryId,
+          formData.estateId
+        );
+      }
 
-      console.log('Create order result:', result);
+      console.log(editingOrder ? 'Update' : 'Create', 'order result:', result);
 
       if (!result.success) {
-        console.error('Order creation failed with errors:', result.errors);
+        console.error('Order operation failed with errors:', result.errors);
         setErrors(result.errors || { submit: t('orders.operationFailed') });
         return;
       }
@@ -785,7 +809,10 @@ const CustomerOrders = () => {
             onClick={handleCreateOrder}
             disabled={uploadingPhotos}
           >
-            {uploadingPhotos ? t('common.creating') : t('orders.createOrder')}
+            {uploadingPhotos
+              ? (editingOrder ? t('common.updating') : t('common.creating'))
+              : (editingOrder ? t('common.update') : t('orders.createOrder'))
+            }
           </Button>
         )}
       </div>
@@ -897,7 +924,7 @@ const CustomerOrders = () => {
                         {order.realEstate.district}
                       </p>
                       <p>
-                        <strong>{t('orders.property')}:</strong> {order.realEstate.kind} -{' '}
+                        <strong>{t('orders.property')}:</strong> {getEstateTypeLabel(order.realEstate.kind)} -{' '}
                         {order.realEstate.areaM2} m²
                       </p>
                     </>

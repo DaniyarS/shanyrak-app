@@ -33,6 +33,8 @@ import { ManageEstates } from '../../application/use-cases/estates/ManageEstates
 import { CreateOffer } from '../../application/use-cases/offers/CreateOffer';
 import { UpdateOffer } from '../../application/use-cases/offers/UpdateOffer';
 import { WithdrawOffer } from '../../application/use-cases/offers/WithdrawOffer';
+import { AcceptOffer } from '../../application/use-cases/offers/AcceptOffer';
+import { RejectOffer } from '../../application/use-cases/offers/RejectOffer';
 import { GetBuilderByOffer } from '../../application/use-cases/offers/GetBuilderByOffer';
 
 // Use Cases - Contracts
@@ -47,6 +49,7 @@ import { GetReview } from '../../application/use-cases/reviews/GetReview';
 // Use Cases - Builders
 import { SearchBuilders } from '../../application/use-cases/builders/SearchBuilders';
 import { GetBuilder } from '../../application/use-cases/builders/GetBuilder';
+import { GetBuilderPhone } from '../../application/use-cases/builders/GetBuilderPhone';
 import { UpdateBuilder } from '../../application/use-cases/builders/UpdateBuilder';
 import { AddBuilderCategory } from '../../application/use-cases/builders/AddBuilderCategory';
 import { DeleteBuilderCategory } from '../../application/use-cases/builders/DeleteBuilderCategory';
@@ -111,6 +114,8 @@ class ServiceContainer {
     this.useCases.createOffer = new CreateOffer(this.repositories.offer);
     this.useCases.updateOffer = new UpdateOffer(this.repositories.offer);
     this.useCases.withdrawOffer = new WithdrawOffer(this.repositories.offer);
+    this.useCases.acceptOffer = new AcceptOffer(this.repositories.offer);
+    this.useCases.rejectOffer = new RejectOffer(this.repositories.offer);
     this.useCases.getBuilderByOffer = new GetBuilderByOffer(this.repositories.offer);
 
     // Contracts
@@ -125,6 +130,7 @@ class ServiceContainer {
     // Builders
     this.useCases.searchBuilders = new SearchBuilders(this.repositories.builder);
     this.useCases.getBuilder = new GetBuilder(this.repositories.builder);
+    this.useCases.getBuilderPhone = new GetBuilderPhone(this.repositories.builder);
     this.useCases.updateBuilder = new UpdateBuilder(this.repositories.builder);
     this.useCases.addBuilderCategory = new AddBuilderCategory(this.repositories.builder);
     this.useCases.deleteBuilderCategory = new DeleteBuilderCategory(this.repositories.builder);
@@ -229,6 +235,14 @@ class ServiceContainer {
     return this.useCases.withdrawOffer;
   }
 
+  getAcceptOfferUseCase() {
+    return this.useCases.acceptOffer;
+  }
+
+  getRejectOfferUseCase() {
+    return this.useCases.rejectOffer;
+  }
+
   getBuilderByOfferUseCase() {
     return this.useCases.getBuilderByOffer;
   }
@@ -262,6 +276,10 @@ class ServiceContainer {
 
   getGetBuilderUseCase() {
     return this.useCases.getBuilder;
+  }
+
+  getGetBuilderPhoneUseCase() {
+    return this.useCases.getBuilderPhone;
   }
 
   getUpdateBuilderUseCase() {

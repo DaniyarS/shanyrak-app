@@ -125,4 +125,17 @@ export class ApiBuilderRepository extends IBuilderRepository {
       throw error;
     }
   }
+
+  /**
+   * Get builder phone number
+   */
+  async getPhone(id) {
+    try {
+      const response = await api.post(`/api/v1/builders/${id}/phone`);
+      return response.data;
+    } catch (error) {
+      console.error('Error getting builder phone:', error);
+      throw error;
+    }
+  }
 }

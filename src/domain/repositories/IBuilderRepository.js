@@ -49,4 +49,13 @@ export class IBuilderRepository {
   async update(id, data) {
     throw new Error('Method update() must be implemented');
   }
+
+  /**
+   * Get builder phone number
+   * @param {string} id - Builder ID
+   * @returns {Promise<Object>} Phone number data
+   */
+  async getPhone(id) {
+    throw new Error('Method getPhone() must be implemented');
+  }
 }
