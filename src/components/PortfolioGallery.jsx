@@ -120,7 +120,7 @@ const PortfolioGallery = ({ photos, onPhotoAdded, onPhotoDeleted, canEdit = fals
               <img
                 src={photo.url}
                 alt={`Portfolio ${index + 1}`}
-                className={`portfolio-image ${loadingImages[photo.id] === false ? 'loaded' : 'loading'}`}
+                className={`portfolio-image ${loadingImages[photo.id] !== true ? 'loaded' : 'loading'}`}
                 onLoadStart={() => handleImageLoadStart(photo.id)}
                 onLoad={() => handleImageLoad(photo.id)}
               />

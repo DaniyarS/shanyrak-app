@@ -58,4 +58,23 @@ export class IOfferRepository {
   async getBuilderByOfferId(offerId) {
     throw new Error('Method not implemented');
   }
+
+  /**
+   * Accept offer (customer accepts the offer)
+   * @param {string} offerId - Offer ID
+   * @param {Object} data - Additional data (startDate, endDate)
+   * @returns {Promise<Object>}
+   */
+  async accept(offerId, data) {
+    throw new Error('Method not implemented');
+  }
+
+  /**
+   * Reject offer (customer rejects the offer)
+   * @param {string} offerId - Offer ID
+   * @returns {Promise<Object>}
+   */
+  async reject(offerId) {
+    throw new Error('Method not implemented');
+  }
 }
