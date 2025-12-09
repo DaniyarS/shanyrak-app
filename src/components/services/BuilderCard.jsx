@@ -1,10 +1,37 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
+import { container } from '../../infrastructure/di/ServiceContainer';
 import './BuilderCard.css';
 
 const BuilderCard = ({ builder, onClick, avatarUrl }) => {
   const { t } = useLanguage();
   const [avatarLoading, setAvatarLoading] = useState(true);
+  const [portfolioPhotos, setPortfolioPhotos] = useState([]);
+  const [loadingPhotos, setLoadingPhotos] = useState(false);
+
+  useEffect(() => {
+    // Load portfolio photos for this builder
+    const fetchPortfolioPhotos = async () => {
+      if (!builder.id) return;
+
+      try {
+        setLoadingPhotos(true);
+        const getPortfolioUseCase = container.getGetPortfolioPhotosUseCase();
+        const result = await getPortfolioUseCase.execute(builder.id);
+
+        if (result.success && result.files) {
+          // Show only first 3 photos in card
+          setPortfolioPhotos(result.files.slice(0, 3));
+        }
+      } catch (error) {
+        console.error('Error fetching portfolio photos:', error);
+      } finally {
+        setLoadingPhotos(false);
+      }
+    };
+
+    fetchPortfolioPhotos();
+  }, [builder.id]);
 
   const renderStarRating = (rating) => {
     // Calculate fill percentage (rating is 0-5, convert to 0-100%)
@@ -136,6 +163,24 @@ const BuilderCard = ({ builder, onClick, avatarUrl }) => {
                   +{builder.priceList.length - 3} услуг
                 </div>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* Portfolio Photos */}
+        {portfolioPhotos.length > 0 && (
+          <div className="builder-portfolio-preview">
+            <div className="portfolio-preview-label">{t('profile.portfolio')}</div>
+            <div className="portfolio-preview-grid">
+              {portfolioPhotos.map((photo, index) => (
+                <div key={photo.id || index} className="portfolio-preview-item">
+                  <img
+                    src={photo.url}
+                    alt={`Portfolio ${index + 1}`}
+                    className="portfolio-preview-image"
+                  />
+                </div>
+              ))}
             </div>
           </div>
         )}
