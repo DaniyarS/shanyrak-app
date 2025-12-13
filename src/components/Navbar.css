@@ -345,7 +345,7 @@
   }
 
   .navbar-menu {
-    display: none;
+    display: flex;
   }
 
   .navbar-links {

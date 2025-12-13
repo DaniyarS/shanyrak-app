@@ -371,7 +371,7 @@
   }
 
   .portfolio-preview-grid {
-    gap: var(--spacing-2);
+    gap: 4px;
   }
 
   .portfolio-preview-item {
