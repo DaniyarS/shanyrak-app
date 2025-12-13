@@ -82,6 +82,20 @@ const Navbar = () => {
                       >
                         {t('navbar.myOrders')}
                       </Link>
+                      <Link
+                        to="/estates"
+                        className={`navbar-link ${isActive('/estates') ? 'active' : ''}`}
+                        onClick={(e) => handleNavClick(e, '/estates')}
+                      >
+                        {t('navbar.myProperties')}
+                      </Link>
+                      <Link
+                        to="/contracts"
+                        className={`navbar-link ${isActive('/contracts') ? 'active' : ''}`}
+                        onClick={(e) => handleNavClick(e, '/contracts')}
+                      >
+                        {t('navbar.contracts')}
+                      </Link>
                     </>
                   )}
                   {user?.role === 'BUILDER' && (
@@ -99,6 +113,13 @@ const Navbar = () => {
                         onClick={(e) => handleNavClick(e, '/offers')}
                       >
                         {t('navbar.myOffers')}
+                      </Link>
+                      <Link
+                        to="/contracts"
+                        className={`navbar-link ${isActive('/contracts') ? 'active' : ''}`}
+                        onClick={(e) => handleNavClick(e, '/contracts')}
+                      >
+                        {t('navbar.contracts')}
                       </Link>
                     </>
                   )}
@@ -309,6 +330,20 @@ const Navbar = () => {
                   >
                     {t('navbar.myOrders')}
                   </Link>
+                  <Link
+                    to="/estates"
+                    className={`mobile-menu-link ${isActive('/estates') ? 'active' : ''}`}
+                    onClick={(e) => handleNavClick(e, '/estates')}
+                  >
+                    {t('navbar.myProperties')}
+                  </Link>
+                  <Link
+                    to="/contracts"
+                    className={`mobile-menu-link ${isActive('/contracts') ? 'active' : ''}`}
+                    onClick={(e) => handleNavClick(e, '/contracts')}
+                  >
+                    {t('navbar.contracts')}
+                  </Link>
                 </>
               )}
               
@@ -327,6 +362,13 @@ const Navbar = () => {
                     onClick={(e) => handleNavClick(e, '/offers')}
                   >
                     {t('navbar.myOffers')}
+                  </Link>
+                  <Link
+                    to="/contracts"
+                    className={`mobile-menu-link ${isActive('/contracts') ? 'active' : ''}`}
+                    onClick={(e) => handleNavClick(e, '/contracts')}
+                  >
+                    {t('navbar.contracts')}
                   </Link>
                 </>
               )}

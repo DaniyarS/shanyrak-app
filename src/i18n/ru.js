@@ -26,6 +26,7 @@ export const ru = {
     view: 'Просмотр',
     reset: 'Сбросить',
     searching: 'Поиск...',
+    notAvailable: 'Не указано',
   },
 
   // Navbar
@@ -50,6 +51,25 @@ export const ru = {
     description: 'Ваша платформа для поиска специалистов по недвижимости',
     getStarted: 'Начать',
     welcomeBack: 'С возвращением',
+
+    // Hero Slider
+    slider: {
+      slide1: {
+        title: 'Добро пожаловать в Shanyrak',
+        subtitle: 'Качественный сервис с проверенными специалистами',
+        description: 'Безопасная и удобная платформа для услуг по недвижимости'
+      },
+      slide2: {
+        title: 'Для заказчиков',
+        subtitle: 'Только реальные специалисты',
+        description: 'Проверенные строители • Живые рейтинги • Оценка по выполненным работам • Безопасные платежи'
+      },
+      slide3: {
+        title: 'Для строителей',
+        subtitle: 'Получайте новые заказы',
+        description: 'Прямая работа с заказчиками • Честная система рейтингов • Удобная подача предложений • Демонстрация портфолио'
+      }
+    },
     browseOrders: 'Просмотреть заказы',
     howItWorks: 'Как это работает',
     feature1Title: 'Добавьте вашу недвижимость',
@@ -311,6 +331,7 @@ export const ru = {
     propertyTypePlaceholder: 'например, Квартира, Дом',
     apartment: 'Квартира',
     house: 'Дом',
+    private_house: 'Частный дом',
     office: 'Офис',
     commercial: 'Коммерческая',
     email: 'Email',
@@ -347,6 +368,7 @@ export const ru = {
 
   // Orders
   orders: {
+    order: 'Заказ',
     myOrders: 'Мои заказы',
     availableOrders: 'Доступные заказы на услуги',
     title: 'Заказы на услуги',
@@ -438,6 +460,7 @@ export const ru = {
     statusCompleted: 'Завершен',
     statusCancelled: 'Отменен',
     status: {
+      new: 'Новый',
       open: 'Открыт',
       in_progress: 'В работе',
       completed: 'Завершен',
@@ -641,6 +664,7 @@ export const ru = {
     completedProjects: 'завершенных проектов',
     location: 'Местоположение',
     fullName: 'Полное имя',
+    name: 'Имя',
     phone: 'Телефон',
     login: 'Имя пользователя',
     status: 'Статус',

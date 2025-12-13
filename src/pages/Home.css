@@ -106,6 +106,58 @@
   color: white;
 }
 
+/* Hero Slider */
+.hero-slider {
+  position: relative;
+  min-height: 220px;
+  margin-bottom: var(--spacing-6);
+}
+
+.hero-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  pointer-events: none;
+}
+
+.hero-slide.active {
+  opacity: 1;
+  pointer-events: auto;
+  position: relative;
+}
+
+.hero-slider-dots {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-6);
+}
+
+.slider-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.slider-dot:hover {
+  background-color: rgba(255, 255, 255, 0.6);
+  transform: scale(1.1);
+}
+
+.slider-dot.active {
+  background-color: white;
+  border-color: white;
+  transform: scale(1.2);
+}
+
 /* Dashboard Section */
 .dashboard-section {
   padding: var(--spacing-12) 0;
@@ -656,6 +708,15 @@
     gap: var(--spacing-3);
   }
 
+  .hero-slider {
+    min-height: 200px;
+  }
+
+  .slider-dot {
+    width: 10px;
+    height: 10px;
+  }
+
   .dashboard-section,
   .quick-actions-section,
   .features,
@@ -735,6 +796,20 @@
 
   .hero-actions .btn {
     width: 100%;
+  }
+
+  .hero-slider {
+    min-height: 180px;
+    margin-bottom: var(--spacing-4);
+  }
+
+  .hero-slider-dots {
+    margin-bottom: var(--spacing-4);
+  }
+
+  .slider-dot {
+    width: 8px;
+    height: 8px;
   }
 
   .dashboard-section,

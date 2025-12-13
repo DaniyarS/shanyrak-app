@@ -26,6 +26,7 @@ export const en = {
     view: 'View',
     reset: 'Reset',
     searching: 'Searching...',
+    notAvailable: 'Not specified',
   },
 
   // Navbar
@@ -50,6 +51,25 @@ export const en = {
     description: 'Your trusted platform for property services',
     getStarted: 'Get Started',
     welcomeBack: 'Welcome back',
+
+    // Hero Slider
+    slider: {
+      slide1: {
+        title: 'Welcome to Shanyrak',
+        subtitle: 'Quality service with trusted professionals',
+        description: 'Safe and convenient platform for property services'
+      },
+      slide2: {
+        title: 'For Customers',
+        subtitle: 'Only real professionals',
+        description: 'Verified builders • Live ratings • Evaluated by completed work • Secure payments'
+      },
+      slide3: {
+        title: 'For Builders',
+        subtitle: 'Get new orders',
+        description: 'Direct work with customers • Fair rating system • Easy offer submission • Portfolio showcase'
+      }
+    },
     browseOrders: 'Browse Orders',
     howItWorks: 'How it works',
     feature1Title: 'Add Your Property',
@@ -311,6 +331,7 @@ export const en = {
     propertyTypePlaceholder: 'e.g., Apartment, House',
     apartment: 'Apartment',
     house: 'House',
+    private_house: 'Private House',
     office: 'Office',
     commercial: 'Commercial',
     email: 'Email',
@@ -347,6 +368,7 @@ export const en = {
 
   // Orders
   orders: {
+    order: 'Order',
     myOrders: 'My Orders',
     availableOrders: 'Available Service Orders',
     title: 'Service Orders',
@@ -438,6 +460,7 @@ export const en = {
     statusCompleted: 'Completed',
     statusCancelled: 'Cancelled',
     status: {
+      new: 'New',
       open: 'Open',
       in_progress: 'In Progress',
       completed: 'Completed',
@@ -641,6 +664,7 @@ export const en = {
     completedProjects: 'completed projects',
     location: 'Location',
     fullName: 'Full Name',
+    name: 'Name',
     phone: 'Phone',
     login: 'Username',
     status: 'Status',

@@ -78,6 +78,7 @@ const BuilderOrders = () => {
     const typeMap = {
       'APARTMENT': t('estates.apartment'),
       'HOUSE': t('estates.house'),
+      'PRIVATE_HOUSE': t('estates.private_house'),
       'OFFICE': t('estates.office'),
       'COMMERCIAL': t('estates.commercial'),
     };
@@ -452,7 +453,7 @@ const BuilderOrders = () => {
             orders.map((order) => (
               <Card key={order.id} className="order-card">
                 <div className="order-header">
-                  <span className="order-category-badge">{order.category?.name || 'N/A'}</span>
+                  <span className="order-category-badge">{order.category?.name || t('common.notAvailable')}</span>
                   <span className={`order-price-badge ${order.priceType === 'FIXED' ? 'fixed' : 'negotiable'}`}>
                     {order.priceType === 'FIXED' && order.price
                       ? `${order.price} ₸${order.unit ? `/${getUnitLabel(order.unit)}` : ''}`
