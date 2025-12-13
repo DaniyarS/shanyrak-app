@@ -233,7 +233,7 @@
 @media (max-width: 768px) {
   .portfolio-grid {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 12px;
+    gap: 6px;
   }
 
   .portfolio-image-container {
@@ -278,7 +278,7 @@
 @media (max-width: 480px) {
   .portfolio-grid {
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 10px;
+    gap: 4px;
   }
 
   .portfolio-image-container {
