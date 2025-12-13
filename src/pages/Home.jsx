@@ -16,6 +16,36 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [showcaseBuilders, setShowcaseBuilders] = useState([]);
   const [showcaseBuildersLoading, setShowcaseBuildersLoading] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const slides = [
+    {
+      title: t('home.slider.slide1.title'),
+      subtitle: t('home.slider.slide1.subtitle'),
+      description: t('home.slider.slide1.description'),
+    },
+    {
+      title: t('home.slider.slide2.title'),
+      subtitle: t('home.slider.slide2.subtitle'),
+      description: t('home.slider.slide2.description'),
+    },
+    {
+      title: t('home.slider.slide3.title'),
+      subtitle: t('home.slider.slide3.subtitle'),
+      description: t('home.slider.slide3.description'),
+    },
+  ];
+
+  // Auto-rotate hero slider
+  useEffect(() => {
+    if (!isAuthenticated) {
+      const interval = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % slides.length);
+      }, 5000); // Change slide every 5 seconds
+
+      return () => clearInterval(interval);
+    }
+  }, [isAuthenticated, slides.length]);
 
   useEffect(() => {
     if (isAuthenticated && user) {
@@ -112,6 +142,12 @@ const Home = () => {
                       if (!unit) return '';
                       
                       const unitTranslationMap = {
+                        // Linear units
+                        'meter': t('orders.units.perMeter'),
+                        'perMeter': t('orders.units.perMeter'),
+                        'permeter': t('orders.units.perMeter'),
+                        'm': t('orders.units.perMeter'),
+
                         // Area-based units (API returns these)
                         'm2': t('offers.perM2'),
                         'perM2': t('offers.perM2'),
@@ -124,7 +160,15 @@ const Home = () => {
                         'permetersquare': t('orders.units.perMeterSquare'),
                         'permeter²': t('orders.units.perMeterSquare'),
                         'perMeterSquare': t('orders.units.perMeterSquare'),
-                        
+
+                        // Volume-based units
+                        'm3': t('orders.units.perMeterCube'),
+                        'perM3': t('orders.units.perMeterCube'),
+                        'perMeterCube': t('orders.units.perMeterCube'),
+                        'permeter³': t('orders.units.perMeterCube'),
+                        'cubic_meter': t('orders.units.perMeterCube'),
+                        'cubic meter': t('orders.units.perMeterCube'),
+
                         // Time-based units
                         'hour': t('offers.perHour'),
                         'hr': t('offers.perHour'),
@@ -299,6 +343,12 @@ const Home = () => {
                       if (!unit) return '';
                       
                       const unitTranslationMap = {
+                        // Linear units
+                        'meter': t('orders.units.perMeter'),
+                        'perMeter': t('orders.units.perMeter'),
+                        'permeter': t('orders.units.perMeter'),
+                        'm': t('orders.units.perMeter'),
+
                         // Area-based units (API returns these)
                         'm2': t('offers.perM2'),
                         'perM2': t('offers.perM2'),
@@ -311,7 +361,15 @@ const Home = () => {
                         'permetersquare': t('orders.units.perMeterSquare'),
                         'permeter²': t('orders.units.perMeterSquare'),
                         'perMeterSquare': t('orders.units.perMeterSquare'),
-                        
+
+                        // Volume-based units
+                        'm3': t('orders.units.perMeterCube'),
+                        'perM3': t('orders.units.perMeterCube'),
+                        'perMeterCube': t('orders.units.perMeterCube'),
+                        'permeter³': t('orders.units.perMeterCube'),
+                        'cubic_meter': t('orders.units.perMeterCube'),
+                        'cubic meter': t('orders.units.perMeterCube'),
+
                         // Time-based units
                         'hour': t('offers.perHour'),
                         'hr': t('offers.perHour'),
@@ -348,7 +406,7 @@ const Home = () => {
                     return (
                     <Card key={order.id} className="order-preview-card" onClick={() => navigate(`/orders`)}>
                       <div className="order-preview-header">
-                        <span className="order-category-badge">{order.category?.name || 'N/A'}</span>
+                        <span className="order-category-badge">{order.category?.name || t('common.notAvailable')}</span>
                         <span className={`order-price-badge ${order.priceType === 'FIXED' ? 'fixed' : 'negotiable'}`}>
                           {order.priceType === 'FIXED' && order.price
                             ? `${order.price} ₸${order.unit ? `/${getUnitLabel(order.unit)}` : ''}`
@@ -416,17 +474,30 @@ const Home = () => {
       <section className="hero">
         <div className="container">
           <div className="hero-content">
-            <h1 className="hero-title">
-              {t('home.title')}
-            </h1>
-            <p className="hero-subtitle">
-              {t('home.subtitle')}
-            </p>
             {!isAuthenticated ? (
               <>
-                <p className="hero-description">
-                  {t('home.description')}
-                </p>
+                <div className="hero-slider">
+                  {slides.map((slide, index) => (
+                    <div
+                      key={index}
+                      className={`hero-slide ${index === currentSlide ? 'active' : ''}`}
+                    >
+                      <h1 className="hero-title">{slide.title}</h1>
+                      <p className="hero-subtitle">{slide.subtitle}</p>
+                      <p className="hero-description">{slide.description}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="hero-slider-dots">
+                  {slides.map((_, index) => (
+                    <button
+                      key={index}
+                      className={`slider-dot ${index === currentSlide ? 'active' : ''}`}
+                      onClick={() => setCurrentSlide(index)}
+                      aria-label={`Go to slide ${index + 1}`}
+                    />
+                  ))}
+                </div>
                 <div className="hero-actions">
                   <Link to="/register">
                     <Button variant="primary" size="large">
@@ -441,14 +512,17 @@ const Home = () => {
                 </div>
               </>
             ) : (
-              <div className="hero-welcome">
-                <h2>
-                  {t('home.welcomeBack')},{' '}
-                  {user?.firstName && user?.lastName
-                    ? `${user.firstName} ${user.lastName}`
-                    : user?.phone}!
-                </h2>
-              </div>
+              <>
+                <h1 className="hero-title">{t('home.title')}</h1>
+                <div className="hero-welcome">
+                  <h2>
+                    {t('home.welcomeBack')},{' '}
+                    {user?.firstName && user?.lastName
+                      ? `${user.firstName} ${user.lastName}`
+                      : user?.phone}!
+                  </h2>
+                </div>
+              </>
             )}
           </div>
         </div>
@@ -539,19 +613,19 @@ const Home = () => {
               <h2 className="stats-title">{t('home.whyShanyrak')}</h2>
               <div className="stats-grid">
                 <div className="stat-card">
-                  <div className="stat-value">1000+</div>
+                  <div className="stat-value">150+</div>
                   <div className="stat-label">{t('home.activeUsers')}</div>
                 </div>
                 <div className="stat-card">
-                  <div className="stat-value">500+</div>
+                  <div className="stat-value">45+</div>
                   <div className="stat-label">{t('home.completedJobs')}</div>
                 </div>
                 <div className="stat-card">
-                  <div className="stat-value">50+</div>
+                  <div className="stat-value">12+</div>
                   <div className="stat-label">{t('home.serviceCategories')}</div>
                 </div>
                 <div className="stat-card">
-                  <div className="stat-value">4.8★</div>
+                  <div className="stat-value">4.6★</div>
                   <div className="stat-label">{t('home.averageRating')}</div>
                 </div>
               </div>

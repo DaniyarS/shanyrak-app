@@ -147,11 +147,11 @@ const BuilderDetail = () => {
                 </div>
                 <div className="info-item">
                   <span className="info-label">{t('services.city') || 'City'}:</span>
-                  <span className="info-value">{builder.city || 'N/A'}</span>
+                  <span className="info-value">{builder.city || t('common.notAvailable')}</span>
                 </div>
                 <div className="info-item">
                   <span className="info-label">{t('services.district') || 'District'}:</span>
-                  <span className="info-value">{builder.district || 'N/A'}</span>
+                  <span className="info-value">{builder.district || t('common.notAvailable')}</span>
                 </div>
               </div>
             </Card>

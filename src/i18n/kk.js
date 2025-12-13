@@ -26,6 +26,7 @@ export const kk = {
     view: 'Көру',
     reset: 'Тазарту',
     searching: 'Іздеу...',
+    notAvailable: 'Көрсетілмеген',
   },
 
   // Navbar
@@ -50,6 +51,25 @@ export const kk = {
     description: 'Мүлік қызметтері үшін сенімді платформа',
     getStarted: 'Бастау',
     welcomeBack: 'Қош келдіңіз',
+
+    // Hero Slider
+    slider: {
+      slide1: {
+        title: 'Shanyrak-қа қош келдіңіз',
+        subtitle: 'Сенімді мамандармен сапалы қызмет',
+        description: 'Мүлік қызметтері үшін қауіпсіз және ыңғайлы платформа'
+      },
+      slide2: {
+        title: 'Тапсырыс берушілер үшін',
+        subtitle: 'Тек нақты мамандар',
+        description: 'Тексерілген құрылысшылар • Тікелей рейтингтер • Аяқталған жұмыстармен бағалау • Қауіпсіз төлемдер'
+      },
+      slide3: {
+        title: 'Құрылысшылар үшін',
+        subtitle: 'Жаңа тапсырыстар алыңыз',
+        description: 'Тікелей тапсырыс берушілермен жұмыс • Әділ рейтинг жүйесі • Ыңғайлы ұсыныстар беру • Портфолионы көрсету'
+      }
+    },
     browseOrders: 'Тапсырыстарды көру',
     howItWorks: 'Қалай жұмысістейді',
     feature1Title: 'Мүлікті қосыңыз',
@@ -312,6 +332,7 @@ export const kk = {
     propertyTypePlaceholder: 'мысалы, Пәтер, Үй',
     apartment: 'Пәтер',
     house: 'Үй',
+    private_house: 'Жеке үй',
     office: 'Кеңсе',
     commercial: 'Коммерциялық',
     email: 'Email',
@@ -348,6 +369,7 @@ export const kk = {
 
   // Orders
   orders: {
+    order: 'Тапсырыс',
     myOrders: 'Менің тапсырыстарым',
     availableOrders: 'Қол жетімді қызмет тапсырыстары',
     title: 'Қызмет тапсырыстары',
@@ -439,6 +461,7 @@ export const kk = {
     statusCompleted: 'Аяқталды',
     statusCancelled: 'Болдырмаған',
     status: {
+      new: 'Жаңа',
       open: 'Ашық',
       in_progress: 'Орындалуда',
       completed: 'Аяқталды',
@@ -642,6 +665,7 @@ export const kk = {
     completedProjects: 'аяқталған жобалар',
     location: 'Орналасқан жері',
     fullName: 'Толық аты',
+    name: 'Аты',
     phone: 'Телефон',
     login: 'Пайдаланушы аты',
     status: 'Мәртебе',

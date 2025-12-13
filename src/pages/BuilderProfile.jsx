@@ -476,15 +476,15 @@ const BuilderProfile = () => {
               <div className="profile-details">
                 {(builderData?.firstName || builderData?.lastName) && (
                   <div className="detail-row">
-                    <span className="detail-label">Name:</span>
+                    <span className="detail-label">{t('profile.name')}:</span>
                     <span className="detail-value">
-                      {[builderData?.firstName, builderData?.lastName].filter(Boolean).join(' ') || 'N/A'}
+                      {[builderData?.firstName, builderData?.lastName].filter(Boolean).join(' ') || t('common.notAvailable')}
                     </span>
                   </div>
                 )}
                 <div className="detail-row">
                   <span className="detail-label">{t('profile.fullName')}:</span>
-                  <span className="detail-value">{builderData?.fullName || 'N/A'}</span>
+                  <span className="detail-value">{builderData?.fullName || t('common.notAvailable')}</span>
                 </div>
                 <div className="detail-row">
                   <span className="detail-label">{t('profile.phone')}:</span>
@@ -520,7 +520,7 @@ const BuilderProfile = () => {
                 <div className="detail-row">
                   <span className="detail-label">{t('profile.location')}:</span>
                   <span className="detail-value">
-                    {[builderData?.city, builderData?.district].filter(Boolean).join(', ') || 'N/A'}
+                    {[builderData?.city, builderData?.district].filter(Boolean).join(', ') || t('common.notAvailable')}
                   </span>
                 </div>
                 <div className="detail-row">

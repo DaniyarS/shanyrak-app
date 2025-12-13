@@ -269,7 +269,7 @@ const Estates = () => {
             estates.map((estate) => (
               <Card key={estate.publicId} className="estate-card">
                 <div className="estate-header">
-                  <h3>{estate.kind}</h3>
+                  <h3>{t(`estates.${estate.kind.toLowerCase()}`) || estate.kind}</h3>
                   <span className="estate-area">{estate.areaM2} m²</span>
                 </div>
                 <div className="estate-details">

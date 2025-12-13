@@ -139,7 +139,10 @@ const Offers = () => {
                 {/* Offer Status */}
                 <div className="offer-card-header">
                   <h3 className="offer-order-title">
-                    {item.order?.title || 'Order'}
+                    {item.order?.title ||
+                     (item.category?.name && item.realEstate?.city
+                       ? `${item.category.name} · ${item.realEstate.city}`
+                       : item.category?.name || t('orders.order'))}
                   </h3>
                   {getOfferStatusBadge(item.offer?.status)}
                 </div>

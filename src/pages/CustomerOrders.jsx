@@ -108,6 +108,7 @@ const CustomerOrders = () => {
     const typeMap = {
       'APARTMENT': t('estates.apartment'),
       'HOUSE': t('estates.house'),
+      'PRIVATE_HOUSE': t('estates.private_house'),
       'OFFICE': t('estates.office'),
       'COMMERCIAL': t('estates.commercial'),
     };
@@ -667,7 +668,7 @@ const CustomerOrders = () => {
           onChange={handleChange}
           options={estates.map((estate) => ({
             value: estate.id,
-            label: `${estate.kind} - ${estate.addressLine}, ${estate.city}`,
+            label: `${t(`estates.${estate.kind.toLowerCase()}`) || estate.kind} - ${estate.addressLine}, ${estate.city}`,
           }))}
           placeholder={t('orders.selectProperty')}
           error={errors.estateId}
@@ -869,7 +870,7 @@ const CustomerOrders = () => {
               <Card key={order.id} className="order-card" data-order-id={order.id}>
                 <div className="order-header">
                   <div className="order-title-row">
-                    <h3>{order.category?.name || 'N/A'}</h3>
+                    <h3>{order.category?.name || t('common.notAvailable')}</h3>
                   </div>
                   <div className="order-header-actions">
                     {order.price && (

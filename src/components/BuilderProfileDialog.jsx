@@ -221,7 +221,7 @@ const BuilderProfileDialog = ({ isOpen, onClose, builderId }) => {
                       {contactInfo.email && (
                         <div className="contact-item">
                           <span className="contact-icon">✉️</span>
-                          <span className="contact-label">Email:</span>
+                          <span className="contact-label">{t('auth.email')}:</span>
                           <span className="contact-value">{contactInfo.email}</span>
                         </div>
                       )}
